@@ -1,0 +1,390 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ChipItem</class>
+ <widget class="QWidget" name="ChipItem">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>200</width>
+    <height>44</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>ChipItem</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">
+QPushButton#butMiddle{
+	border:none;
+	border-image:url(:/Resources/ItemToolbar/butMiddle.png);
+}
+QPushButton#butMiddle:hover{
+	border-image:url(:/Resources/ItemToolbar/butMiddle_H.png);
+}
+QPushButton#butMiddle:disabled{
+	border-image:url(:/Resources/ItemToolbar/butMiddle_D.png);
+}
+
+
+QPushButton#butScaleFull{
+	border:none;
+	border-image:url(:/Resources/ItemToolbar/butScaleFull.png);
+}
+QPushButton#butScaleFull:hover{
+	border-image:url(:/Resources/ItemToolbar/butScaleFull_H.png);
+}
+QPushButton#butScaleFull:disabled{
+	border-image:url(:/Resources/ItemToolbar/butScaleFull_D.png);
+}
+
+
+QPushButton#chkLockAspect{
+	border:none;
+	border-image:url(:/Resources/ItemToolbar/chkLockAspect.png);
+}
+QPushButton#chkLockAspect:hover{
+	border-image:url(:/Resources/ItemToolbar/chkLockAspect_H.png);
+}
+QPushButton#chkLockAspect:disabled{
+	border-image:url(:/Resources/ItemToolbar/chkLockAspect_D.png);
+}
+QPushButton#chkLockAspect:checked{
+	border-image:url(:/Resources/ItemToolbar/chkLockAspect_C.png);
+}
+QPushButton#chkLockAspect:hover:checked{
+	border-image:url(:/Resources/ItemToolbar/chkLockAspect_H_C.png);
+}
+QPushButton#chkLockAspect:disabled:checked{
+	border-image:url(:/Resources/ItemToolbar/chkLockAspect_D_C.png);
+}
+
+QPushButton#chkLockPos{
+	border:none;
+	border-image:url(:/Resources/ItemToolbar/chkLockPos.png);
+}
+QPushButton#chkLockPos:hover{
+	border-image:url(:/Resources/ItemToolbar/chkLockPos_H.png);
+}
+QPushButton#chkLockPos:disabled{
+	border-image:url(:/Resources/ItemToolbar/chkLockPos_D.png);
+}
+QPushButton#chkLockPos:checked{
+	border-image:url(:/Resources/ItemToolbar/chkLockPos_C.png);
+}
+QPushButton#chkLockPos:hover:checked{
+	border-image:url(:/Resources/ItemToolbar/chkLockPos_H_C.png);
+}
+QPushButton#chkLockPos:disabled:checked{
+	border-image:url(:/Resources/ItemToolbar/chkLockPos_D_C.png);
+}
+
+QPushButton#chkLockSize{
+	border:none;
+	border-image:url(:/Resources/ItemToolbar/chkLockSize.png);
+}
+QPushButton#chkLockSize:hover{
+	border-image:url(:/Resources/ItemToolbar/chkLockSize_H.png);
+}
+QPushButton#chkLockSize:disabled{
+	border-image:url(:/Resources/ItemToolbar/chkLockSize_D.png);
+}
+QPushButton#chkLockSize:checked{
+	border-image:url(:/Resources/ItemToolbar/chkLockSize_C.png);
+}
+QPushButton#chkLockSize:hover:checked{
+	border-image:url(:/Resources/ItemToolbar/chkLockSize_H_C.png);
+}
+QPushButton#chkLockSize:disabled:checked{
+	border-image:url(:/Resources/ItemToolbar/chkLockSize_D_C.png);
+}
+
+QPushButton#chkLockAngle{
+	border:none;
+	border-image:url(:/Resources/ItemToolbar/chkLockAngle.png);
+}
+QPushButton#chkLockAngle:hover{
+	border-image:url(:/Resources/ItemToolbar/chkLockAngle_H.png);
+}
+QPushButton#chkLockAngle:disabled{
+	border-image:url(:/Resources/ItemToolbar/chkLockAngle_D.png);
+}
+QPushButton#chkLockAngle:checked{
+	border-image:url(:/Resources/ItemToolbar/chkLockAngle_C.png);
+}
+QPushButton#chkLockAngle:hover:checked{
+	border-image:url(:/Resources/ItemToolbar/chkLockAngle_H_C.png);
+}
+QPushButton#chkLockAngle:disabled:checked{
+	border-image:url(:/Resources/ItemToolbar/chkLockAngle_D_C.png);
+}
+
+
+QPushButton#chkHideChip{
+	border:none;
+	border-image:url(:/Resources/ItemToolbar/chkHideChip.png);
+}
+QPushButton#chkHideChip:hover{
+	border-image:url(:/Resources/ItemToolbar/chkHideChip_H.png);
+}
+QPushButton#chkHideChip:disabled{
+	border-image:url(:/Resources/ItemToolbar/chkHideChip_D.png);
+}
+QPushButton#chkHideChip:checked{
+	border-image:url(:/Resources/ItemToolbar/chkHideChip_C.png);
+}
+QPushButton#chkHideChip:hover:checked{
+	border-image:url(:/Resources/ItemToolbar/chkHideChip_H_C.png);
+}
+QPushButton#chkHideChip:disabled:checked{
+	border-image:url(:/Resources/ItemToolbar/chkHideChip_D_C.png);
+}
+</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="margin">
+    <number>4</number>
+   </property>
+   <item>
+    <widget class="QWidget" name="widgetBase" native="true">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>36</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>36</height>
+      </size>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <property name="horizontalSpacing">
+       <number>6</number>
+      </property>
+      <property name="verticalSpacing">
+       <number>2</number>
+      </property>
+      <property name="margin">
+       <number>0</number>
+      </property>
+      <item row="1" column="2">
+       <widget class="QWidget" name="widImgOper" native="true">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <property name="spacing">
+          <number>4</number>
+         </property>
+         <property name="margin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QPushButton" name="chkHideChip">
+           <property name="minimumSize">
+            <size>
+             <width>16</width>
+             <height>16</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16</width>
+             <height>16</height>
+            </size>
+           </property>
+           <property name="toolTip">
+            <string>显示、隐藏图像</string>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="chkLockAspect">
+           <property name="minimumSize">
+            <size>
+             <width>16</width>
+             <height>16</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16</width>
+             <height>16</height>
+            </size>
+           </property>
+           <property name="toolTip">
+            <string>锁定图像缩放的宽高比例，以图像的原始分辨率为基准</string>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="chkLockPos">
+           <property name="minimumSize">
+            <size>
+             <width>16</width>
+             <height>16</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16</width>
+             <height>16</height>
+            </size>
+           </property>
+           <property name="toolTip">
+            <string>锁定图像的位置，防止使用鼠标进行拖动</string>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="chkLockSize">
+           <property name="minimumSize">
+            <size>
+             <width>16</width>
+             <height>16</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16</width>
+             <height>16</height>
+            </size>
+           </property>
+           <property name="toolTip">
+            <string>锁定图像的大小，防止使用鼠标拖拽图像边缘</string>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="chkLockAngle">
+           <property name="minimumSize">
+            <size>
+             <width>16</width>
+             <height>16</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16</width>
+             <height>16</height>
+            </size>
+           </property>
+           <property name="toolTip">
+            <string>锁定图像的旋转角度，防止按下Ctrl键后用鼠标拖拽改变图像显示角度</string>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QPushButton" name="butMiddle">
+           <property name="minimumSize">
+            <size>
+             <width>16</width>
+             <height>16</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16</width>
+             <height>16</height>
+            </size>
+           </property>
+           <property name="toolTip">
+            <string>把图像显示在画布的正中</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="butScaleFull">
+           <property name="minimumSize">
+            <size>
+             <width>16</width>
+             <height>16</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16</width>
+             <height>16</height>
+            </size>
+           </property>
+           <property name="toolTip">
+            <string>把图像铺满整个画布，如果图像的比例和画布不同，将会切换铺满的方式</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="0" column="0" rowspan="2">
+       <widget class="QLabel" name="labChipIcon">
+        <property name="minimumSize">
+         <size>
+          <width>32</width>
+          <height>32</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>32</width>
+          <height>32</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1" rowspan="2">
+       <widget class="Line" name="line">
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QLabel" name="labSourceName"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources>
+  <include location="rdlivesdkdemo.qrc"/>
+ </resources>
+ <connections/>
+</ui>

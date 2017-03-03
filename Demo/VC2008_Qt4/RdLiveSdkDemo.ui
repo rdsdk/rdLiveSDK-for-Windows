@@ -1,0 +1,893 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>RDLiveSdkDemoClass</class>
+ <widget class="QMainWindow" name="RDLiveSdkDemoClass">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>684</width>
+    <height>574</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>RDLiveSdkDemo</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">
+QPushButton#butCloseChip{
+	border:none;
+	border-image:url(:/Resources/ItemToolbar/butCloseChip.png);
+}
+QPushButton#butCloseChip:hover{
+	border-image:url(:/Resources/ItemToolbar/butCloseChip_H.png);
+}
+QPushButton#butCloseChip:disabled{
+	border-image:url(:/Resources/ItemToolbar/butCloseChip_D.png);
+}
+
+QPushButton#butUpChip{
+	border:none;
+	border-image:url(:/Resources/ItemToolbar/butUpChip.png);
+}
+QPushButton#butUpChip:hover{
+	border-image:url(:/Resources/ItemToolbar/butUpChip_H.png);
+}
+QPushButton#butUpChip:disabled{
+	border-image:url(:/Resources/ItemToolbar/butUpChip_D.png);
+}
+
+QPushButton#butDownChip{
+	border:none;
+	border-image:url(:/Resources/ItemToolbar/butDownChip.png);
+}
+QPushButton#butDownChip:hover{
+	border-image:url(:/Resources/ItemToolbar/butDownChip_H.png);
+}
+QPushButton#butDownChip:disabled{
+	border-image:url(:/Resources/ItemToolbar/butDownChip_D.png);
+}
+
+QPushButton#chkSpeaker{
+	border:none;
+	border-image:url(:/Resources/chkSpeaker.png);
+}
+QPushButton#chkSpeaker:hover{
+	border-image:url(:/Resources/chkSpeaker_H.png);
+}
+QPushButton#chkSpeaker:disabled{
+	border-image:url(:/Resources/chkSpeaker_D.png);
+}
+QPushButton#chkSpeaker:checked{
+	border-image:url(:/Resources/chkSpeaker_C.png);
+}
+QPushButton#chkSpeaker:hover:checked{
+	border-image:url(:/Resources/chkSpeaker_H_C.png);
+}
+QPushButton#chkSpeaker:disabled:checked{
+	border-image:url(:/Resources/chkSpeaker_D_C.png);
+}
+
+QPushButton#chkMicrophone{
+	border:none;
+	border-image:url(:/Resources/chkMicrophone.png);
+}
+QPushButton#chkMicrophone:hover{
+	border-image:url(:/Resources/chkMicrophone_H.png);
+}
+QPushButton#chkMicrophone:disabled{
+	border-image:url(:/Resources/chkMicrophone_D.png);
+}
+QPushButton#chkMicrophone:checked{
+	border-image:url(:/Resources/chkMicrophone_C.png);
+}
+QPushButton#chkMicrophone:hover:checked{
+	border-image:url(:/Resources/chkMicrophone_H_C.png);
+}
+QPushButton#chkMicrophone:disabled:checked{
+	border-image:url(:/Resources/chkMicrophone_D_C.png);
+}
+
+QPushButton#butAudioPopSpk{
+	border:none;
+	border-image:url(:/Resources/butAudioPopup.png);
+}
+QPushButton#butAudioPopSpk:hover{
+	border-image:url(:/Resources/butAudioPopup_H.png);
+}
+QPushButton#butAudioPopSpk:disabled{
+	border-image:url(:/Resources/butAudioPopup_D.png);
+}
+
+QPushButton#butAudioPopMic{
+	border:none;
+	border-image:url(:/Resources/butAudioPopup.png);
+}
+QPushButton#butAudioPopMic:hover{
+	border-image:url(:/Resources/butAudioPopup_H.png);
+}
+QPushButton#butAudioPopMic:disabled{
+	border-image:url(:/Resources/butAudioPopup_D.png);
+}
+
+
+QPushButton#chkStart{
+	border:none;
+	border-image:url(:/Resources/chkStart.png);
+}
+QPushButton#chkStart:hover{
+	border-image:url(:/Resources/chkStart_H.png);
+}
+QPushButton#chkStart:disabled{
+	border-image:url(:/Resources/chkStart_D.png);
+}
+QPushButton#chkStart:checked{
+	border-image:url(:/Resources/chkStart_C.png);
+}
+QPushButton#chkStart:hover:checked{
+	border-image:url(:/Resources/chkStart_H_C.png);
+}
+QPushButton#chkStart:disabled:checked{
+	border-image:url(:/Resources/chkStart_D_C.png);
+}
+
+</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <property name="margin">
+     <number>4</number>
+    </property>
+    <property name="spacing">
+     <number>4</number>
+    </property>
+    <item row="0" column="0">
+     <widget class="CPreviewWnd" name="widPreview" native="true">
+      <property name="minimumSize">
+       <size>
+        <width>176</width>
+        <height>144</height>
+       </size>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(0, 170, 127);</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QWidget" name="widControl" native="true">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>32</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>32</height>
+       </size>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <property name="leftMargin">
+        <number>6</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>6</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <spacer name="horizontalSpacer_5">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QWidget" name="widVolumeOperOut_3" native="true">
+         <property name="minimumSize">
+          <size>
+           <width>32</width>
+           <height>16</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>32</width>
+           <height>16</height>
+          </size>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_9">
+          <property name="margin">
+           <number>0</number>
+          </property>
+          <property name="spacing">
+           <number>0</number>
+          </property>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QWidget" name="widVolumeOperOut_4" native="true">
+         <property name="minimumSize">
+          <size>
+           <width>32</width>
+           <height>16</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>32</width>
+           <height>16</height>
+          </size>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_10">
+          <property name="margin">
+           <number>0</number>
+          </property>
+          <property name="spacing">
+           <number>0</number>
+          </property>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QPushButton" name="chkStart">
+         <property name="minimumSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QWidget" name="widVolumeOperSpk" native="true">
+         <property name="minimumSize">
+          <size>
+           <width>32</width>
+           <height>24</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>32</width>
+           <height>24</height>
+          </size>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_7">
+          <property name="horizontalSpacing">
+           <number>0</number>
+          </property>
+          <property name="verticalSpacing">
+           <number>1</number>
+          </property>
+          <property name="margin">
+           <number>0</number>
+          </property>
+          <item row="0" column="0">
+           <widget class="QPushButton" name="chkSpeaker">
+            <property name="minimumSize">
+             <size>
+              <width>16</width>
+              <height>16</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16</width>
+              <height>16</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QPushButton" name="butAudioPopSpk">
+            <property name="minimumSize">
+             <size>
+              <width>13</width>
+              <height>9</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>13</width>
+              <height>9</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" colspan="2">
+           <widget class="CRangeSlider" name="widVolumeSpk" native="true">
+            <property name="minimumSize">
+             <size>
+              <width>32</width>
+              <height>7</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>32</width>
+              <height>7</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QWidget" name="widVolumeOperMic" native="true">
+         <property name="minimumSize">
+          <size>
+           <width>32</width>
+           <height>24</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>32</width>
+           <height>24</height>
+          </size>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_8">
+          <property name="horizontalSpacing">
+           <number>0</number>
+          </property>
+          <property name="verticalSpacing">
+           <number>1</number>
+          </property>
+          <property name="margin">
+           <number>0</number>
+          </property>
+          <item row="0" column="0">
+           <widget class="QPushButton" name="chkMicrophone">
+            <property name="minimumSize">
+             <size>
+              <width>16</width>
+              <height>16</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16</width>
+              <height>16</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QPushButton" name="butAudioPopMic">
+            <property name="minimumSize">
+             <size>
+              <width>13</width>
+              <height>9</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>13</width>
+              <height>9</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" colspan="2">
+           <widget class="CRangeSlider" name="widVolumeMic" native="true">
+            <property name="minimumSize">
+             <size>
+              <width>32</width>
+              <height>7</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>32</width>
+              <height>7</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_4">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="0" column="1" rowspan="2">
+     <widget class="QTabWidget" name="tabSector">
+      <property name="minimumSize">
+       <size>
+        <width>250</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>250</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="tabCurrScene">
+       <attribute name="title">
+        <string>当前场景</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="QPushButton" name="butAddChip">
+            <property name="text">
+             <string>添加内容</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="butUpChip">
+            <property name="minimumSize">
+             <size>
+              <width>16</width>
+              <height>16</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16</width>
+              <height>16</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="butDownChip">
+            <property name="minimumSize">
+             <size>
+              <width>16</width>
+              <height>16</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16</width>
+              <height>16</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="butCloseChip">
+            <property name="minimumSize">
+             <size>
+              <width>16</width>
+              <height>16</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16</width>
+              <height>16</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QListWidget" name="listWidChips"/>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tabSetting">
+       <attribute name="title">
+        <string>设置</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <item>
+         <widget class="DlgEncoderSetting" name="widEncoderSetting" native="true"/>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>684</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuChipInput">
+    <property name="title">
+     <string>添加</string>
+    </property>
+    <widget class="QMenu" name="menuAddScreen">
+     <property name="title">
+      <string>屏幕/窗口</string>
+     </property>
+     <addaction name="separator"/>
+    </widget>
+    <widget class="QMenu" name="menuAddCamera">
+     <property name="title">
+      <string>摄像头</string>
+     </property>
+     <addaction name="separator"/>
+    </widget>
+    <addaction name="menuAddScreen"/>
+    <addaction name="menuAddCamera"/>
+    <addaction name="actiAddPicture"/>
+   </widget>
+   <widget class="QMenu" name="menuScene">
+    <property name="title">
+     <string>场景</string>
+    </property>
+    <widget class="QMenu" name="menuDeleteScene">
+     <property name="title">
+      <string>删除场景</string>
+     </property>
+     <addaction name="separator"/>
+    </widget>
+    <widget class="QMenu" name="menuSwitchScene">
+     <property name="title">
+      <string>切换到</string>
+     </property>
+     <addaction name="separator"/>
+    </widget>
+    <widget class="QMenu" name="menuPreviewLayout">
+     <property name="title">
+      <string>预览布局</string>
+     </property>
+     <widget class="QMenu" name="menuBScenePos">
+      <property name="title">
+       <string>显示的位置</string>
+      </property>
+      <addaction name="actBSceneUp"/>
+      <addaction name="actBSceneDown"/>
+      <addaction name="actBSceneLeft"/>
+      <addaction name="actBSceneRight"/>
+     </widget>
+     <addaction name="actBSceneCount0"/>
+     <addaction name="actBSceneCount2"/>
+     <addaction name="actBSceneCount4"/>
+     <addaction name="actBSceneCount6"/>
+     <addaction name="actBSceneCount8"/>
+     <addaction name="separator"/>
+     <addaction name="actShowAddScene"/>
+     <addaction name="actShowScrollBar"/>
+     <addaction name="actShowSceneName"/>
+     <addaction name="actShowCurrOnBack"/>
+     <addaction name="actBSceneScale"/>
+     <addaction name="separator"/>
+     <addaction name="menuBScenePos"/>
+     <addaction name="separator"/>
+     <addaction name="actRestorePreview"/>
+    </widget>
+    <widget class="QMenu" name="menuRenameScene">
+     <property name="title">
+      <string>场景重命名</string>
+     </property>
+     <addaction name="separator"/>
+    </widget>
+    <addaction name="actAddScene"/>
+    <addaction name="menuSwitchScene"/>
+    <addaction name="menuDeleteScene"/>
+    <addaction name="menuRenameScene"/>
+    <addaction name="separator"/>
+    <addaction name="menuPreviewLayout"/>
+    <addaction name="actClearCurScene"/>
+   </widget>
+   <widget class="QMenu" name="menuImage">
+    <property name="title">
+     <string>图像</string>
+    </property>
+    <widget class="QMenu" name="menuFpses">
+     <property name="title">
+      <string>帧率</string>
+     </property>
+     <addaction name="separator"/>
+    </widget>
+    <widget class="QMenu" name="menuPreviewScale">
+     <property name="title">
+      <string>预览缩放</string>
+     </property>
+     <addaction name="separator"/>
+    </widget>
+    <addaction name="actSwapVH"/>
+    <addaction name="separator"/>
+    <addaction name="menuFpses"/>
+    <addaction name="separator"/>
+    <addaction name="menuPreviewScale"/>
+    <addaction name="actPreviewOpenGL"/>
+    <addaction name="separator"/>
+   </widget>
+   <addaction name="menuImage"/>
+   <addaction name="menuScene"/>
+   <addaction name="menuChipInput"/>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <action name="actAddScene">
+   <property name="text">
+    <string>添加场景……</string>
+   </property>
+  </action>
+  <action name="actBSceneCount0">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>关闭后台场景预览</string>
+   </property>
+  </action>
+  <action name="actBSceneCount2">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>显示 2 个后台场景</string>
+   </property>
+  </action>
+  <action name="actBSceneCount4">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>显示 4 个后台场景</string>
+   </property>
+  </action>
+  <action name="actBSceneCount6">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>显示 6 个后台场景</string>
+   </property>
+  </action>
+  <action name="actBSceneCount8">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>显示 8 个后台场景</string>
+   </property>
+  </action>
+  <action name="actShowScrollBar">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>显示场景滚动条</string>
+   </property>
+  </action>
+  <action name="actShowAddScene">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>显示添加场景按钮</string>
+   </property>
+  </action>
+  <action name="actShowCurrOnBack">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>后台显示当前场景</string>
+   </property>
+  </action>
+  <action name="actShowSceneName">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>显示场景名称</string>
+   </property>
+  </action>
+  <action name="actBSceneScale">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>鼠标移入场景放大</string>
+   </property>
+  </action>
+  <action name="actClearCurScene">
+   <property name="text">
+    <string>清空当前场景</string>
+   </property>
+  </action>
+  <action name="actBSceneUp">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>上</string>
+   </property>
+  </action>
+  <action name="actBSceneDown">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>下</string>
+   </property>
+  </action>
+  <action name="actBSceneLeft">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>左</string>
+   </property>
+  </action>
+  <action name="actBSceneRight">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>右</string>
+   </property>
+  </action>
+  <action name="actRestorePreview">
+   <property name="text">
+    <string>还原预览布局</string>
+   </property>
+  </action>
+  <action name="actSwapVH">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>交换宽和高</string>
+   </property>
+  </action>
+  <action name="actPreviewOpenGL">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>预览使用硬件加速</string>
+   </property>
+  </action>
+  <action name="actiAddPicture">
+   <property name="text">
+    <string>图像文件……</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>CPreviewWnd</class>
+   <extends>QWidget</extends>
+   <header>cpreviewwnd.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>CRangeSlider</class>
+   <extends>QWidget</extends>
+   <header>crangeslider.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>DlgEncoderSetting</class>
+   <extends>QWidget</extends>
+   <header>dlgencodersetting.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="rdlivesdkdemo.qrc"/>
+ </resources>
+ <connections/>
+</ui>

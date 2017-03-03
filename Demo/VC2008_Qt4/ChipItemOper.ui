@@ -1,0 +1,363 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ChipItemOper</class>
+ <widget class="QWidget" name="ChipItemOper">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>234</width>
+    <height>112</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>ChipItemOper</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">
+QPushButton#butClip16_9{
+	border: 1px solid #8f8f91;
+	background-color: #dfefef;
+	border-radius: 2px;
+}
+QPushButton#butClip16_9:hover{
+	border: 1px solid #9f9f91;
+	background-color: #efefff;
+}
+QPushButton#butClip16_9:disabled{
+	border: 1px solid #7f7f7f;
+	background-color: #7f7f7f;
+}
+
+QPushButton#butClip9_16{
+	border: 1px solid #8f8f91;
+	background-color: #dfefef;
+	border-radius: 2px;
+}
+QPushButton#butClip9_16:hover{
+	border: 1px solid #9f9f91;
+	background-color: #efefff;
+}
+QPushButton#butClip9_16:disabled{
+	border: 1px solid #7f7f7f;
+	background-color: #7f7f7f;
+}
+
+QPushButton#butClip4_3{
+	border: 1px solid #8f8f91;
+	background-color: #dfefef;
+	border-radius: 2px;
+}
+QPushButton#butClip4_3:hover{
+	border: 1px solid #9f9f91;
+	background-color: #efefff;
+}
+QPushButton#butClip4_3:disabled{
+	border: 1px solid #7f7f7f;
+	background-color: #7f7f7f;
+}
+
+QPushButton#butClip3_4{
+	border: 1px solid #8f8f91;
+	background-color: #dfefef;
+	border-radius: 2px;
+}
+QPushButton#butClip3_4:hover{
+	border: 1px solid #9f9f91;
+	background-color: #efefff;
+}
+QPushButton#butClip3_4:disabled{
+	border: 1px solid #7f7f7f;
+	background-color: #7f7f7f;
+}
+
+QPushButton#butRestore{
+	border: 1px solid #8f8f91;
+	background-color: #dfefef;
+	border-radius: 2px;
+}
+QPushButton#butRestore:hover{
+	border: 1px solid #9f9f91;
+	background-color: #efefff;
+}
+QPushButton#butRestore:disabled{
+	border: 1px solid #7f7f7f;
+	background-color: #7f7f7f;
+}</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_4" stretch="0">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="margin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
+     <property name="tabPosition">
+      <enum>QTabWidget::South</enum>
+     </property>
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="tab_3">
+      <attribute name="title">
+       <string>基本</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QWidget" name="widgetClip" native="true">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>55</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>55</height>
+          </size>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <property name="spacing">
+           <number>2</number>
+          </property>
+          <property name="margin">
+           <number>0</number>
+          </property>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_2">
+            <property name="spacing">
+             <number>4</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="label">
+              <property name="minimumSize">
+               <size>
+                <width>40</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>40</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>剪裁：</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_2">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QPushButton" name="butClip16_9">
+              <property name="minimumSize">
+               <size>
+                <width>32</width>
+                <height>16</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>32</width>
+                <height>16</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>16:9</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="butClip9_16">
+              <property name="minimumSize">
+               <size>
+                <width>32</width>
+                <height>16</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>32</width>
+                <height>16</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>9:16</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="butClip4_3">
+              <property name="minimumSize">
+               <size>
+                <width>24</width>
+                <height>16</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>24</width>
+                <height>16</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>4:3</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="butClip3_4">
+              <property name="minimumSize">
+               <size>
+                <width>24</width>
+                <height>16</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>24</width>
+                <height>16</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>3:4</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="butRestore">
+              <property name="minimumSize">
+               <size>
+                <width>16</width>
+                <height>16</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16</width>
+                <height>16</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>R</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_3">
+            <item>
+             <widget class="QLabel" name="label_2">
+              <property name="minimumSize">
+               <size>
+                <width>40</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>40</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>左右</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="CRangeSlider" name="widClipLR" native="true"/>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_4">
+            <item>
+             <widget class="QLabel" name="label_5">
+              <property name="minimumSize">
+               <size>
+                <width>40</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>40</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>上下</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="CRangeSlider" name="widClipTB" native="true"/>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+      <zorder>widgetClip</zorder>
+     </widget>
+     <widget class="QWidget" name="tab_4">
+      <attribute name="title">
+       <string>特效</string>
+      </attribute>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>CRangeSlider</class>
+   <extends>QWidget</extends>
+   <header>crangeslider.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
