@@ -271,7 +271,7 @@ bool DlgEncoderSetting::UpdateEncoderConfig( BOOL bPopMsg )
 
 	if ( ui.gboxSaveToFile->isChecked() )
 	{
-		if ( !Encoder_AddSaveFile( &sSave ) )
+		if ( -1 == Encoder_AddSaveFile( &sSave ) )
 		{
 			dwError	= GetLastError();
 		}
@@ -314,7 +314,7 @@ bool DlgEncoderSetting::UpdateEncoderConfig( BOOL bPopMsg )
 							sSave.szSavePath	= eleLive.attribute( "UrlOrId" ).utf16();
 							break;
 						}
-						if ( !Encoder_AddSaveFile( &sSave ) )
+						if ( -1 == Encoder_AddSaveFile( &sSave ) )
 						{
 							dwError	= GetLastError();
 						}

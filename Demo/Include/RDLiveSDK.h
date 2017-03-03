@@ -9,6 +9,10 @@ extern "C"
 {
 #endif
 
+BOOL	WINAPI RDLive_Init( LPCWSTR szOrganizationName, LPCWSTR szApplicationName,
+						   fnRenderNotifyCB pCbRender, fnEncoderNotifyCB pCbEncoder, LPVOID pCbParam );
+VOID	WINAPI RDLive_Uninit();
+
 enum	ERdLiveAccreditType
 {
 	eAccreditLocalSave,		//授权本地保存
@@ -17,9 +21,6 @@ enum	ERdLiveAccreditType
 };
 BOOL	WINAPI RDLive_ResetAccredit( LPCSTR szAppKey, LPCSTR szAppSecret );
 FLOAT	WINAPI RDLive_GetAccreditDays( ERdLiveAccreditType eAccreditType );
-
-BOOL	WINAPI RDLive_Init( LPCWSTR szOrganizationName, LPCWSTR szApplicationName );
-VOID	WINAPI RDLive_Uninit();
 
 //系统默认文件夹的类型。
 enum	ERecDefaultDirs
@@ -32,7 +33,6 @@ enum	ERecDefaultDirs
 
 };
 LPCWSTR	WINAPI RDLive_DefaultDir( ERecDefaultDirs eDir );
-LPCWSTR WINAPI RDLive_LastErrorString();
 
 BOOL	WINAPI Render_SetSize( INT iWidth, INT iHeight );
 SIZE	WINAPI Render_GetSize();
@@ -55,7 +55,6 @@ const IGlRender_SPreviewLayout* WINAPI Render_GetPreviewLayout();
 //返回值是当前应该显示的鼠标指针形状的句柄
 HCURSOR WINAPI Render_SendPreviewMouseMessage( UINT uMsg, WPARAM wParam, int iX, int iY );
 
-BOOL	WINAPI Render_SetNotifyCallBack( fnRenderNotifyCB pCbRender, fnEncoderNotifyCB pCbEncoder, LPVOID pCbParam );
 INT		WINAPI Render_GetSceneCount();
 HSCENE	WINAPI Render_GetScene( INT iIndex );
 HSCENE	WINAPI Render_CreateScene();
