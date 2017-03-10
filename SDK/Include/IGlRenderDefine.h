@@ -9,6 +9,10 @@ typedef	VOID		( WINAPI *fnGPin_Destroy_Input )( IPinInput* pin );
 typedef	VOID*		( WINAPI *fnGPin_Expand_Interface )( LPCWSTR szInterface );
 typedef	VOID		( WINAPI *fnPreviewImageCB ) ( INT iWidth, INT iHeight, LPBYTE pImageBuffer, LPVOID pCbParam );
 typedef	VOID		( WINAPI *fnFrameImageCB ) ( INT64 iPts, INT iWidth, INT iHeight, LPBYTE pImageBuffer, LPVOID pCbParam );
+typedef	DWORD_PTR	HSCENE;
+typedef	DWORD_PTR	HCHIP;
+enum	IRender_ENotify;
+typedef	VOID		( WINAPI *fnRenderNotifyCB ) ( IRender_ENotify eNotify, HSCENE hScene, INT iValue, LPVOID pCbParam );
 enum	IRender_ENotify		//pScene						//iValue
 {
 	eNotify_None,
@@ -66,9 +70,6 @@ enum	IRender_ENotify		//pScene						//iValue
 
 	eNotify_Count
 };
-typedef	DWORD_PTR	HSCENE;
-typedef	DWORD_PTR	HCHIP;
-typedef	VOID		( WINAPI *fnRenderNotifyCB ) ( IRender_ENotify eNotify, HSCENE hScene, INT iValue, LPVOID pCbParam );
 
 enum	IPinInput_EChipStatus
 {
@@ -158,7 +159,7 @@ struct	IGlRender_SPreviewLayout
 	fnPreviewImageCB	pCbFunction;	//(in)	如果有值，且 hPreviewWnd 为空，则通过该回调函数传出预览画面的数据，而不是使用 OpenGL 绘制窗口。
 	LPVOID				pCbParam;		//(in)	该参数是当调用 pCbFunction 时，原样传出的参数。
 
-	//根据布局参数计算得到新的预览显示区域，以及主窗口大小等。
+	enum	ELocBScene { eUp, eDown, eLeft, eRight };	//枚举：上，下，左，右。
 	enum	EReposWnd			//枚举，当主窗口大小需要修改时，以哪种方式作为限制。
 	{
 		eNotChangePos,			//计算时不要改变主窗口的坐标
@@ -167,12 +168,6 @@ struct	IGlRender_SPreviewLayout
 		eDoNotExceedDesktop,	//计算时，只要大小改变后不超过桌面，就不要改变主窗口坐标。否则就移动位置使之在桌面范围内。
 		eDoNotExceedScreen,		//计算时，只要大小改变后不超过当前屏幕，就不要改变主窗口坐标。否则就移动位置使之在当前屏幕范围内。
 	};
-	EReposWnd	eReposWindow;	//(in)	计算主窗口位置的限制方式。
-	BOOL		bOnlyWorkArea;	//(in)	是否以桌面的工作区域（排除任务栏之后的区域）作为限制。
-	//计算得到各个新的区域，开发者应该根据新的区域重设窗口。
-	RECT		rtMainWindow;	//(out) 计算后得到的主窗口在屏幕上的区域，包含整个主窗口(标题栏、边框)。
-	RECT		rtMainClient;	//(out) 计算后得到的主窗口的客户区域在屏幕上的区域，是使用的屏幕坐标，而不是窗口内部的坐标。
-
 	union UColor
 	{
 		struct
@@ -185,7 +180,7 @@ struct	IGlRender_SPreviewLayout
 		BYTE	co[4];
 		DWORD	dwColor;
 	};
-	//设置多场景时，后台场景的缩略显示时的布局。
+
 	struct SBorder
 	{
 		INT			iSize;		//边框线的宽度(粗细)，单位为像素。值为 0 到 32 之间的整数
@@ -197,22 +192,27 @@ struct	IGlRender_SPreviewLayout
 								//BScene:	后台场景区域，当前场景的边框色
 								//ScrollBar:滚动条颜色
 	};
-	enum	ELocBScene { eUp, eDown, eLeft, eRight };	//枚举：上，下，左，右。
+	EReposWnd	eReposWindow;	//(in)	计算主窗口位置的限制方式。
+	BOOL		bOnlyWorkArea;	//(in)	是否以桌面的工作区域（排除任务栏之后的区域）作为限制。
+	//计算得到各个新的区域，开发者应该根据新的区域重设窗口。
+	RECT		rtMainWindow;	//(out) 计算后得到的主窗口在屏幕上的区域，包含整个主窗口(标题栏、边框)。
+	RECT		rtMainClient;	//(out) 计算后得到的主窗口的客户区域在屏幕上的区域，是使用的屏幕坐标，而不是窗口内部的坐标。
 
+	//根据布局参数计算得到新的预览显示区域，以及主窗口大小等。
 	SBorder		boPreview;		//(in)	整个预览画面的边框属性
 	SBorder		boCurScene;		//(in)	当前场景的边框属性
 	SBorder		boCurChip;		//(in)	当前选中的 Chip 的边框属性
+	//设置多场景时，后台场景的缩略显示时的布局。
 	INT			iBSceneCount;	//(in)	显示后台场景的数量，值为 0 到 32 的整数。例如 4，那么每个后台场景的长和宽都约为主预览画面的 1/4。
+								//		如果值为 0，则不显示后台场景，以下有关后台场景的布局参数均会忽略。
 	BOOL		bAddSceneBut;	//(in)	显示添加场景的按钮
 	BOOL		bSceneName;		//(in)	后台场景上显示场景名
 	BOOL		bCurLikeBScene;	//(in)	当前场景像后台场景那样绘制，也就是后台场景列表中也包括当前场景。
-	FLOAT		fEnterScale;	//(int)	当鼠标移入后台场景，后台场景缩略显示的放大比例，值为 1.0 到 iBSceneCount - 1 之间的的浮点数。
+	FLOAT		fEnterScale;	//(in)	当鼠标移入后台场景，后台场景缩略显示的放大比例，值为 1.0 到 iBSceneCount - 1 之间的的浮点数。
 								//		当鼠标移入的后台场景放大时，其它后台场景相应变小。鼠标移开就恢复正常。
 	BOOL		bNoBigCurScene;	//(in)	不要绘制大幅的当前场景。如果设置为TRUE，那么 bCurLikeBScene 也必须是 TRUE，并且 iBSceneCount 不能为0。
-								//		如果值为 0，则不显示后台场景，以下有关后台场景的布局参数均会忽略。
 	ELocBScene	eLocBScene;		//(in)	后台场景显示在当前场景的上下左右哪个位置。		
 	INT			iBSceneSpacing;	//(in)	后台场景之间的间距，单位为像素。值为 0 到 32 之间的整数。
-								//		实际间距为后台场景缩略显示时的宽度或高度(与布局的位置有关)与该值的乘积。
 	INT			iCBSpacing;		//(in)	后台场景与当前场景之间预览时的间距，单位为像素。值为 0 到 32 之间的整数。
 	SBorder		boBScene;		//(in)	后台场景的边框属性
 
@@ -227,12 +227,13 @@ struct	IGlRender_SPreviewLayout
 								//		如果设置为 FALSE，则当只有一个场景时，就只计算主预览画面的大小，作为预览区域的大小。
 	BOOL		bScrollHolder;	//(in)	计算时是否必须为滚动条保留位置，即使当前只有一个场景。
 								//		如果不会显示后台场景（只有一个场景且不保留位置），那么此值不生效。
+
 };
 
 
-struct	IGlRender_SResourceInfo
+struct	IGlRender_SClassInfo
 {
-	LPCWSTR	szTypeName;		//类型名
+	LPCWSTR	szClassName;	//类型名
 	LPCWSTR	szDescription;	//说明
 	LPCWSTR	szRemark;		//备注
 };

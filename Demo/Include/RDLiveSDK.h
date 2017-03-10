@@ -40,7 +40,7 @@ BOOL	WINAPI Render_SetFps( FLOAT fps );
 FLOAT	WINAPI Render_GetFps();
 
 INT		WINAPI Render_GetClassCount();
-IGlRender_SResourceInfo		WINAPI Render_GetClassInfo( INT iIndex );
+IGlRender_SClassInfo		WINAPI Render_GetClassInfo( INT iIndex );
 
 
 //功能：重设预览画面显示布局和百分比，并计算出需要的主窗口等的大小。
@@ -100,15 +100,6 @@ BOOL	WINAPI Chip_GetStatusInfo( HCHIP hChip, IPinInput_SStatusInfo* pStatus );
 BOOL	WINAPI Chip_GetCharacteristics( HCHIP hChip, IPinInput_SCharacteristics* pCharacter );
 LPCWSTR	WINAPI Chip_GetClassName( HCHIP hChip );
 LPCWSTR	WINAPI Chip_GetSourceName( HCHIP hChip );
-
-struct	SInputResourInfo
-{
-	LPCWSTR		szTypeName;
-	LPCWSTR		szResource;
-	BOOL		bCannotReuse;
-	RECT		rtView;
-};
-const SInputResourInfo* WINAPI Input_GetResourceInfo();
 
 ////////////////////////////////////////////////////////////////
 INT		WINAPI Camera_GetCount();
