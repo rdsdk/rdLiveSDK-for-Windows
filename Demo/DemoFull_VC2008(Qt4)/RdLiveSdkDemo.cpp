@@ -73,7 +73,7 @@ RDLiveSdkDemo::RDLiveSdkDemo(QWidget *parent, Qt::WFlags flags)
 	//{
 	//}
 
-	if ( !RDLive_ResetAccredit( "265d4aa64b5eae8e|WPYvhd6SCVrcOaWsDu8a+g==", 
+	if ( !RDLive_ResetAccredit( "265d4aa64b5eae8e", 
 		"0abf473cf7aa75a30f596021cf7b5f9b" ) )
 	{
 	}
