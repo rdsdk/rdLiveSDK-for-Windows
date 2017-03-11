@@ -9,7 +9,7 @@ ChipItem::ChipItem( HCHIP hChip, QListWidget *parent)
 
 	ZeroMemory( &m_sScrCapParams, sizeof( m_sScrCapParams ) );
 	ZeroMemory( &m_sChipStatus, sizeof( m_sChipStatus ) );
-
+	m_eClassType		= ePinInput_Unknow;
 	m_listWidChips		= parent;
 	m_hChip				= hChip;
 	if ( NULL == m_pItemOper )
@@ -160,7 +160,7 @@ void ChipItem::OnStatusChanged()
 	{
 		return;
 	}
-	if ( m_sChipStatus.eStatus == ePin_Opening || m_szClass.isEmpty() )
+	if ( m_sChipStatus.eStatus == ePin_Opening || m_eClassType == ePinInput_Unknow )
 	{
 		DisplaySourceName();
 	}
@@ -263,27 +263,27 @@ void ChipItem::OnPosChanged()
 
 void ChipItem::DisplaySourceName()
 {
-	m_szClass	= QFU( Chip_GetClassName( m_hChip ) );
+	m_eClassType	= Chip_GetClassType( m_hChip );
 	m_szSource	= QFU( Chip_GetSourceName( m_hChip ) );
 	QString	szName;
 	QFontMetrics	fm( ui.labSourceName->font() );
-	if ( m_szClass.isEmpty() )
+	if ( m_eClassType == ePinInput_Unknow )
 	{
 		szName	= "Unknow";
 	}
-	else if ( m_szClass == "Picture" )
+	else if ( m_eClassType == ePinInput_Picture )
 	{
 		szName	= m_szSource;
 		szName	= fm.elidedText( szName, Qt::ElideLeft, ui.labSourceName->width() );
 	}
-	else if ( m_szClass == "Camera" )
+	else if ( m_eClassType == ePinInput_Camera )
 	{
         int	iCamera	= Camera_GetIndex( (LPCWSTR)m_szSource.utf16() );
 		if ( iCamera >= 0 ) 
 			szName	= QFU( Camera_GetFriendlyName( iCamera ) );
 		szName	= fm.elidedText( szName, Qt::ElideRight, ui.labSourceName->width() );
 	}
-	else if ( m_szClass == "Screen" )
+	else if ( m_eClassType == ePinInput_Screen )
 	{
         if ( Screen_AnalysisSource( (LPCWSTR)m_szSource.utf16(), &m_sScrCapParams ) )
 		{
@@ -371,20 +371,18 @@ void ChipItem::SetLabelIcon()
 	static QImage	imgStaLoading( ":/Resources/ItemToolbar/inpStatusLoading.png" );
 
 	QImage	imgIcon;
-	if ( m_szClass.isEmpty() )
+	switch( m_eClassType )
 	{
+	case ePinInput_Unknow:
 		imgIcon	= imgNone;
-	}
-	else if ( m_szClass == "Picture" )
-	{
+		break;
+	case ePinInput_Picture:
 		imgIcon	= imgPicture;
-	}
-	else if ( m_szClass == "Camera" )
-	{
+		break;
+	case ePinInput_Camera:
 		imgIcon	= imgCamera;
-	}
-	else if ( m_szClass == "Screen" )
-	{
+		break;
+	case ePinInput_Screen:
 		if ( m_sScrCapParams.szWindow[0] || m_sScrCapParams.hWindow )
 		{
 			imgIcon	= imgWindow;
@@ -393,7 +391,15 @@ void ChipItem::SetLabelIcon()
 		{
 			imgIcon	= imgSceeen;
 		}
+		break;
+	case ePinInput_Movie:
+		imgIcon	= imgMovie;
+		break;
+	case ePinInput_Game:
+		//imgIcon	= imgCamera;
+		break;
 	}
+	
 	QPainter	pnt( &imgIcon );
 
 	switch( m_sChipStatus.eStatus )

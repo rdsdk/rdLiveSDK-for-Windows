@@ -39,20 +39,8 @@ SIZE	WINAPI Render_GetSize();
 BOOL	WINAPI Render_SetFps( FLOAT fps );
 FLOAT	WINAPI Render_GetFps();
 
-INT		WINAPI Render_GetClassCount();
-IGlRender_SClassInfo		WINAPI Render_GetClassInfo( INT iIndex );
-
-
-//功能：重设预览画面显示布局和百分比，并计算出需要的主窗口等的大小。
-//参数：pLayout		[in,out]	SPreviewLayout 结构的指针，请务必详细阅读 SPreviewLayout 结构中的注释。
-//返回：TRUE 表示成功，FALSE 表示失败，可以使用 RDLive_LastError 取得错误代码。
 BOOL	WINAPI Render_SetPreviewLayout( IGlRender_SPreviewLayout* pLayout );
 const IGlRender_SPreviewLayout* WINAPI Render_GetPreviewLayout();
-//当不使用OpenGL加速，而通过回调获得预览图像时，需要在鼠标在预览的显示区域进行操作的时候，
-//由上层调用者把鼠标消息发送到预览。
-//目前只处理以下消息，x 和 y 参数都是以预览图像绘制区域左上角为原点的鼠标坐标。
-//WM_MOUSEMOVE, WM_LBUTTONDOWN, WM_LBUTTONUP, WM_RBUTTONDOWN, WM_RBUTTONUP
-//返回值是当前应该显示的鼠标指针形状的句柄
 HCURSOR WINAPI Render_SendPreviewMouseMessage( UINT uMsg, WPARAM wParam, int iX, int iY );
 
 INT		WINAPI Render_GetSceneCount();
@@ -63,12 +51,12 @@ BOOL	WINAPI Render_SetCurScene( HSCENE hScene );
 HSCENE	WINAPI Render_GetCurScene();
 INT		WINAPI Render_GetSceneIndex( HSCENE hScene );
 BOOL	WINAPI Render_SetBSceneScroll( INT iValue );
-INT		WINAPI Render_GetBSceneScroll();
+INT		WINAPI Render_GetBSceneScroll( LPINT pMax );
 
 INT		WINAPI Scene_GetChipCount( HSCENE hScene );
 HCHIP	WINAPI Scene_GetChip( HSCENE hScene, INT iIndex );
 
-HCHIP	WINAPI Scene_CreateChip( HSCENE hScene );
+HCHIP	WINAPI Scene_CreateChip( HSCENE hScene, IPinInput_EClass ePinClass );
 HCHIP	WINAPI Sceen_GetCurChip( HSCENE hScene );
 LPCWSTR WINAPI Scene_GetName( HSCENE hScene );
 BOOL	WINAPI Scene_SetName( HSCENE hScene, LPCWSTR szName );
@@ -79,7 +67,7 @@ BOOL	WINAPI Chip_Destroy( HCHIP hChip );
 BOOL	WINAPI Chip_SetCurent( HCHIP hChip );
 //////////////////////////////////////////////////////
 
-BOOL	WINAPI Chip_Open( HCHIP hChip, LPCWSTR szTypeName, LPCWSTR szResource, BOOL bCannotReuse = FALSE, DWORD_PTR ptrParam = NULL );
+BOOL	WINAPI Chip_Open( HCHIP hChip, LPCWSTR szSourceName, BOOL bCannotReuse = FALSE, DWORD_PTR ptrParam = NULL );
 BOOL	WINAPI Chip_Close( HCHIP hChip );
 BOOL	WINAPI Chip_SetRect( HCHIP hChip, INT iX, INT iY, INT iWidth, INT iHeight, IChip_EBorderFitMode eFitMode );
 BOOL	WINAPI Chip_GetRect( HCHIP hChip, PINT pX, PINT pY, PINT pWidth, PINT pHeight, BOOL bRealDisplay );
@@ -98,7 +86,7 @@ BOOL	WINAPI Chip_IsVisible( HCHIP hChip );
 IPinInput_EChipStatus		WINAPI Chip_GetStatus( HCHIP hChip );
 BOOL	WINAPI Chip_GetStatusInfo( HCHIP hChip, IPinInput_SStatusInfo* pStatus );
 BOOL	WINAPI Chip_GetCharacteristics( HCHIP hChip, IPinInput_SCharacteristics* pCharacter );
-LPCWSTR	WINAPI Chip_GetClassName( HCHIP hChip );
+IPinInput_EClass	WINAPI Chip_GetClassType( HCHIP hChip );
 LPCWSTR	WINAPI Chip_GetSourceName( HCHIP hChip );
 
 ////////////////////////////////////////////////////////////////

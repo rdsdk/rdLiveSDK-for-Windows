@@ -4,15 +4,10 @@
 class	IGlRender;
 class	IPinInput;
 class	IScene;
-typedef	IPinInput*	( WINAPI *fnGPin_Create_Input )( IGlRender* pRender );
-typedef	VOID		( WINAPI *fnGPin_Destroy_Input )( IPinInput* pin );
-typedef	VOID*		( WINAPI *fnGPin_Expand_Interface )( LPCWSTR szInterface );
 typedef	VOID		( WINAPI *fnPreviewImageCB ) ( INT iWidth, INT iHeight, LPBYTE pImageBuffer, LPVOID pCbParam );
 typedef	VOID		( WINAPI *fnFrameImageCB ) ( INT64 iPts, INT iWidth, INT iHeight, LPBYTE pImageBuffer, LPVOID pCbParam );
 typedef	DWORD_PTR	HSCENE;
 typedef	DWORD_PTR	HCHIP;
-enum	IRender_ENotify;
-typedef	VOID		( WINAPI *fnRenderNotifyCB ) ( IRender_ENotify eNotify, HSCENE hScene, INT iValue, LPVOID pCbParam );
 enum	IRender_ENotify		//pScene						//iValue
 {
 	eNotify_None,
@@ -69,6 +64,19 @@ enum	IRender_ENotify		//pScene						//iValue
 	eNotify_AudioImmVolume,
 
 	eNotify_Count
+};
+typedef	VOID		( WINAPI *fnRenderNotifyCB ) ( IRender_ENotify eNotify, HSCENE hScene, INT iValue, LPVOID pCbParam );
+
+enum	IPinInput_EClass
+{
+	ePinInput_Unknow,
+	ePinInput_Picture,
+	ePinInput_Camera,
+	ePinInput_Screen,
+	ePinInput_Movie,
+	ePinInput_Game,
+
+	ePinInput_ClassCount
 };
 
 enum	IPinInput_EChipStatus
@@ -228,14 +236,6 @@ struct	IGlRender_SPreviewLayout
 	BOOL		bScrollHolder;	//(in)	计算时是否必须为滚动条保留位置，即使当前只有一个场景。
 								//		如果不会显示后台场景（只有一个场景且不保留位置），那么此值不生效。
 
-};
-
-
-struct	IGlRender_SClassInfo
-{
-	LPCWSTR	szClassName;	//类型名
-	LPCWSTR	szDescription;	//说明
-	LPCWSTR	szRemark;		//备注
 };
 
 //屏幕、窗口截取的参数结构

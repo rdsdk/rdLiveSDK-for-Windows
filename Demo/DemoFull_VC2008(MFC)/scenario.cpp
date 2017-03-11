@@ -165,10 +165,10 @@ BOOL scenario::OnCommand( WPARAM wParam, LPARAM lParam )
 
 	{
 		int iCaremaCount = menuID - WM_CAMERA; 
-		HCHIP	hChip	= Scene_CreateChip( Render_GetCurScene() );
+		HCHIP	hChip	= Scene_CreateChip( Render_GetCurScene(), ePinInput_Camera );
 		if ( hChip )
 		{
-			if ( Chip_Open( hChip, L"Camera",Camera_GetDisplayName(iCaremaCount) ) )
+			if ( Chip_Open( hChip, Camera_GetDisplayName(iCaremaCount) ) )
 			{
 				Chip_SetRectPercent( hChip, 0.0f, 0.0f, 1.0f, 1.0f, eKeepAspectRatio );
 				Chip_SetVisible( hChip, TRUE );
@@ -192,10 +192,10 @@ BOOL scenario::OnCommand( WPARAM wParam, LPARAM lParam )
 		{
 			sCapParams.iScreen	= iVal;
 		}
-		HCHIP hChip	= Scene_CreateChip( Render_GetCurScene() );
+		HCHIP hChip	= Scene_CreateChip( Render_GetCurScene(), ePinInput_Screen );
 		if ( hChip )
 		{
-			if ( Chip_Open( hChip, L"Screen", Screen_AssembleSource( &sCapParams ) ) )
+			if ( Chip_Open( hChip, Screen_AssembleSource( &sCapParams ) ) )
 			{
 				Chip_SetRectPercent( hChip, 0.0f, 0.0f, 1.0f, 1.0f, eKeepAspectRatio );
 				//新添加的元件，不要忘了设置显示。
@@ -220,10 +220,10 @@ BOOL scenario::OnCommand( WPARAM wParam, LPARAM lParam )
 			return  CDialog::OnCommand(wParam, lParam);  
 		}
 		sCapParams.hWindow = m_HWndList->GetAt(iVal); 
-		HCHIP hChip	= Scene_CreateChip( Render_GetCurScene() );
+		HCHIP hChip	= Scene_CreateChip( Render_GetCurScene(), ePinInput_Screen );
 		if ( hChip )
 		{
-			if ( Chip_Open( hChip, L"Screen", Screen_AssembleSource( &sCapParams ) ) )
+			if ( Chip_Open( hChip, Screen_AssembleSource( &sCapParams ) ) )
 			{
 				Chip_SetRectPercent( hChip, 0.0f, 0.0f, 1.0f, 1.0f, eKeepAspectRatio );
 				//新添加的元件，不要忘了设置显示。
@@ -235,12 +235,12 @@ BOOL scenario::OnCommand( WPARAM wParam, LPARAM lParam )
 	{
 		CString szFileName = GetImageDir();
 		if ( szFileName.IsEmpty() ) return CDialog::OnCommand(wParam, lParam); ;
-		HCHIP	hChip	= Scene_CreateChip( Render_GetCurScene() );
+		HCHIP	hChip	= Scene_CreateChip( Render_GetCurScene(), ePinInput_Picture );
 		if ( hChip )
 		{
 			Chip_SetRectPercent( hChip, 0.0f, 0.0f, 1.0f, 1.0f, eKeepAspectRatio );
 			Chip_SetVisible( hChip, TRUE );
-			if ( Chip_Open( hChip, L"Picture", szFileName ) )
+			if ( Chip_Open( hChip, szFileName ) )
 			{
 
 			}

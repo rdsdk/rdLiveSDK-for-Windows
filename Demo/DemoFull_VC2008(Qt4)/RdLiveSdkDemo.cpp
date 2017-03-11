@@ -261,16 +261,14 @@ BOOL RDLiveSdkDemo::LoadScenes()
 				continue;
 			}
 			int				iSelChip	= eleScene.attribute( "Current", "-1" ).toInt();
-			HCHIP			hChip		= Scene_CreateChip( hScene );
-            if ( Chip_Open( hChip, (LPCWSTR)eleChip.attribute( "Type" ).utf16(),
-                (LPCWSTR)eleChip.attribute( "Source" ).utf16(),
+			HCHIP			hChip		= Scene_CreateChip( hScene, (IPinInput_EClass)eleChip.attribute( "Type" ).toInt() );
+            if ( Chip_Open( hChip, (LPCWSTR)eleChip.attribute( "Source" ).utf16(),
                 eleChip.attribute( "CannotReuse" ).toInt() ? TRUE : FALSE ) )
 			{
 			}
-			else if ( eleChip.attribute( "Type" ) == "Camera" )
+			else if ( eleChip.attribute( "Type" ).toInt() == ePinInput_Camera )
 			{
-				Chip_Open( hChip, L"Camera", 
-				Camera_GetDisplayName( 0 ),
+				Chip_Open( hChip, Camera_GetDisplayName( 0 ),
 				eleChip.attribute( "CannotReuse" ).toInt() ? TRUE : FALSE );
 			}
 			QDomElement		eleRect		= eleChip.firstChildElement( "Rect" );
@@ -329,7 +327,7 @@ BOOL RDLiveSdkDemo::SaveScenes()
 			IPinInput_SStatusInfo	sStatus;
 			Chip_GetStatusInfo( hChip, &sStatus );
 
-			eleChip.setAttribute( "Type", QFU( Chip_GetClassName( hChip ) ) );
+			eleChip.setAttribute( "Type", Chip_GetClassType( hChip ) );
 			eleChip.setAttribute( "Source", QFU( Chip_GetSourceName( hChip ) ) );
 			eleChip.setAttribute( "CannotReuse", sStatus.bCannotReuse ? 1 : 0 );
 			eleChip.setAttribute( "Paused", sStatus.eStatus == ePin_Paused ? 1 : 0 );

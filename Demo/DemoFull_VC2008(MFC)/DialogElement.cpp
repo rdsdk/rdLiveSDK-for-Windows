@@ -13,6 +13,7 @@ IMPLEMENT_DYNAMIC(CDialogElement, CDialog)
 CDialogElement::CDialogElement(CWnd* pParent /*=NULL*/)
 : CDialog(CDialogElement::IDD, pParent)
 {
+	m_eClassType	= ePinInput_Unknow;
 	m_BisSelected = FALSE;
 	m_Bursh.CreateSolidBrush(RGB( 255, 255, 0 ));
 	ZeroMemory( &m_sScrCapParams, sizeof( m_sScrCapParams ) );
@@ -184,21 +185,21 @@ void CDialogElement::SetElementName( )
 {
 	int ImageID = -1;
 	CString szName;
-	m_szClass	=  Chip_GetClassName( m_HChip );
+	m_eClassType	=  Chip_GetClassType( m_HChip );
 	m_szSource	=  Chip_GetSourceName( m_HChip );
 	//QFontMetrics	fm( ui.labSourceName->font() );
-	if ( m_szClass.IsEmpty() )
+	if ( m_eClassType == ePinInput_Unknow )
 	{
 		szName	= "Unknow";
 		ImageID = 0;
 	}
-	else if ( m_szClass == "Picture" )
+	else if ( m_eClassType == ePinInput_Picture )
 	{
 		szName	= m_szSource;
 		ImageID = 1;
 		//szName	= fm.elidedText( szName, Qt::ElideLeft, ui.labSourceName->width() );
 	}
-	else if ( m_szClass == "Camera" )
+	else if ( m_eClassType == ePinInput_Camera )
 	{
 		int	iCamera	= Camera_GetIndex( m_szSource );
 		if ( iCamera >= 0 ) 
@@ -206,7 +207,7 @@ void CDialogElement::SetElementName( )
 		ImageID = 2;
 		/*szName	= fm.elidedText( szName, Qt::ElideRight, ui.labSourceName->width() );*/
 	}
-	else if ( m_szClass == "Screen" )
+	else if ( m_eClassType == ePinInput_Screen )
 	{
 		if ( Screen_AnalysisSource( m_szSource, &m_sScrCapParams ) )
 		{

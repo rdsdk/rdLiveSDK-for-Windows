@@ -547,13 +547,13 @@ void RDLiveSdkDemo::on_menuAddScreen_triggered ( QAction * action )
 	{
 		sCapParams.hWindow	= HWND(iVal);
 	}
-	hChip	= Scene_CreateChip( Render_GetCurScene() );
+	hChip	= Scene_CreateChip( Render_GetCurScene(), ePinInput_Screen );
 	if ( hChip )
 	{
 		Chip_SetRectPercent( hChip, 0.0f, 0.0f, 1.0f, 1.0f, eKeepAspectRatio );
 		//新添加的元件，不要忘了设置显示。
 		Chip_SetVisible( hChip, TRUE );
-		if ( Chip_Open( hChip, L"Screen", Screen_AssembleSource( &sCapParams ) ) )
+		if ( Chip_Open( hChip, Screen_AssembleSource( &sCapParams ) ) )
 		{
 		}
 	}
@@ -561,12 +561,12 @@ void RDLiveSdkDemo::on_menuAddScreen_triggered ( QAction * action )
 
 void RDLiveSdkDemo::on_menuAddCamera_triggered ( QAction * action )
 {
-	HCHIP	hChip	= Scene_CreateChip( Render_GetCurScene() );
+	HCHIP	hChip	= Scene_CreateChip( Render_GetCurScene(), ePinInput_Camera );
 	if ( hChip )
 	{
 		Chip_SetRectPercent( hChip, 0.0f, 0.0f, 1.0f, 1.0f, eKeepAspectRatio );
 		Chip_SetVisible( hChip, TRUE );
-        if ( Chip_Open( hChip, L"Camera", (LPCWSTR)action->data().toString().utf16() ) )
+        if ( Chip_Open( hChip, (LPCWSTR)action->data().toString().utf16() ) )
 		{
 		}
 	}
@@ -577,12 +577,12 @@ void RDLiveSdkDemo::on_actiAddPicture_triggered( bool checked )
 	QString	szFilter	= "Images (*.png *.jpg *.jpeg *.gif *.bmp)";
 	QString szFileName	= QFileDialog::getOpenFileName( this, "Open File", QString(), szFilter );
 	if ( szFileName.isEmpty() ) return;
-	HCHIP	hChip	= Scene_CreateChip( Render_GetCurScene() );
+	HCHIP	hChip	= Scene_CreateChip( Render_GetCurScene(), ePinInput_Picture );
 	if ( hChip )
 	{
 		Chip_SetRectPercent( hChip, 0.0f, 0.0f, 1.0f, 1.0f, eKeepAspectRatio );
 		Chip_SetVisible( hChip, TRUE );
-        if ( Chip_Open( hChip, L"Picture", (LPCWSTR)szFileName.utf16() ) )
+        if ( Chip_Open( hChip, (LPCWSTR)szFileName.utf16() ) )
 		{
 		}
 	}

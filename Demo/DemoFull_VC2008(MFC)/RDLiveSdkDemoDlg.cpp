@@ -1114,10 +1114,10 @@ BOOL CDemoRdLiveDlg::OnCommand( WPARAM wParam, LPARAM lParam )
 		if( (menuID > (WM_CAMERA-1) ) & ( menuID < WM_CAMERA + m_scenario->m_CameraCount) )
 		{
 			int iCaremaCount = menuID - WM_CAMERA; 
-			HCHIP	hChip	= Scene_CreateChip( Render_GetCurScene() );
+			HCHIP	hChip	= Scene_CreateChip( Render_GetCurScene(), ePinInput_Camera );
 			if ( hChip )
 			{
-				if ( Chip_Open( hChip, L"Camera",Camera_GetDisplayName(iCaremaCount) ) )
+				if ( Chip_Open( hChip, Camera_GetDisplayName(iCaremaCount) ) )
 				{
 					Chip_SetRectPercent( hChip, 0.0f, 0.0f, 1.0f, 1.0f, eKeepAspectRatio );
 					Chip_SetVisible( hChip, TRUE );
@@ -1141,10 +1141,10 @@ BOOL CDemoRdLiveDlg::OnCommand( WPARAM wParam, LPARAM lParam )
 			{
 				sCapParams.iScreen	= iVal;
 			}
-			HCHIP hChip	= Scene_CreateChip( Render_GetCurScene() );
+			HCHIP hChip	= Scene_CreateChip( Render_GetCurScene(), ePinInput_Screen );
 			if ( hChip )
 			{
-				if ( Chip_Open( hChip, L"Screen", Screen_AssembleSource( &sCapParams ) ) )
+				if ( Chip_Open( hChip, Screen_AssembleSource( &sCapParams ) ) )
 				{
 					Chip_SetRectPercent( hChip, 0.0f, 0.0f, 1.0f, 1.0f, eKeepAspectRatio );
 					//新添加的元件，不要忘了设置显示。
@@ -1169,10 +1169,10 @@ BOOL CDemoRdLiveDlg::OnCommand( WPARAM wParam, LPARAM lParam )
 				return  CDialog::OnCommand(wParam, lParam);  
 			}
 			sCapParams.hWindow = m_scenario->m_HWndList->GetAt(iVal); 
-			HCHIP hChip	= Scene_CreateChip( Render_GetCurScene() );
+			HCHIP hChip	= Scene_CreateChip( Render_GetCurScene(), ePinInput_Screen );
 			if ( hChip )
 			{
-				if ( Chip_Open( hChip, L"Screen", Screen_AssembleSource( &sCapParams ) ) )
+				if ( Chip_Open( hChip, Screen_AssembleSource( &sCapParams ) ) )
 				{
 					Chip_SetRectPercent( hChip, 0.0f, 0.0f, 1.0f, 1.0f, eKeepAspectRatio );
 					//新添加的元件，不要忘了设置显示。
@@ -1184,12 +1184,12 @@ BOOL CDemoRdLiveDlg::OnCommand( WPARAM wParam, LPARAM lParam )
 		{
 			CString szFileName = m_scenario->GetImageDir();
 			if ( szFileName.IsEmpty() ) return CDialog::OnCommand(wParam, lParam); ;
-			HCHIP	hChip	= Scene_CreateChip( Render_GetCurScene() );
+			HCHIP	hChip	= Scene_CreateChip( Render_GetCurScene(), ePinInput_Picture );
 			if ( hChip )
 			{
 				Chip_SetRectPercent( hChip, 0.0f, 0.0f, 1.0f, 1.0f, eKeepAspectRatio );
 				Chip_SetVisible( hChip, TRUE );
-				if ( Chip_Open( hChip, L"Picture", szFileName ) )
+				if ( Chip_Open( hChip, szFileName ) )
 				{
 				}
 			}
@@ -1839,8 +1839,9 @@ BOOL CDemoRdLiveDlg::LoadScenes()
 				CComPtr<MSXML2::IXMLDOMNode> spChildNode;
 				sSceneList->get_item(i, &spChildNode);
 
-				CString szLockPos,szType,szLockAR,szSoure,szLockSize,szCannotReuse,
+				CString szLockPos, szLockAR,szSoure,szLockSize,szCannotReuse,
 					szVisible,szPaused,szLockAngle;
+				IPinInput_EClass	eClassType	= ePinInput_Unknow;
 
 				CComPtr<MSXML2::IXMLDOMNamedNodeMap> spNameNodeMap;
 				spChildNode->get_attributes(&spNameNodeMap);
@@ -1864,7 +1865,7 @@ BOOL CDemoRdLiveDlg::LoadScenes()
 						}
 						else if (bsNodeName == L"Type" )
 						{
-							szType = val;
+							eClassType = (IPinInput_EClass)_wtoi( val );
 						}
 						else if (bsNodeName == L"LockAR" )
 						{
@@ -1896,14 +1897,13 @@ BOOL CDemoRdLiveDlg::LoadScenes()
 						}
 					}
 				}
-				HCHIP			hChip		= Scene_CreateChip( hScene );
-				if ( Chip_Open( hChip,szType,szSoure,_wtoi(szCannotReuse)? TRUE : FALSE ) )
+				HCHIP			hChip		= Scene_CreateChip( hScene, eClassType );
+				if ( Chip_Open( hChip, szSoure, _wtoi(szCannotReuse) ? TRUE : FALSE ) )
 				{
 				}
-				else if ( szType == L"Camera" )
+				else if ( eClassType == ePinInput_Camera )
 				{
-					Chip_Open( hChip, L"Camera", 
-						Camera_GetDisplayName( 0 ),
+					Chip_Open( hChip, Camera_GetDisplayName( 0 ),
 						_wtoi(szCannotReuse)? TRUE : FALSE );
 				}
 
@@ -2109,11 +2109,14 @@ BOOL CDemoRdLiveDlg::SaveScenes()
 			Chip_GetStatusInfo( hChip, &sStatus );
 
 			//创建下结点属性 Type
-			CComPtr<MSXML2::IXMLDOMAttribute> pXMLAttrChipType = NULL;
-			pXMLAttrChipType = pXMLDoc->createAttribute(_T("Type"));
-			pXMLAttrChipType->nodeTypedValue = Chip_GetClassName( hChip );
-			pXMLNodeNodeChip->attributes->setNamedItem(pXMLAttrChipType);
-
+			{
+				CString str;
+				str.Format(L"%d", Chip_GetClassType( hChip ) );
+				CComPtr<MSXML2::IXMLDOMAttribute> pXMLAttrChipType = NULL;
+				pXMLAttrChipType = pXMLDoc->createAttribute(_T("Type"));
+				pXMLAttrChipType->nodeTypedValue = str.GetBuffer(str.GetLength());
+				pXMLNodeNodeChip->attributes->setNamedItem(pXMLAttrChipType);
+			}
 			//创建下结点属性 Source
 			CComPtr<MSXML2::IXMLDOMAttribute> pXMLAttrChipSource = NULL;
 			pXMLAttrChipSource = pXMLDoc->createAttribute(_T("Source"));

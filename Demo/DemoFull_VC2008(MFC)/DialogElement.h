@@ -20,7 +20,7 @@ public:
 	HCHIP m_HChip;
 	IScreen_SCapParams		m_sScrCapParams;
 	IPinInput_SStatusInfo	m_sChipStatus;
-	CString			m_szClass;
+	IPinInput_EClass		m_eClassType;
 	CString			m_szSource;
 	BOOL  m_BisSelected;//是否选中
 	int m_cy;//纵坐标

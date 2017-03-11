@@ -19,7 +19,7 @@ public:
 private:
 	Ui::ChipItem ui;
 	HCHIP			m_hChip;
-	QString			m_szClass;
+	IPinInput_EClass	m_eClassType;
 	QString			m_szSource;
 	QSize			m_siBase;
 	static ChipItemOper*	m_pItemOper;

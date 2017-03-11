@@ -58,10 +58,10 @@ int _tmain(int argc, _TCHAR* argv[])
 	//创建一个场景。得到场景句柄，之后对该场景的操作，都通过句柄来完成。
 	HSCENE hScene = Render_CreateScene();
 	//创建一个元件。得到元件句柄。之后对该元件的操作，都通过句柄来完成。
-	HCHIP hChip = Scene_CreateChip( hScene );
+	HCHIP hChip = Scene_CreateChip( hScene, ePinInput_Screen );
 
 	//为元件设置图像来源。这里设置为录制第一个屏幕。
-	if ( FALSE == Chip_Open( hChip, L"Screen", L"0", FALSE, NULL ) )
+	if ( FALSE == Chip_Open( hChip, L"0", FALSE, NULL ) )
 	{
 		//错误处理 
 		printf( "Open Chip Fail, Error=%d\n", GetLastError() );
@@ -73,11 +73,11 @@ int _tmain(int argc, _TCHAR* argv[])
 	int		iCameraCount	= Camera_GetCount();
 	if ( iCameraCount )
 	{
-		HCHIP	hChip	= Scene_CreateChip( Render_GetCurScene() );
+		HCHIP	hChip	= Scene_CreateChip( Render_GetCurScene(), ePinInput_Camera );
 		if ( hChip )
 		{
 			//打开第一个摄像头
-			if ( Chip_Open( hChip, L"Camera", Camera_GetDisplayName( 0 ) ) )
+			if ( Chip_Open( hChip, Camera_GetDisplayName( 0 ) ) )
 			{
 			}
 			//之前设置的视频分辨率为 1280x720，这里设置一个 320x240 的摄像头画面到右下方。
