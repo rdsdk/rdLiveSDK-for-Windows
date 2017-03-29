@@ -56,7 +56,7 @@ INT		WINAPI Render_GetBSceneScroll( LPINT pMax );
 INT		WINAPI Scene_GetChipCount( HSCENE hScene );
 HCHIP	WINAPI Scene_GetChip( HSCENE hScene, INT iIndex );
 
-HCHIP	WINAPI Scene_CreateChip( HSCENE hScene, IPinInput_EClass ePinClass );
+HCHIP	WINAPI Scene_CreateChip( HSCENE hScene, IPinInput_EClass ePinClass, LPCWSTR szSource = NULL, BOOL bCannotReuse = FALSE, DWORD_PTR ptrParam = NULL );
 HCHIP	WINAPI Sceen_GetCurChip( HSCENE hScene );
 LPCWSTR WINAPI Scene_GetName( HSCENE hScene );
 BOOL	WINAPI Scene_SetName( HSCENE hScene, LPCWSTR szName );
@@ -78,28 +78,53 @@ BOOL	WINAPI Chip_GetClipPercent( HCHIP hChip, PFLOAT pLeft, PFLOAT pTop, PFLOAT 
 
 BOOL	WINAPI Chip_SetViewLock( HCHIP hChip, IChip_ELockType eLockType, BOOL bLock );
 BOOL	WINAPI Chip_GetViewLock( HCHIP hChip, IChip_ELockType eLockType );
-BOOL	WINAPI Chip_SetVolume( HCHIP hChip, FLOAT fVolume, BOOL bMute );
-FLOAT	WINAPI Chip_GetVolume( HCHIP hChip, PBOOL pMute );
 BOOL	WINAPI Chip_SetVisible( HCHIP hChip, BOOL bVisible );
 BOOL	WINAPI Chip_IsVisible( HCHIP hChip );
+
+BOOL	WINAPI Chip_Play( HCHIP hChip );
+BOOL	WINAPI Chip_Pause( HCHIP hChip );
+BOOL	WINAPI Chip_Stop( HCHIP hChip );
+BOOL	WINAPI Chip_Seek( HCHIP hChip, INT64 iSeek, BOOL bIsFrame );
+BOOL	WINAPI Chip_SetRange( HCHIP hChip, INT64 iStart, INT64 iEnd, BOOL bIsFrameRange );
+BOOL	WINAPI Chip_SetLoop( HCHIP hChip, BOOL bLoop );
+BOOL	WINAPI Chip_SetVolume( HCHIP hChip, FLOAT fVolume );
+BOOL	WINAPI Chip_SetMute( HCHIP hChip, BOOL bMute );
+FLOAT	WINAPI Chip_GetVolume( HCHIP hChip, PBOOL pMute );
 
 IPinInput_EChipStatus		WINAPI Chip_GetStatus( HCHIP hChip );
 BOOL	WINAPI Chip_GetStatusInfo( HCHIP hChip, IPinInput_SStatusInfo* pStatus );
 BOOL	WINAPI Chip_GetCharacteristics( HCHIP hChip, IPinInput_SCharacteristics* pCharacter );
 IPinInput_EClass	WINAPI Chip_GetClassType( HCHIP hChip );
 LPCWSTR	WINAPI Chip_GetSourceName( HCHIP hChip );
+LPCWSTR	WINAPI Chip_GetFriendlyName( HCHIP hChip );
+
+
+BOOL	WINAPI Chip_SetShaderParam( HCHIP hChip, IChip_EShaderParam eParam, FLOAT fValue );
+FLOAT	WINAPI Chip_GetShaderParam( HCHIP hChip, IChip_EShaderParam eParam );
 
 ////////////////////////////////////////////////////////////////
 INT		WINAPI Camera_GetCount();
 LPCWSTR	WINAPI Camera_GetFriendlyName( INT iIndex );
-LPCWSTR	WINAPI Camera_GetDisplayName( INT iIndex );
+LPCWSTR	WINAPI Camera_GetInternalName( INT iIndex );
 INT		WINAPI Camera_GetIndex( LPCWSTR szDisplayName );
 
 INT		WINAPI Screen_GetCount();
 BOOL	WINAPI Screen_GetInfo( INT iIndex, MONITORINFOEXW* pMonitorInfo );
 LPCWSTR	WINAPI Screen_AssembleSource( IScreen_SCapParams* pParams );
 BOOL	WINAPI Screen_AnalysisSource( LPCWSTR szSource, IScreen_SCapParams* pParams  );
+BOOL	WINAPI Screen_IsAeroEnabled();
+BOOL	WINAPI Screen_EnableAero( BOOL bEnabled );
+BOOL	WINAPI Screen_IsAutoEnableAero();
+BOOL	WINAPI Screen_SetAutoEnableAero( BOOL bAuto );
+BOOL	WINAPI Screen_SelectScreenAsUI( IScreen_SCapParams* pParams );
 
+BOOL	WINAPI Game_InitRecord( BOOL bMustUseAgent );
+BOOL	WINAPI Game_UninitRecord();
+INT		WINAPI Game_GetCount();
+BOOL	WINAPI Game_GetInfoByInd( INT iIndex, IGame_SGameInfo* pInfo );
+BOOL	WINAPI Game_GetInfoByPid( DWORD dwPID, IGame_SGameInfo* pInfo );
+
+BOOL	WINAPI Cursor_EnableCapture( BOOL bEnabled );
 //音频捕获设备的类型
 enum	EAudioCaptureDev
 {

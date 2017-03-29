@@ -98,9 +98,21 @@ public slots:
 	//场景内容菜单
 	void on_menuAddScreen_aboutToShow();
 	void on_menuAddCamera_aboutToShow();
+	void on_menuAddGame_aboutToShow();
 	void on_menuAddScreen_triggered ( QAction * action );
 	void on_menuAddCamera_triggered ( QAction * action );
-	void on_actiAddPicture_triggered( bool checked );
+	void on_menuAddGame_triggered ( QAction * action );
+	void on_actAddPicture_triggered( bool checked );
+	void on_actAddMovie_triggered( bool checked );
+	void on_actAddOnline_triggered( bool checked );
+	void on_actAddText_triggered( bool checked );
+	
+	//
+	void on_actGameRec_toggled( bool checked );
+	void on_actCapCursor_toggled( bool checked );
+	void on_actAutoAero_toggled( bool checked );
+
+	
 };
 
 #endif // RDLIVESDKDEMO_H

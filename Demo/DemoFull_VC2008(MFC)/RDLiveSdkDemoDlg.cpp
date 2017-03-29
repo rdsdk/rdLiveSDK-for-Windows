@@ -1117,7 +1117,7 @@ BOOL CDemoRdLiveDlg::OnCommand( WPARAM wParam, LPARAM lParam )
 			HCHIP	hChip	= Scene_CreateChip( Render_GetCurScene(), ePinInput_Camera );
 			if ( hChip )
 			{
-				if ( Chip_Open( hChip, Camera_GetDisplayName(iCaremaCount) ) )
+				if ( Chip_Open( hChip, Camera_GetInternalName(iCaremaCount) ) )
 				{
 					Chip_SetRectPercent( hChip, 0.0f, 0.0f, 1.0f, 1.0f, eKeepAspectRatio );
 					Chip_SetVisible( hChip, TRUE );
@@ -1903,7 +1903,7 @@ BOOL CDemoRdLiveDlg::LoadScenes()
 				}
 				else if ( eClassType == ePinInput_Camera )
 				{
-					Chip_Open( hChip, Camera_GetDisplayName( 0 ),
+					Chip_Open( hChip, Camera_GetInternalName( 0 ),
 						_wtoi(szCannotReuse)? TRUE : FALSE );
 				}
 

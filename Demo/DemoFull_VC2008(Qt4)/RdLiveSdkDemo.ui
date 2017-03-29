@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>RDLiveSdkDemo</string>
+   <string>RdLiveSDK For Windows (v1.1.2) Demo</string>
   </property>
   <property name="styleSheet">
    <string notr="true">
@@ -490,7 +490,7 @@ QPushButton#chkStart:disabled:checked{
      <widget class="QTabWidget" name="tabSector">
       <property name="minimumSize">
        <size>
-        <width>250</width>
+        <width>280</width>
         <height>0</height>
        </size>
       </property>
@@ -624,9 +624,19 @@ QPushButton#chkStart:disabled:checked{
      </property>
      <addaction name="separator"/>
     </widget>
+    <widget class="QMenu" name="menuAddGame">
+     <property name="title">
+      <string>游戏</string>
+     </property>
+     <addaction name="separator"/>
+    </widget>
     <addaction name="menuAddScreen"/>
     <addaction name="menuAddCamera"/>
-    <addaction name="actiAddPicture"/>
+    <addaction name="menuAddGame"/>
+    <addaction name="actAddPicture"/>
+    <addaction name="actAddMovie"/>
+    <addaction name="actAddOnline"/>
+    <addaction name="actAddText"/>
    </widget>
    <widget class="QMenu" name="menuScene">
     <property name="title">
@@ -711,9 +721,18 @@ QPushButton#chkStart:disabled:checked{
     <addaction name="actPreviewOpenGL"/>
     <addaction name="separator"/>
    </widget>
+   <widget class="QMenu" name="menuFunction">
+    <property name="title">
+     <string>其它</string>
+    </property>
+    <addaction name="actGameRec"/>
+    <addaction name="actCapCursor"/>
+    <addaction name="actAutoAero"/>
+   </widget>
    <addaction name="menuImage"/>
    <addaction name="menuScene"/>
    <addaction name="menuChipInput"/>
+   <addaction name="menuFunction"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actAddScene">
@@ -859,24 +878,63 @@ QPushButton#chkStart:disabled:checked{
     <string>预览使用硬件加速</string>
    </property>
   </action>
-  <action name="actiAddPicture">
+  <action name="actAddPicture">
    <property name="text">
     <string>图像文件……</string>
+   </property>
+  </action>
+  <action name="actAddMovie">
+   <property name="text">
+    <string>视频文件……</string>
+   </property>
+  </action>
+  <action name="actAddOnline">
+   <property name="text">
+    <string>在线视频……</string>
+   </property>
+  </action>
+  <action name="actGameRec">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>开启游戏录制</string>
+   </property>
+  </action>
+  <action name="actCapCursor">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>允许录制鼠标指针</string>
+   </property>
+  </action>
+  <action name="actAutoAero">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>截屏自动关闭Aero</string>
+   </property>
+  </action>
+  <action name="actAddText">
+   <property name="text">
+    <string>文字</string>
    </property>
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>CPreviewWnd</class>
-   <extends>QWidget</extends>
-   <header>cpreviewwnd.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>CRangeSlider</class>
    <extends>QWidget</extends>
    <header>crangeslider.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>CPreviewWnd</class>
+   <extends>QWidget</extends>
+   <header>cpreviewwnd.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

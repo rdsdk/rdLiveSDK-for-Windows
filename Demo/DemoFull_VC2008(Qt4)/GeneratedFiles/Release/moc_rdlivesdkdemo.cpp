@@ -23,7 +23,7 @@ static const uint qt_meta_data_RDLiveSdkDemo[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-      34,   14, // methods
+      42,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -64,9 +64,17 @@ static const uint qt_meta_data_RDLiveSdkDemo[] = {
     1106,  714,   14,   14, 0x0a,
     1147,   14,   14,   14, 0x0a,
     1178,   14,   14,   14, 0x0a,
-    1209,  714,   14,   14, 0x0a,
-    1246,  714,   14,   14, 0x0a,
-    1283,  281,   14,   14, 0x0a,
+    1209,   14,   14,   14, 0x0a,
+    1238,  714,   14,   14, 0x0a,
+    1275,  714,   14,   14, 0x0a,
+    1312,  714,   14,   14, 0x0a,
+    1347,  281,   14,   14, 0x0a,
+    1380,  281,   14,   14, 0x0a,
+    1411,  281,   14,   14, 0x0a,
+    1443,  281,   14,   14, 0x0a,
+    1473,  281,   14,   14, 0x0a,
+    1501,  281,   14,   14, 0x0a,
+    1531,  281,   14,   14, 0x0a,
 
        0        // eod
 };
@@ -105,9 +113,17 @@ static const char qt_meta_stringdata_RDLiveSdkDemo[] = {
     "on_menuPreviewLayout_triggered(QAction*)\0"
     "on_menuAddScreen_aboutToShow()\0"
     "on_menuAddCamera_aboutToShow()\0"
+    "on_menuAddGame_aboutToShow()\0"
     "on_menuAddScreen_triggered(QAction*)\0"
     "on_menuAddCamera_triggered(QAction*)\0"
-    "on_actiAddPicture_triggered(bool)\0"
+    "on_menuAddGame_triggered(QAction*)\0"
+    "on_actAddPicture_triggered(bool)\0"
+    "on_actAddMovie_triggered(bool)\0"
+    "on_actAddOnline_triggered(bool)\0"
+    "on_actAddText_triggered(bool)\0"
+    "on_actGameRec_toggled(bool)\0"
+    "on_actCapCursor_toggled(bool)\0"
+    "on_actAutoAero_toggled(bool)\0"
 };
 
 void RDLiveSdkDemo::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
@@ -147,9 +163,17 @@ void RDLiveSdkDemo::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _i
         case 28: _t->on_menuPreviewLayout_triggered((*reinterpret_cast< QAction*(*)>(_a[1]))); break;
         case 29: _t->on_menuAddScreen_aboutToShow(); break;
         case 30: _t->on_menuAddCamera_aboutToShow(); break;
-        case 31: _t->on_menuAddScreen_triggered((*reinterpret_cast< QAction*(*)>(_a[1]))); break;
-        case 32: _t->on_menuAddCamera_triggered((*reinterpret_cast< QAction*(*)>(_a[1]))); break;
-        case 33: _t->on_actiAddPicture_triggered((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 31: _t->on_menuAddGame_aboutToShow(); break;
+        case 32: _t->on_menuAddScreen_triggered((*reinterpret_cast< QAction*(*)>(_a[1]))); break;
+        case 33: _t->on_menuAddCamera_triggered((*reinterpret_cast< QAction*(*)>(_a[1]))); break;
+        case 34: _t->on_menuAddGame_triggered((*reinterpret_cast< QAction*(*)>(_a[1]))); break;
+        case 35: _t->on_actAddPicture_triggered((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 36: _t->on_actAddMovie_triggered((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 37: _t->on_actAddOnline_triggered((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 38: _t->on_actAddText_triggered((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 39: _t->on_actGameRec_toggled((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 40: _t->on_actCapCursor_toggled((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 41: _t->on_actAutoAero_toggled((*reinterpret_cast< bool(*)>(_a[1]))); break;
         default: ;
         }
     }
@@ -187,9 +211,9 @@ int RDLiveSdkDemo::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 34)
+        if (_id < 42)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 34;
+        _id -= 42;
     }
     return _id;
 }

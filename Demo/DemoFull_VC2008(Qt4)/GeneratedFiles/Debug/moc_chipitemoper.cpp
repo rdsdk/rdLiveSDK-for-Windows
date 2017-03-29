@@ -23,7 +23,7 @@ static const uint qt_meta_data_ChipItemOper[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-       7,   14, // methods
+      31,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -31,25 +31,71 @@ static const uint qt_meta_data_ChipItemOper[] = {
        0,       // signalCount
 
  // slots: signature, parameters, type, tag, flags
-      27,   14,   13,   13, 0x0a,
-      67,   14,   13,   13, 0x0a,
-     107,   13,   13,   13, 0x0a,
-     132,   13,   13,   13, 0x0a,
-     157,   13,   13,   13, 0x0a,
-     181,   13,   13,   13, 0x0a,
-     205,   13,   13,   13, 0x0a,
+      24,   14,   13,   13, 0x0a,
+      64,   14,   13,   13, 0x0a,
+     104,   14,   13,   13, 0x0a,
+     157,  150,   13,   13, 0x0a,
+     197,  150,   13,   13, 0x0a,
+     235,   13,   13,   13, 0x0a,
+     260,   13,   13,   13, 0x0a,
+     285,   13,   13,   13, 0x0a,
+     309,   13,   13,   13, 0x0a,
+     333,   13,   13,   13, 0x0a,
+     357,   13,   13,   13, 0x0a,
+     378,   13,   13,   13, 0x0a,
+     400,   13,   13,   13, 0x0a,
+     429,  421,   13,   13, 0x0a,
+     454,   13,   13,   13, 0x0a,
+     483,   13,   13,   13, 0x0a,
+     512,  421,   13,   13, 0x0a,
+     541,   13,   13,   13, 0x0a,
+     576,  570,   13,   13, 0x0a,
+     603,  570,   13,   13, 0x0a,
+     637,  570,   13,   13, 0x0a,
+     671,  570,   13,   13, 0x0a,
+     703,  570,   13,   13, 0x0a,
+     739,  421,   13,   13, 0x0a,
+     768,   13,   13,   13, 0x0a,
+     799,  794,   13,   13, 0x0a,
+     841,  421,   13,   13, 0x0a,
+     871,  421,   13,   13, 0x0a,
+     899,  421,   13,   13, 0x0a,
+     936,  934,   13,   13, 0x0a,
+     983,   13,   13,   13, 0x0a,
 
        0        // eod
 };
 
 static const char qt_meta_stringdata_ChipItemOper[] = {
-    "ChipItemOper\0\0fLeft,fRight\0"
-    "on_widClipLR_sliderRange(double,double)\0"
-    "on_widClipTB_sliderRange(double,double)\0"
+    "ChipItemOper\0\0fMin,fMax\0"
+    "on_widClipLR_areaChanged(double,double)\0"
+    "on_widClipTB_areaChanged(double,double)\0"
+    "on_widPlayProgress_areaChanged(double,double)\0"
+    "fValue\0on_widPlayProgress_valueChanged(double)\0"
+    "on_widPlayVolume_valueChanged(double)\0"
     "on_butClip16_9_clicked()\0"
     "on_butClip9_16_clicked()\0"
     "on_butClip4_3_clicked()\0on_butClip3_4_clicked()\0"
-    "on_butRestore_clicked()\0"
+    "on_butRestore_clicked()\0on_butPlay_clicked()\0"
+    "on_butPause_clicked()\0on_butStop_clicked()\0"
+    "checked\0on_chkMute_clicked(bool)\0"
+    "on_butSetPlayRange_clicked()\0"
+    "on_butUsePlayRange_clicked()\0"
+    "on_chkLoopPlay_clicked(bool)\0"
+    "on_timPlayProgress_timeout()\0value\0"
+    "on_hsHue_valueChanged(int)\0"
+    "on_hsSaturation_valueChanged(int)\0"
+    "on_hsLighteness_valueChanged(int)\0"
+    "on_hsContrast_valueChanged(int)\0"
+    "on_hsTransparency_valueChanged(int)\0"
+    "on_chkFixedHue_clicked(bool)\0"
+    "on_texInput_textChanged()\0font\0"
+    "on_fontComboBox_currentFontChanged(QFont)\0"
+    "on_butTexItalic_clicked(bool)\0"
+    "on_butTexBold_clicked(bool)\0"
+    "on_butTexSizeByWidth_clicked(bool)\0d\0"
+    "on_dspScrollCharPerSecond_valueChanged(double)\0"
+    "on_butTexColor_clicked()\0"
 };
 
 void ChipItemOper::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
@@ -58,13 +104,37 @@ void ChipItemOper::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
         Q_ASSERT(staticMetaObject.cast(_o));
         ChipItemOper *_t = static_cast<ChipItemOper *>(_o);
         switch (_id) {
-        case 0: _t->on_widClipLR_sliderRange((*reinterpret_cast< double(*)>(_a[1])),(*reinterpret_cast< double(*)>(_a[2]))); break;
-        case 1: _t->on_widClipTB_sliderRange((*reinterpret_cast< double(*)>(_a[1])),(*reinterpret_cast< double(*)>(_a[2]))); break;
-        case 2: _t->on_butClip16_9_clicked(); break;
-        case 3: _t->on_butClip9_16_clicked(); break;
-        case 4: _t->on_butClip4_3_clicked(); break;
-        case 5: _t->on_butClip3_4_clicked(); break;
-        case 6: _t->on_butRestore_clicked(); break;
+        case 0: _t->on_widClipLR_areaChanged((*reinterpret_cast< double(*)>(_a[1])),(*reinterpret_cast< double(*)>(_a[2]))); break;
+        case 1: _t->on_widClipTB_areaChanged((*reinterpret_cast< double(*)>(_a[1])),(*reinterpret_cast< double(*)>(_a[2]))); break;
+        case 2: _t->on_widPlayProgress_areaChanged((*reinterpret_cast< double(*)>(_a[1])),(*reinterpret_cast< double(*)>(_a[2]))); break;
+        case 3: _t->on_widPlayProgress_valueChanged((*reinterpret_cast< double(*)>(_a[1]))); break;
+        case 4: _t->on_widPlayVolume_valueChanged((*reinterpret_cast< double(*)>(_a[1]))); break;
+        case 5: _t->on_butClip16_9_clicked(); break;
+        case 6: _t->on_butClip9_16_clicked(); break;
+        case 7: _t->on_butClip4_3_clicked(); break;
+        case 8: _t->on_butClip3_4_clicked(); break;
+        case 9: _t->on_butRestore_clicked(); break;
+        case 10: _t->on_butPlay_clicked(); break;
+        case 11: _t->on_butPause_clicked(); break;
+        case 12: _t->on_butStop_clicked(); break;
+        case 13: _t->on_chkMute_clicked((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 14: _t->on_butSetPlayRange_clicked(); break;
+        case 15: _t->on_butUsePlayRange_clicked(); break;
+        case 16: _t->on_chkLoopPlay_clicked((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 17: _t->on_timPlayProgress_timeout(); break;
+        case 18: _t->on_hsHue_valueChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 19: _t->on_hsSaturation_valueChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 20: _t->on_hsLighteness_valueChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 21: _t->on_hsContrast_valueChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 22: _t->on_hsTransparency_valueChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 23: _t->on_chkFixedHue_clicked((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 24: _t->on_texInput_textChanged(); break;
+        case 25: _t->on_fontComboBox_currentFontChanged((*reinterpret_cast< const QFont(*)>(_a[1]))); break;
+        case 26: _t->on_butTexItalic_clicked((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 27: _t->on_butTexBold_clicked((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 28: _t->on_butTexSizeByWidth_clicked((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 29: _t->on_dspScrollCharPerSecond_valueChanged((*reinterpret_cast< double(*)>(_a[1]))); break;
+        case 30: _t->on_butTexColor_clicked(); break;
         default: ;
         }
     }
@@ -102,9 +172,9 @@ int ChipItemOper::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 7)
+        if (_id < 31)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 7;
+        _id -= 31;
     }
     return _id;
 }

@@ -60,6 +60,7 @@ enum	IRender_ENotify		//pScene						//iValue
 
 	//其它的通知
 	eNotify_CameraDevChanged,//NULL，						//当前摄像头的数量
+	eNotify_GameListChanged, //NULL,						//当前的游戏数量
 	eNotify_AudioDevChanged,
 	eNotify_AudioImmVolume,
 
@@ -73,8 +74,10 @@ enum	IPinInput_EClass
 	ePinInput_Picture,
 	ePinInput_Camera,
 	ePinInput_Screen,
+	ePinInput_Flash,
 	ePinInput_Movie,
 	ePinInput_Game,
+	ePinInput_Text,
 
 	ePinInput_ClassCount
 };
@@ -94,7 +97,7 @@ enum	IPinInput_EChipStatus
 	ePin_Opening,	//正在打开
 	ePin_Stoping,	//正在停止
 	ePin_Pausing,	//正在暂停
-	ePin_Loading,	//正在载入
+	ePin_Loading,	//正在载入，仅当播放过程中需要加载数据时。
 };
 
 //输入源的特性，固有特性，由程序内部设置
@@ -118,6 +121,7 @@ struct IPinInput_SCharacteristics
 	bool	bDefaultLockRatio;	//源是否默认锁定长宽比
 	bool	bTurnUpDown;		//源本身上下翻转，显示时需要翻转。
 	bool	bTurnLeftRight;		//源本身左右翻转
+	bool	bDoNotNeedAlpha;	//图像不需要有 Alpha 通道。例如摄像头、屏幕截图，即使数据中有，也不应该使用。
 };
 //输入源的当前状态
 struct	IPinInput_SStatusInfo
@@ -135,15 +139,15 @@ struct	IPinInput_SStatusInfo
 
 	INT64	iFrameCount;	//总的帧数
 	FLOAT	fFrameRate;		//帧率
-	FLOAT	fSecondCount;	//总的秒数
-	FLOAT	fVolume;		//当前音量 0～1
+	double	fSecondCount;	//总的秒数
 	INT64	iFramePlay;		//当前正在播放的帧
-	FLOAT	fSecondPlay;	//当前正在播放的时间
+	double	fSecondPlay;	//当前正在播放的时间
+	FLOAT	fVolume;		//当前音量 0～1
 
-	INT64	iFrameStart;	//设置的播放区域的开始帧
-	INT64	iFrameEnd;		//设置的播放区域的结束帧
-	FLOAT	fSecondStart;	//设置的播放区域的开始时间
-	FLOAT	fSecondEnd;		//设置的播放区域的结束时间
+	INT64	iFrameStart;	//设置的播放区域的开始帧(播放范围包含开始帧)
+	INT64	iFrameEnd;		//设置的播放区域的结束帧(播放范围包含结束帧)
+	double	fSecondStart;	//设置的播放区域的开始时间
+	double	fSecondEnd;		//设置的播放区域的结束时间
 };
 
 //用于设置和计算预览画面区域的结构
@@ -260,5 +264,56 @@ enum IChip_ELockType {
     eLock_Position,
     eLock_Size,
 	eLock_Angle,
+};
+
+enum	IChip_EShaderParam
+{
+	eShader_Hue,			//色相
+	eShader_UseFixedHue,	//使用固定的色相，即单色
+	eShader_Saturation,		//饱和度
+	eShader_Lighteness,		//亮度
+	eShader_Contrast,		//对比度
+	eShader_Transparency,	//透明度
+};
+
+//游戏使用的绘图接口
+enum	IGame_EInterface
+{
+	GI_Unknow,				//未知的。未初始化或尚未获得目标程序的绘图接口信息
+	GI_GDI,					//GDI，通常不会出现 GDI 类型，如果出现说明由于某些原因当前只能使用 GDI 方式抓取游戏画面。
+	GI_OpenGL,				//OpenGL 游戏。
+	GI_DirectDraw,			//DirectX 7 及之前的所有 DirectX 版本
+	GI_DirectX8,			//DirectX 8
+	GI_DirectX9,			//DirectX 9
+	GI_DirectX10,			//DirectX 10
+	GI_DirectX11			//DirectX 11
+};
+static const char * const game_interface_names[] = { "Unknow", "GDI", "OpenGL", "DirectDraw", "DirectX8",
+													"DirectX9", "DirectX10", "DirectX11", 0 };
+
+//进行游戏画面截取的状态
+enum	IGame_ECaptStatus
+{
+	GC_Idle,				//空闲的，未开始图像捕获。
+	GC_Starting,			//正在开始。
+	GC_Recording,			//正在捕获。
+	GC_Stoping				//正在停止。停止后恢复为 GC_Idle 状态。
+};
+
+//游戏进程信息
+struct	IGame_SGameInfo
+{
+	DWORD			dwProcessId;	//游戏进程 ID。
+	DWORD			dwParentPID;	//游戏进程的父进程 ID。
+	BOOL			bIs64BitProc;	//是否是 64 位的进程	
+	HWND			hGameWnd;		//游戏的窗口句柄
+	DWORD			dwSessionId;	//游戏进程的 Session ID。
+	LPCWSTR			szFilePath;		//游戏进程的完整文件路径
+	LPCWSTR			szBaseName;		//游戏进程的文件名
+	LPCWSTR			szGameName;		//游戏的名字
+	LPCWSTR			szIdentity;		//游戏ID，内部计算的一个字符串，用于识别是不是同一个游戏程序，而不是简单地通过文件名和路径来判断，防止误识别。
+	IGame_EInterface	eInterface;		//游戏使用的绘图接口
+	IGame_ECaptStatus	eCapture;		//游戏画面截取的状态
+	SIZE			sViewSize;		//游戏的画面分辨率
 };
 #endif

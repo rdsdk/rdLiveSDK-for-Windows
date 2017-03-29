@@ -168,7 +168,7 @@ BOOL scenario::OnCommand( WPARAM wParam, LPARAM lParam )
 		HCHIP	hChip	= Scene_CreateChip( Render_GetCurScene(), ePinInput_Camera );
 		if ( hChip )
 		{
-			if ( Chip_Open( hChip, Camera_GetDisplayName(iCaremaCount) ) )
+			if ( Chip_Open( hChip, Camera_GetInternalName(iCaremaCount) ) )
 			{
 				Chip_SetRectPercent( hChip, 0.0f, 0.0f, 1.0f, 1.0f, eKeepAspectRatio );
 				Chip_SetVisible( hChip, TRUE );

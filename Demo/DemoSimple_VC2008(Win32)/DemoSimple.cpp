@@ -77,7 +77,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		if ( hChip )
 		{
 			//打开第一个摄像头
-			if ( Chip_Open( hChip, Camera_GetDisplayName( 0 ) ) )
+			if ( Chip_Open( hChip, Camera_GetInternalName( 0 ) ) )
 			{
 			}
 			//之前设置的视频分辨率为 1280x720，这里设置一个 320x240 的摄像头画面到右下方。

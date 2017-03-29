@@ -31,16 +31,16 @@ static const uint qt_meta_data_CRangeSlider[] = {
        2,       // signalCount
 
  // signals: signature, parameters, type, tag, flags
-      27,   14,   13,   13, 0x05,
-      64,   54,   13,   13, 0x05,
+      24,   14,   13,   13, 0x05,
+      58,   51,   13,   13, 0x05,
 
        0        // eod
 };
 
 static const char qt_meta_stringdata_CRangeSlider[] = {
-    "CRangeSlider\0\0fLeft,fRight\0"
-    "sliderRange(double,double)\0fProgress\0"
-    "progress(double)\0"
+    "CRangeSlider\0\0fMin,fMax\0"
+    "areaChanged(double,double)\0fValue\0"
+    "valueChanged(double)\0"
 };
 
 void CRangeSlider::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
@@ -49,8 +49,8 @@ void CRangeSlider::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
         Q_ASSERT(staticMetaObject.cast(_o));
         CRangeSlider *_t = static_cast<CRangeSlider *>(_o);
         switch (_id) {
-        case 0: _t->sliderRange((*reinterpret_cast< double(*)>(_a[1])),(*reinterpret_cast< double(*)>(_a[2]))); break;
-        case 1: _t->progress((*reinterpret_cast< double(*)>(_a[1]))); break;
+        case 0: _t->areaChanged((*reinterpret_cast< double(*)>(_a[1])),(*reinterpret_cast< double(*)>(_a[2]))); break;
+        case 1: _t->valueChanged((*reinterpret_cast< double(*)>(_a[1]))); break;
         default: ;
         }
     }
@@ -96,14 +96,14 @@ int CRangeSlider::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 }
 
 // SIGNAL 0
-void CRangeSlider::sliderRange(double _t1, double _t2)
+void CRangeSlider::areaChanged(double _t1, double _t2)
 {
     void *_a[] = { 0, const_cast<void*>(reinterpret_cast<const void*>(&_t1)), const_cast<void*>(reinterpret_cast<const void*>(&_t2)) };
     QMetaObject::activate(this, &staticMetaObject, 0, _a);
 }
 
 // SIGNAL 1
-void CRangeSlider::progress(double _t1)
+void CRangeSlider::valueChanged(double _t1)
 {
     void *_a[] = { 0, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
     QMetaObject::activate(this, &staticMetaObject, 1, _a);

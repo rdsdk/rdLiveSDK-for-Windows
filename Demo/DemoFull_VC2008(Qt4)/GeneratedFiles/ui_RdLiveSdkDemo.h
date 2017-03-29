@@ -54,7 +54,13 @@ public:
     QAction *actRestorePreview;
     QAction *actSwapVH;
     QAction *actPreviewOpenGL;
-    QAction *actiAddPicture;
+    QAction *actAddPicture;
+    QAction *actAddMovie;
+    QAction *actAddOnline;
+    QAction *actGameRec;
+    QAction *actCapCursor;
+    QAction *actAutoAero;
+    QAction *actAddText;
     QWidget *centralWidget;
     QGridLayout *gridLayout;
     CPreviewWnd *widPreview;
@@ -96,6 +102,7 @@ public:
     QMenu *menuChipInput;
     QMenu *menuAddScreen;
     QMenu *menuAddCamera;
+    QMenu *menuAddGame;
     QMenu *menuScene;
     QMenu *menuDeleteScene;
     QMenu *menuSwitchScene;
@@ -105,6 +112,7 @@ public:
     QMenu *menuImage;
     QMenu *menuFpses;
     QMenu *menuPreviewScale;
+    QMenu *menuFunction;
     QStatusBar *statusBar;
 
     void setupUi(QMainWindow *RDLiveSdkDemoClass)
@@ -287,8 +295,23 @@ public:
         actPreviewOpenGL = new QAction(RDLiveSdkDemoClass);
         actPreviewOpenGL->setObjectName(QString::fromUtf8("actPreviewOpenGL"));
         actPreviewOpenGL->setCheckable(true);
-        actiAddPicture = new QAction(RDLiveSdkDemoClass);
-        actiAddPicture->setObjectName(QString::fromUtf8("actiAddPicture"));
+        actAddPicture = new QAction(RDLiveSdkDemoClass);
+        actAddPicture->setObjectName(QString::fromUtf8("actAddPicture"));
+        actAddMovie = new QAction(RDLiveSdkDemoClass);
+        actAddMovie->setObjectName(QString::fromUtf8("actAddMovie"));
+        actAddOnline = new QAction(RDLiveSdkDemoClass);
+        actAddOnline->setObjectName(QString::fromUtf8("actAddOnline"));
+        actGameRec = new QAction(RDLiveSdkDemoClass);
+        actGameRec->setObjectName(QString::fromUtf8("actGameRec"));
+        actGameRec->setCheckable(true);
+        actCapCursor = new QAction(RDLiveSdkDemoClass);
+        actCapCursor->setObjectName(QString::fromUtf8("actCapCursor"));
+        actCapCursor->setCheckable(true);
+        actAutoAero = new QAction(RDLiveSdkDemoClass);
+        actAutoAero->setObjectName(QString::fromUtf8("actAutoAero"));
+        actAutoAero->setCheckable(true);
+        actAddText = new QAction(RDLiveSdkDemoClass);
+        actAddText->setObjectName(QString::fromUtf8("actAddText"));
         centralWidget = new QWidget(RDLiveSdkDemoClass);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         gridLayout = new QGridLayout(centralWidget);
@@ -440,7 +463,7 @@ public:
 
         tabSector = new QTabWidget(centralWidget);
         tabSector->setObjectName(QString::fromUtf8("tabSector"));
-        tabSector->setMinimumSize(QSize(250, 0));
+        tabSector->setMinimumSize(QSize(280, 0));
         tabSector->setMaximumSize(QSize(250, 16777215));
         tabCurrScene = new QWidget();
         tabCurrScene->setObjectName(QString::fromUtf8("tabCurrScene"));
@@ -515,6 +538,8 @@ public:
         menuAddScreen->setObjectName(QString::fromUtf8("menuAddScreen"));
         menuAddCamera = new QMenu(menuChipInput);
         menuAddCamera->setObjectName(QString::fromUtf8("menuAddCamera"));
+        menuAddGame = new QMenu(menuChipInput);
+        menuAddGame->setObjectName(QString::fromUtf8("menuAddGame"));
         menuScene = new QMenu(menuBar);
         menuScene->setObjectName(QString::fromUtf8("menuScene"));
         menuDeleteScene = new QMenu(menuScene);
@@ -533,6 +558,8 @@ public:
         menuFpses->setObjectName(QString::fromUtf8("menuFpses"));
         menuPreviewScale = new QMenu(menuImage);
         menuPreviewScale->setObjectName(QString::fromUtf8("menuPreviewScale"));
+        menuFunction = new QMenu(menuBar);
+        menuFunction->setObjectName(QString::fromUtf8("menuFunction"));
         RDLiveSdkDemoClass->setMenuBar(menuBar);
         statusBar = new QStatusBar(RDLiveSdkDemoClass);
         statusBar->setObjectName(QString::fromUtf8("statusBar"));
@@ -541,11 +568,17 @@ public:
         menuBar->addAction(menuImage->menuAction());
         menuBar->addAction(menuScene->menuAction());
         menuBar->addAction(menuChipInput->menuAction());
+        menuBar->addAction(menuFunction->menuAction());
         menuChipInput->addAction(menuAddScreen->menuAction());
         menuChipInput->addAction(menuAddCamera->menuAction());
-        menuChipInput->addAction(actiAddPicture);
+        menuChipInput->addAction(menuAddGame->menuAction());
+        menuChipInput->addAction(actAddPicture);
+        menuChipInput->addAction(actAddMovie);
+        menuChipInput->addAction(actAddOnline);
+        menuChipInput->addAction(actAddText);
         menuAddScreen->addSeparator();
         menuAddCamera->addSeparator();
+        menuAddGame->addSeparator();
         menuScene->addAction(actAddScene);
         menuScene->addAction(menuSwitchScene->menuAction());
         menuScene->addAction(menuDeleteScene->menuAction());
@@ -584,6 +617,9 @@ public:
         menuImage->addSeparator();
         menuFpses->addSeparator();
         menuPreviewScale->addSeparator();
+        menuFunction->addAction(actGameRec);
+        menuFunction->addAction(actCapCursor);
+        menuFunction->addAction(actAutoAero);
 
         retranslateUi(RDLiveSdkDemoClass);
 
@@ -595,7 +631,7 @@ public:
 
     void retranslateUi(QMainWindow *RDLiveSdkDemoClass)
     {
-        RDLiveSdkDemoClass->setWindowTitle(QApplication::translate("RDLiveSdkDemoClass", "RDLiveSdkDemo", 0, QApplication::UnicodeUTF8));
+        RDLiveSdkDemoClass->setWindowTitle(QApplication::translate("RDLiveSdkDemoClass", "RdLiveSDK For Windows (v1.1.2) Demo", 0, QApplication::UnicodeUTF8));
         actAddScene->setText(QApplication::translate("RDLiveSdkDemoClass", "\346\267\273\345\212\240\345\234\272\346\231\257\342\200\246\342\200\246", 0, QApplication::UnicodeUTF8));
         actBSceneCount0->setText(QApplication::translate("RDLiveSdkDemoClass", "\345\205\263\351\227\255\345\220\216\345\217\260\345\234\272\346\231\257\351\242\204\350\247\210", 0, QApplication::UnicodeUTF8));
         actBSceneCount2->setText(QApplication::translate("RDLiveSdkDemoClass", "\346\230\276\347\244\272 2 \344\270\252\345\220\216\345\217\260\345\234\272\346\231\257", 0, QApplication::UnicodeUTF8));
@@ -615,7 +651,13 @@ public:
         actRestorePreview->setText(QApplication::translate("RDLiveSdkDemoClass", "\350\277\230\345\216\237\351\242\204\350\247\210\345\270\203\345\261\200", 0, QApplication::UnicodeUTF8));
         actSwapVH->setText(QApplication::translate("RDLiveSdkDemoClass", "\344\272\244\346\215\242\345\256\275\345\222\214\351\253\230", 0, QApplication::UnicodeUTF8));
         actPreviewOpenGL->setText(QApplication::translate("RDLiveSdkDemoClass", "\351\242\204\350\247\210\344\275\277\347\224\250\347\241\254\344\273\266\345\212\240\351\200\237", 0, QApplication::UnicodeUTF8));
-        actiAddPicture->setText(QApplication::translate("RDLiveSdkDemoClass", "\345\233\276\345\203\217\346\226\207\344\273\266\342\200\246\342\200\246", 0, QApplication::UnicodeUTF8));
+        actAddPicture->setText(QApplication::translate("RDLiveSdkDemoClass", "\345\233\276\345\203\217\346\226\207\344\273\266\342\200\246\342\200\246", 0, QApplication::UnicodeUTF8));
+        actAddMovie->setText(QApplication::translate("RDLiveSdkDemoClass", "\350\247\206\351\242\221\346\226\207\344\273\266\342\200\246\342\200\246", 0, QApplication::UnicodeUTF8));
+        actAddOnline->setText(QApplication::translate("RDLiveSdkDemoClass", "\345\234\250\347\272\277\350\247\206\351\242\221\342\200\246\342\200\246", 0, QApplication::UnicodeUTF8));
+        actGameRec->setText(QApplication::translate("RDLiveSdkDemoClass", "\345\274\200\345\220\257\346\270\270\346\210\217\345\275\225\345\210\266", 0, QApplication::UnicodeUTF8));
+        actCapCursor->setText(QApplication::translate("RDLiveSdkDemoClass", "\345\205\201\350\256\270\345\275\225\345\210\266\351\274\240\346\240\207\346\214\207\351\222\210", 0, QApplication::UnicodeUTF8));
+        actAutoAero->setText(QApplication::translate("RDLiveSdkDemoClass", "\346\210\252\345\261\217\350\207\252\345\212\250\345\205\263\351\227\255Aero", 0, QApplication::UnicodeUTF8));
+        actAddText->setText(QApplication::translate("RDLiveSdkDemoClass", "\346\226\207\345\255\227", 0, QApplication::UnicodeUTF8));
         chkSpeaker->setText(QString());
         butAudioPopSpk->setText(QString());
         chkMicrophone->setText(QString());
@@ -626,6 +668,7 @@ public:
         menuChipInput->setTitle(QApplication::translate("RDLiveSdkDemoClass", "\346\267\273\345\212\240", 0, QApplication::UnicodeUTF8));
         menuAddScreen->setTitle(QApplication::translate("RDLiveSdkDemoClass", "\345\261\217\345\271\225/\347\252\227\345\217\243", 0, QApplication::UnicodeUTF8));
         menuAddCamera->setTitle(QApplication::translate("RDLiveSdkDemoClass", "\346\221\204\345\203\217\345\244\264", 0, QApplication::UnicodeUTF8));
+        menuAddGame->setTitle(QApplication::translate("RDLiveSdkDemoClass", "\346\270\270\346\210\217", 0, QApplication::UnicodeUTF8));
         menuScene->setTitle(QApplication::translate("RDLiveSdkDemoClass", "\345\234\272\346\231\257", 0, QApplication::UnicodeUTF8));
         menuDeleteScene->setTitle(QApplication::translate("RDLiveSdkDemoClass", "\345\210\240\351\231\244\345\234\272\346\231\257", 0, QApplication::UnicodeUTF8));
         menuSwitchScene->setTitle(QApplication::translate("RDLiveSdkDemoClass", "\345\210\207\346\215\242\345\210\260", 0, QApplication::UnicodeUTF8));
@@ -635,6 +678,7 @@ public:
         menuImage->setTitle(QApplication::translate("RDLiveSdkDemoClass", "\345\233\276\345\203\217", 0, QApplication::UnicodeUTF8));
         menuFpses->setTitle(QApplication::translate("RDLiveSdkDemoClass", "\345\270\247\347\216\207", 0, QApplication::UnicodeUTF8));
         menuPreviewScale->setTitle(QApplication::translate("RDLiveSdkDemoClass", "\351\242\204\350\247\210\347\274\251\346\224\276", 0, QApplication::UnicodeUTF8));
+        menuFunction->setTitle(QApplication::translate("RDLiveSdkDemoClass", "\345\205\266\345\256\203", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

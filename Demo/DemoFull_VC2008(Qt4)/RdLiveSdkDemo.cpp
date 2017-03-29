@@ -38,11 +38,19 @@ RDLiveSdkDemo::RDLiveSdkDemo(QWidget *parent, Qt::WFlags flags)
 	m_agpBScenePos->setExclusive( true );
 
 	ui.widVolumeSpk->SetRange( 0.0, 1.0 );
-	ui.widVolumeSpk->SetText( 0, 0, 0 );
-	ui.widVolumeSpk->SetHitMask( ( 1 << CRangeSlider::eHit_Right ) | ( 1 << CRangeSlider::eHit_RightLine ) );
+	CRangeSlider::SStyle	sSty	= ui.widVolumeSpk->GetStyle();
+	sSty.bHitMinSpace	= false;
+	sSty.bHitMinLine	= false;
+	sSty.bHitAreaBar	= false;
+	sSty.bHitValue		= false;
+	sSty.sMinText.eAlign	= CRangeSlider::eAlignNone;
+	sSty.sMaxText.eAlign	= CRangeSlider::eAlignNone;
+	sSty.sAreaText.eAlign	= CRangeSlider::eAlignNone;
+	sSty.sValueText.eAlign	= CRangeSlider::eAlignNone;
+	sSty.sValueTextSub.eAlign	= CRangeSlider::eAlignNone;
+	ui.widVolumeSpk->SetStyle( sSty );
 	ui.widVolumeMic->SetRange( 0.0, 1.0 );
-	ui.widVolumeMic->SetText( 0, 0, 0 );
-	ui.widVolumeMic->SetHitMask( ( 1 << CRangeSlider::eHit_Right ) | ( 1 << CRangeSlider::eHit_RightLine ) );
+	ui.widVolumeMic->SetStyle( sSty );
 
 	ui.widEncoderSetting->SetDocOption( &m_docOption );
 
@@ -68,15 +76,12 @@ RDLiveSdkDemo::RDLiveSdkDemo(QWidget *parent, Qt::WFlags flags)
 		close();
 	}
 
-	//if ( !RDLive_ResetAccredit( "d3200cc987431827", 
-	//	"77a9eeea008524e8bdf10e18409cbdb3sULczML4CjomZFtst04v/HLUrHqWT72Mmkz7WhUEmpjXMH7/UWz5oGMwUGQPbYX+MKSpM01lSGQ/qNzCkFFyKXSwxrKIViR4iZ7ZxOuB6n80wDeCV7jHJSEN1+DqlCLm3dJWQF3CFLMOj2YJxwI/YDY9h3SjCsWFz9j/71RCHH0FWpr13vMRM6a1uRCnke2Tyly/V4S4E7BE1tR6WDcxNQTeX9w399l/EpNb8LvBNNUz6shNmM627BGBfTbPG2vj+grPaxv1rFcVRqNkT45Jrjvjp3PV8L6Py7fCUvK5PJ0Pb/olb9q/M2Yom+AZkSlE0FDcSKb0MG+QCE9f1MYacjFoU31o7cZb5ZQZ++7lMqXMDvTi9LyTYR+0lDKKwFC8EJ43/upbIuhawyXQ2w4u7Zvv9IUXqhamlTUirPmuV4lSVypdzCT+gPdEjq9krLLjRajAMutBwefKiHdrp/h65BxTErT94rH7OAU6bCmbX/o=" ) )
-	//{
-	//}
-
-	if ( !RDLive_ResetAccredit( "265d4aa64b5eae8e", 
-		"0abf473cf7aa75a30f596021cf7b5f9b" ) )
+	if ( !RDLive_ResetAccredit( "d3200cc987431827", 
+		"77a9eeea008524e8bdf10e18409cbdb3sULczML4CjomZFtst04v/HLUrHqWT72Mmkz7WhUEmpjXMH7/UWz5oGMwUGQPbYX+MKSpM01lSGQ/qNzCkFFyKXSwxrKIViR4iZ7ZxOuB6n80wDeCV7jHJSEN1+DqlCLm3dJWQF3CFLMOj2YJxwI/YDY9h3SjCsWFz9j/71RCHH0FWpr13vMRM6a1uRCnke2Tyly/V4S4E7BE1tR6WDcxNQTeX9w399l/EpNb8LvBNNUz6shNmM627BGBfTbPG2vj+grPaxv1rFcVRqNkT45Jrjvjp3PV8L6Py7fCUvK5PJ0Pb/olb9q/M2Yom+AZkSlE0FDcSKb0MG+QCE9f1MYacjFoU31o7cZb5ZQZ++7lMqXMDvTi9LyTYR+0lDKKwFC8EJ43/upbIuhawyXQ2w4u7Zvv9IUXqhamlTUirPmuV4lSVypdzCT+gPdEjq9krLLjRajAMutBwefKiHdrp/h65BxTErT94rH7OAU6bCmbX/o=" ) )
 	{
 	}
+
+
 	LoadProfile();
 
 
@@ -260,17 +265,38 @@ BOOL RDLiveSdkDemo::LoadScenes()
 				nodeChip	= nodeChip.nextSibling();
 				continue;
 			}
-			int				iSelChip	= eleScene.attribute( "Current", "-1" ).toInt();
-			HCHIP			hChip		= Scene_CreateChip( hScene, (IPinInput_EClass)eleChip.attribute( "Type" ).toInt() );
-            if ( Chip_Open( hChip, (LPCWSTR)eleChip.attribute( "Source" ).utf16(),
-                eleChip.attribute( "CannotReuse" ).toInt() ? TRUE : FALSE ) )
+			int					iSelChip	= eleScene.attribute( "Current", "-1" ).toInt();
+			IPinInput_EClass	eClass		= (IPinInput_EClass)eleChip.attribute( "Type" ).toInt();
+			HCHIP				hChip		= NULL;
+			switch( eClass )
 			{
+			case ePinInput_Picture:
+			case ePinInput_Camera:
+			case ePinInput_Screen:
+				hChip	= Scene_CreateChip( hScene, eClass, (LPCWSTR)eleChip.attribute( "Source" ).utf16(),
+								eleChip.attribute( "CannotReuse" ).toInt() ? TRUE : FALSE );
+				break;
+			case ePinInput_Flash:
+			case ePinInput_Movie:
+				hChip	= Scene_CreateChip( hScene, eClass, (LPCWSTR)eleChip.attribute( "Source" ).utf16(),
+								eleChip.attribute( "CannotReuse" ).toInt() ? TRUE : FALSE, 
+								eleChip.attribute( "Playing" ).toInt() ? TRUE : FALSE );
+				break;
+			case ePinInput_Game:
+				hChip	= Scene_CreateChip( hScene, eClass, (LPCWSTR)eleChip.attribute( "Source" ).utf16(),
+								eleChip.attribute( "CannotReuse" ).toInt() ? TRUE : FALSE );
+				break;
+			case ePinInput_Text:
+				hChip	= Scene_CreateChip( hScene, eClass, (LPCWSTR)eleChip.attribute( "Source" ).utf16(),
+								eleChip.attribute( "CannotReuse" ).toInt() ? TRUE : FALSE );
+				break;
 			}
-			else if ( eleChip.attribute( "Type" ).toInt() == ePinInput_Camera )
+			if ( hChip == NULL )
 			{
-				Chip_Open( hChip, Camera_GetDisplayName( 0 ),
-				eleChip.attribute( "CannotReuse" ).toInt() ? TRUE : FALSE );
+				nodeChip	= nodeChip.nextSibling();
+				continue;
 			}
+
 			QDomElement		eleRect		= eleChip.firstChildElement( "Rect" );
 			if ( !eleRect.isNull() )
 			{
@@ -284,13 +310,32 @@ BOOL RDLiveSdkDemo::LoadScenes()
 					eleClip.attribute( "R" ).toFloat(), eleClip.attribute( "B" ).toFloat() );
 			}
 
+			QDomElement	eleColor	= eleChip.firstChildElement( "Color" );
+			if ( !eleColor.isNull() )
+			{
+				Chip_SetShaderParam( hChip, eShader_Hue, eleColor.attribute( "Hue" ).toFloat() );
+				Chip_SetShaderParam( hChip, eShader_UseFixedHue, eleColor.attribute( "HueFixed" ).toFloat() );
+				Chip_SetShaderParam( hChip, eShader_Saturation, eleColor.attribute( "Saturation" ).toFloat() );
+				Chip_SetShaderParam( hChip, eShader_Lighteness, eleColor.attribute( "Ligtheness" ).toFloat() );
+				Chip_SetShaderParam( hChip, eShader_Contrast, eleColor.attribute( "Contrast" ).toFloat() );
+				Chip_SetShaderParam( hChip, eShader_Transparency, eleColor.attribute( "Transparency" ).toFloat() );
+			}
+
 			Chip_SetViewLock( hChip, eLock_AspectRatio, eleChip.attribute( "LockAR" ).toInt() ? TRUE : FALSE );
 			Chip_SetViewLock( hChip, eLock_Position, eleChip.attribute( "LockPos" ).toInt() ? TRUE : FALSE );
 			Chip_SetViewLock( hChip, eLock_Size, eleChip.attribute( "LockSize" ).toInt() ? TRUE : FALSE ); 
 			Chip_SetViewLock( hChip, eLock_Angle, eleChip.attribute( "LockAngle" ).toInt() ? TRUE : FALSE ); 
 
 			Chip_SetVisible( hChip, eleChip.attribute( "Visible" ).toInt() ? TRUE : FALSE );
-			Chip_SetVolume( hChip, eleChip.attribute( "Volume" ).toFloat(), eleChip.attribute( "Mutex" ).toInt() ? TRUE : FALSE );
+			Chip_SetVolume( hChip, eleChip.attribute( "Volume" ).toFloat() );
+			Chip_SetMute( hChip, eleChip.attribute( "Mutex" ).toInt() ? TRUE : FALSE );
+			Chip_SetLoop( hChip, eleChip.attribute( "LoopPlay" ).toInt() ? TRUE : FALSE );
+			if ( eleChip.attribute( "RangePlay" ).toInt() )
+			{
+				Chip_SetRange( hChip, INT64( eleChip.attribute( "RangeStart" ).toFloat() * 1000.0 ),
+					INT64( eleChip.attribute( "RangeEnd" ).toFloat() * 1000.0 ), FALSE );
+			}
+
 			if ( iSelChip == Scene_GetChipCount( hScene ) - 1 )
 			{
 				Chip_SetCurent( hChip );
@@ -330,8 +375,18 @@ BOOL RDLiveSdkDemo::SaveScenes()
 			eleChip.setAttribute( "Type", Chip_GetClassType( hChip ) );
 			eleChip.setAttribute( "Source", QFU( Chip_GetSourceName( hChip ) ) );
 			eleChip.setAttribute( "CannotReuse", sStatus.bCannotReuse ? 1 : 0 );
-			eleChip.setAttribute( "Paused", sStatus.eStatus == ePin_Paused ? 1 : 0 );
 			eleChip.setAttribute( "Visible", Chip_IsVisible( hChip ) );
+			eleChip.setAttribute( "Volume", sStatus.fVolume );
+			eleChip.setAttribute( "Mutex", sStatus.bIsMute );
+			if ( sStatus.eStatus == ePin_Played || sStatus.eStatus == ePin_Loading )
+				eleChip.setAttribute( "Playing", 1 );
+			else
+				eleChip.setAttribute( "Playing", 0 );
+			eleChip.setAttribute( "LoopPlay", sStatus.bIsLoop );
+			eleChip.setAttribute( "RangePlay", sStatus.bIsRange ? 1 : 0 );
+			eleChip.setAttribute( "RangeStart", sStatus.fSecondStart );
+			eleChip.setAttribute( "RangeEnd", sStatus.fSecondEnd );
+
 			eleChip.setAttribute( "LockAR", Chip_GetViewLock( hChip, eLock_AspectRatio )  );
 			eleChip.setAttribute( "LockPos", Chip_GetViewLock( hChip, eLock_Position )  );
 			eleChip.setAttribute( "LockSize", Chip_GetViewLock( hChip, eLock_Size )  );
@@ -355,6 +410,15 @@ BOOL RDLiveSdkDemo::SaveScenes()
 			eleClip.setAttribute( "R", fR );
 			eleClip.setAttribute( "B", fB );
 			eleChip.appendChild( eleClip );
+
+			QDomElement	eleColor	= docScenes.createElement( "Color" );
+			eleColor.setAttribute( "Hue", Chip_GetShaderParam( hChip, eShader_Hue ) );
+			eleColor.setAttribute( "HueFixed", Chip_GetShaderParam( hChip, eShader_UseFixedHue ) );
+			eleColor.setAttribute( "Saturation", Chip_GetShaderParam( hChip, eShader_Saturation ) );
+			eleColor.setAttribute( "Ligtheness", Chip_GetShaderParam( hChip, eShader_Lighteness ) );
+			eleColor.setAttribute( "Contrast", Chip_GetShaderParam( hChip, eShader_Contrast ) );
+			eleColor.setAttribute( "Transparency", Chip_GetShaderParam( hChip, eShader_Transparency ) );
+			eleChip.appendChild( eleColor );
 
 			eleScene.appendChild( eleChip );
 		}
@@ -382,6 +446,10 @@ BOOL RDLiveSdkDemo::SettingToUiAndSdk()
 	SetPreviewLayoutToMenu();
 	ui.widEncoderSetting->SetEncoderSetting();
 	SetAudioCaptureSetting();
+	QDomElement		eleFun	= FindXmlElement( "Function" );
+	if ( eleFun.attribute( "GameRec" ).toInt() ) ui.actGameRec->setChecked( true );
+	if ( eleFun.attribute( "CursorCapture" ).toInt() ) ui.actCapCursor->setChecked( true );
+	if ( eleFun.attribute( "AutoAero" ).toInt() ) ui.actAutoAero->setChecked( true );
 	return TRUE;
 }
 
@@ -402,7 +470,7 @@ void RDLiveSdkDemo::SetAudioCaptureSetting()
 			Audio_Enable( eAudCap_Speaker, TRUE );
 			Audio_SetVolume( eAudCap_Speaker, 1.0f );
 		}
-		ui.widVolumeSpk->SetSlider( 0.0, Audio_GetVolume( eAudCap_Speaker ) );
+		ui.widVolumeSpk->SetArea( 0.0, Audio_GetVolume( eAudCap_Speaker ) );
 		ui.chkSpeaker->setChecked( !Audio_IsEnabled( eAudCap_Speaker ) );
 	}
 	else
@@ -426,7 +494,7 @@ void RDLiveSdkDemo::SetAudioCaptureSetting()
 			Audio_Enable( eAudCap_Microphone, TRUE );
 			Audio_SetVolume( eAudCap_Microphone, 1.0f );
 		}
-		ui.widVolumeMic->SetSlider( 0.0, Audio_GetVolume( eAudCap_Microphone ) );
+		ui.widVolumeMic->SetArea( 0.0, Audio_GetVolume( eAudCap_Microphone ) );
 		ui.chkMicrophone->setChecked( !Audio_IsEnabled( eAudCap_Microphone ) );
 	}
 	else
@@ -459,8 +527,8 @@ void RDLiveSdkDemo::on_timReszie_timeout()
 	if ( bFirstResize )
 	{
 		bFirstResize	= false;
+		UpdatePreviewConfig( IGlRender_SPreviewLayout::eScreenCenter );		
 		LoadScenes();
-		UpdatePreviewConfig( IGlRender_SPreviewLayout::eScreenCenter );
 	}
 	else
 	{

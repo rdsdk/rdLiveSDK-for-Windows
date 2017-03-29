@@ -521,12 +521,28 @@ void RDLiveSdkDemo::on_menuAddCamera_aboutToShow()
 		for ( int i = 0; i < iCameraCount; ++i )
 		{
 			QAction*	actCamera	= ui.menuAddCamera->addAction( QFU( Camera_GetFriendlyName( i ) ) );
-			actCamera->setData( QFU( Camera_GetDisplayName( i ) ) );
+			actCamera->setData( QFU( Camera_GetInternalName( i ) ) );
 		}
 	}
 	else
 	{
 		ui.menuAddCamera->setVisible( false );
+	}
+}
+
+void RDLiveSdkDemo::on_menuAddGame_aboutToShow()
+{
+	ui.menuAddGame->clear();
+	int		iGameCount	= Game_GetCount();
+	if ( iGameCount )
+	{
+		IGame_SGameInfo	gameInfo	= {0};
+		for ( int i = 0; i < iGameCount; ++i )
+		{
+			Game_GetInfoByInd( i, &gameInfo );
+			QAction*	actGame	= ui.menuAddGame->addAction( QFU( gameInfo.szGameName ) );
+			actGame->setData( int( gameInfo.dwProcessId ) );
+		}
 	}
 }
 
@@ -547,44 +563,55 @@ void RDLiveSdkDemo::on_menuAddScreen_triggered ( QAction * action )
 	{
 		sCapParams.hWindow	= HWND(iVal);
 	}
-	hChip	= Scene_CreateChip( Render_GetCurScene(), ePinInput_Screen );
+	hChip	= Scene_CreateChip( Render_GetCurScene(), 
+		ePinInput_Screen,
+		Screen_AssembleSource( &sCapParams ) );
 	if ( hChip )
 	{
 		Chip_SetRectPercent( hChip, 0.0f, 0.0f, 1.0f, 1.0f, eKeepAspectRatio );
 		//新添加的元件，不要忘了设置显示。
 		Chip_SetVisible( hChip, TRUE );
-		if ( Chip_Open( hChip, Screen_AssembleSource( &sCapParams ) ) )
-		{
-		}
 	}
 }
 
 void RDLiveSdkDemo::on_menuAddCamera_triggered ( QAction * action )
 {
-	HCHIP	hChip	= Scene_CreateChip( Render_GetCurScene(), ePinInput_Camera );
+	HCHIP	hChip	= Scene_CreateChip( Render_GetCurScene(), 
+		ePinInput_Camera,
+		(LPCWSTR)action->data().toString().utf16() );
 	if ( hChip )
 	{
 		Chip_SetRectPercent( hChip, 0.0f, 0.0f, 1.0f, 1.0f, eKeepAspectRatio );
 		Chip_SetVisible( hChip, TRUE );
-        if ( Chip_Open( hChip, (LPCWSTR)action->data().toString().utf16() ) )
-		{
-		}
 	}
 }
 
-void RDLiveSdkDemo::on_actiAddPicture_triggered( bool checked )
+void RDLiveSdkDemo::on_menuAddGame_triggered ( QAction * action )
+{
+	QString		str	= action->data().toString();
+	HCHIP	hChip	= Scene_CreateChip( Render_GetCurScene(), 
+		ePinInput_Game,
+		(LPCWSTR)action->data().toString().utf16() );
+	if ( hChip )
+	{
+		Chip_SetRectPercent( hChip, 0.0f, 0.0f, 1.0f, 1.0f, eKeepAspectRatio );
+		Chip_SetVisible( hChip, TRUE );
+	}
+}
+
+void RDLiveSdkDemo::on_actAddPicture_triggered( bool checked )
 {
 	QString	szFilter	= "Images (*.png *.jpg *.jpeg *.gif *.bmp)";
 	QString szFileName	= QFileDialog::getOpenFileName( this, "Open File", QString(), szFilter );
 	if ( szFileName.isEmpty() ) return;
-	HCHIP	hChip	= Scene_CreateChip( Render_GetCurScene(), ePinInput_Picture );
+
+	HCHIP	hChip	= Scene_CreateChip( Render_GetCurScene(), 
+		ePinInput_Picture,
+		(LPCWSTR)szFileName.utf16() );
 	if ( hChip )
 	{
 		Chip_SetRectPercent( hChip, 0.0f, 0.0f, 1.0f, 1.0f, eKeepAspectRatio );
 		Chip_SetVisible( hChip, TRUE );
-        if ( Chip_Open( hChip, (LPCWSTR)szFileName.utf16() ) )
-		{
-		}
 	}
 
 	//QString	szFilter	= "Media Files (*.png *.jpg *.jpeg *.gif *.bmp )"
@@ -592,3 +619,82 @@ void RDLiveSdkDemo::on_actiAddPicture_triggered( bool checked )
 	//	";;Movies (*.mp4 *.flv *.mkv *.mpg *.mpeg *.avi *.3gp *.ts *.wmv *.asf)";
 }
 
+
+void RDLiveSdkDemo::on_actAddMovie_triggered( bool checked )
+{
+	QString	szFilter	= "Video Files (*.swf *.mp4 *.m4v *.flv *.f4v *.3gpp)";
+	QString szFileName	= QFileDialog::getOpenFileName( this, "Open File", QString(), szFilter );
+	if ( szFileName.isEmpty() ) return;
+
+	HCHIP	hChip	= 0;
+	if ( szFileName.lastIndexOf( ".swf", -1, Qt::CaseInsensitive ) == szFileName.length() - 4 )
+	{
+		hChip	= Scene_CreateChip( Render_GetCurScene(), ePinInput_Flash,
+			(LPCWSTR)szFileName.utf16(), FALSE, TRUE );
+	}
+	else
+	{
+		hChip	= Scene_CreateChip( Render_GetCurScene(), ePinInput_Movie,
+			(LPCWSTR)szFileName.utf16(), FALSE, TRUE );
+	}
+	if ( hChip )
+	{
+		Chip_SetRectPercent( hChip, 0.0f, 0.0f, 1.0f, 1.0f, eKeepAspectRatio );
+		Chip_SetVisible( hChip, TRUE );
+	}
+}
+
+void RDLiveSdkDemo::on_actAddOnline_triggered( bool checked )
+{
+	bool	bOk		= false;
+	QString	szUrl	= QInputDialog::getText( this, QFU( L"添加在线视频" ), QFU( L"URL：" ),
+		QLineEdit::Normal, QString(), &bOk );
+
+	if ( !bOk ) return;
+	if ( szUrl.isEmpty() ) return;
+
+	HCHIP	hChip	= Scene_CreateChip( Render_GetCurScene(), ePinInput_Movie,
+		(LPCWSTR)szUrl.utf16(), FALSE, TRUE );
+	if ( hChip )
+	{
+		Chip_SetRectPercent( hChip, 0.0f, 0.0f, 1.0f, 1.0f, eKeepAspectRatio );
+		Chip_SetVisible( hChip, TRUE );
+	}
+
+}
+
+void RDLiveSdkDemo::on_actAddText_triggered( bool checked )
+{
+	QString	szText	= QFU( L"黑体|I|0|0,Hello" );
+	HCHIP	hChip	= Scene_CreateChip( Render_GetCurScene(), ePinInput_Text,
+		(LPCWSTR)szText.utf16() );
+	if ( hChip )
+	{
+		Chip_SetRectPercent( hChip, 0.1f, 0.4f, 0.8f, 0.2f, eKeepAspectRatio );
+		Chip_SetVisible( hChip, TRUE );
+	}
+}
+
+void RDLiveSdkDemo::on_actGameRec_toggled( bool checked )
+{
+	if ( checked )
+		Game_InitRecord( FALSE );
+	else
+		Game_UninitRecord();
+	QDomElement		eleFun	= FindXmlElement( "Function" );
+	eleFun.setAttribute( "GameRec", checked ? 1 : 0 );
+}
+
+void RDLiveSdkDemo::on_actCapCursor_toggled( bool checked )
+{
+	QDomElement		eleFun	= FindXmlElement( "Function" );
+	eleFun.setAttribute( "CursorCapture", checked ? 1 : 0 );
+	Cursor_EnableCapture( checked );
+}
+
+void RDLiveSdkDemo::on_actAutoAero_toggled( bool checked )
+{
+	QDomElement		eleFun	= FindXmlElement( "Function" );
+	eleFun.setAttribute( "AutoAero", checked ? 1 : 0 );
+	Screen_SetAutoEnableAero( checked );
+}

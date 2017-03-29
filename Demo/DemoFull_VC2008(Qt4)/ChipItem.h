@@ -20,16 +20,13 @@ private:
 	Ui::ChipItem ui;
 	HCHIP			m_hChip;
 	IPinInput_EClass	m_eClassType;
-	QString			m_szSource;
 	QSize			m_siBase;
 	static ChipItemOper*	m_pItemOper;
 
-	IScreen_SCapParams		m_sScrCapParams;
-	IPinInput_SStatusInfo	m_sChipStatus;
 	QListWidget*		m_listWidChips;
 	QListWidgetItem*	m_lwItem;
 	void DisplaySourceName();
-	void SetLabelIcon();
+	void SetLabelIcon( IPinInput_SStatusInfo& sChipStatus );
 
 	void OnStatusChanged();
 	void OnPosChanged();

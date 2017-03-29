@@ -1,5 +1,22 @@
 <RCC>
   <qresource prefix="/">
+    <file>Resources/ItemToolbar/inpGame32.png</file>
+    <file>Resources/ItemToolbar/inpText32.png</file>
+    <file>Resources/ItemOper/butPause.png</file>
+    <file>Resources/ItemOper/butPause_D.png</file>
+    <file>Resources/ItemOper/butPause_H.png</file>
+    <file>Resources/ItemOper/butPlay.png</file>
+    <file>Resources/ItemOper/butPlay_D.png</file>
+    <file>Resources/ItemOper/butPlay_H.png</file>
+    <file>Resources/ItemOper/butStop.png</file>
+    <file>Resources/ItemOper/butStop_D.png</file>
+    <file>Resources/ItemOper/butStop_H.png</file>
+    <file>Resources/ItemOper/chkSpeaker.png</file>
+    <file>Resources/ItemOper/chkSpeaker_C.png</file>
+    <file>Resources/ItemOper/chkSpeaker_D.png</file>
+    <file>Resources/ItemOper/chkSpeaker_D_C.png</file>
+    <file>Resources/ItemOper/chkSpeaker_H.png</file>
+    <file>Resources/ItemOper/chkSpeaker_H_C.png</file>
     <file>Resources/chkStart.png</file>
     <file>Resources/chkStart_C.png</file>
     <file>Resources/chkStart_D.png</file>

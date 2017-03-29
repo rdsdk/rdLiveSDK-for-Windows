@@ -6,28 +6,55 @@ CRangeSlider::CRangeSlider(QWidget *parent)
 {
 	m_fMax		= 1.0;
 	m_fMin		= 0.0;
-	m_fSliderMin		= 0.0;
-	m_fSliderMax	= 1.0;
-	m_fPos		= 0.0;
-	m_bEnablePos	= FALSE;
-	m_coFrame.setRgb( 96,96,96 );
-	m_coBack.setRgb( 160,160,160 );
-	m_coSlider.setRgb( 0,36,200 );
-	m_coLine.setRgb( 0,0,0 );
-	m_coProgress.setRgb( 0,200,32 );
-
-	m_iLeft		= 0;
-	m_iRight	= 0;
-	m_iPos		= 0;
-	m_dwHitMask	= 0xFFFFFFFF;
-
+	m_fAreaMin	= 0.0;
+	m_fAreaMax	= 1.0;
+	m_fValue	= 0.0;
 	m_eHit		= eHit_None;
-	m_iOffset	= 0;
+	m_eDisp		= eDispBoth;
+	m_iPrevPos	= -1;
+	m_fPrevVal	= 0.0;
 
-	m_dwTexDraw		= eTex_Percent | eTex_Left | eTex_Right | eTex_Middle;
-	m_iPrecision	= 2;
-	m_iTexSpace		= 2;
-	m_coText.setRgb( 255, 255, 255 );
+	m_sStyle.iBorderLineWidth	= 1;
+	m_sStyle.coBorderLine		= QColor( 56, 89, 136 );
+	m_sStyle.coBackgroup		= QColor( 22, 33, 51 );
+	m_sStyle.coAreaBar		= QColor( 51, 82, 125 );
+	m_sStyle.coValue		= QColor( 91, 137, 205 );
+
+	m_sStyle.bHitMinSpace	= true;
+	m_sStyle.bHitMaxSpace	= true;
+	m_sStyle.bHitMinLine	= true;
+	m_sStyle.bHitMaxLine	= true;
+	m_sStyle.bHitAreaBar	= true;
+	m_sStyle.bHitValue		= true;
+	m_sStyle.eFormat	= eTextFloat;
+	m_sStyle.iPrecision	= 2;
+
+	m_sStyle.bIsSpaceValue	= true;
+	m_sStyle.sMinText.coText	= QColor( 170, 204, 254 );
+	m_sStyle.sMinText.eAlign	= eAlignFar;
+	m_sStyle.sMinText.iSpace		= 1;
+
+	m_sStyle.sMaxText.coText	= QColor( 170, 204, 254 );
+	m_sStyle.sMaxText.eAlign	= eAlignFar;
+	m_sStyle.sMaxText.iSpace		= 1;
+
+	m_sStyle.sAreaText.coText	= QColor( 170, 204, 254 );
+	m_sStyle.sAreaText.eAlign	= eAlignCenter;
+	m_sStyle.sAreaText.iSpace		= 1;
+
+	m_sStyle.bDrawValueBar	= true;
+	m_sStyle.bTextAlignBar	= true;
+	m_sStyle.sValueText.coText	= QColor( 170, 204, 254 );
+	m_sStyle.sValueText.eAlign	= eAlignFar;
+	m_sStyle.sValueText.iSpace		= 1;
+
+	m_sStyle.sValueTextSub.coText	= QColor( 170, 204, 254 );
+	m_sStyle.sValueTextSub.eAlign	= eAlignFar;
+	m_sStyle.sValueTextSub.iSpace		= 1;
+
+	m_iMinLine		= 0;
+	m_iMaxLine		= 0;
+	m_iPosValue		= 0;
 
 	setMouseTracking( true );
 }
@@ -43,13 +70,13 @@ void CRangeSlider::SetRange( double fMin, double fMax )
 	{
 		m_fMin	= fMin;
 		m_fMax	= fMax;
-        m_fSliderMin	= qMax( m_fMin, m_fSliderMin );
-        m_fSliderMin	= qMin( m_fMax, m_fSliderMin );
-        m_fSliderMax	= qMin( m_fMax, m_fSliderMax );
-        m_fSliderMax	= qMax( m_fMin, m_fSliderMax );
-		CalcPos( width() );
-		update();
 	}
+	else
+	{
+		m_fMin	= fMax;
+		m_fMax	= fMin;
+	}
+	CalcPos();
 }
 
 void CRangeSlider::GetRange( double* pMin, double* pMax )
@@ -58,107 +85,278 @@ void CRangeSlider::GetRange( double* pMin, double* pMax )
 	if ( pMax ) *pMax	= m_fMax;
 }
 
-void CRangeSlider::SetSlider( double fSliderMin, double fSliderMax )
+void CRangeSlider::SetArea( double fAreaMin, double fAreaMax )
 {
-    m_fSliderMin	= qMax( m_fMin, fSliderMin );
-    m_fSliderMax	= qMin( m_fMax, fSliderMax );
-	if ( m_fSliderMin > m_fSliderMax )
+	if ( fAreaMin < fAreaMax )
 	{
-		m_fSliderMin	= ( m_fSliderMax + m_fSliderMin ) * 0.5;
-		m_fSliderMax	= m_fSliderMin;
+		m_fAreaMin	= fAreaMin;
+		m_fAreaMax	= fAreaMax;
 	}
-	CalcPos( width() );
-	update();
+	else
+	{
+		m_fAreaMin	= fAreaMax;
+		m_fAreaMax	= fAreaMin;
+	}
+	CalcPos();
 }
 
-void CRangeSlider::SetProgress( double fPos, BOOL bEnable )
+void CRangeSlider::SetValue( double fValue )
 {
-    m_fPos		= qMax( m_fPos, m_fSliderMin );
-    m_fPos		= qMin( m_fPos, m_fSliderMax );
-	m_bEnablePos	= bEnable ? TRUE : FALSE;
-	CalcPos( width() );
-	update();
+	if ( m_eHit == eHit_Value && m_iPrevPos >= 0 ) return;
+    m_fValue	= fValue;
+	CalcPos();
 }
 
-void CRangeSlider::SetColors( const QColor& coFrame, const QColor& coBack,
-		const QColor& coSlider, const QColor& coLine, 
-		const QColor& coProgress, const QColor& coText )
+void CRangeSlider::SetStyle( const SStyle& sStyle )
 {
-	m_coFrame	= coFrame;
-	m_coBack	= coBack;
-	m_coSlider	= coSlider;
-	m_coLine	= coLine;
-	m_coProgress	= coProgress;
-	m_coText		= coText;
-	update();
+	m_sStyle		= sStyle;
+	CalcPos();
 }
 
-void CRangeSlider::SetText( DWORD eDrawMask, int iPrecision, int iSpace )
+void CRangeSlider::SetDispMode( EDispMode eMode )
 {
-	m_dwTexDraw		= eDrawMask;
-	m_iPrecision	= iPrecision;
-	m_iTexSpace		= iSpace;
-	update();
+	m_eDisp	= eMode;
+	qDebug() <<"DispMode:" <<m_eDisp;
+	CalcPos();
 }
 
 void CRangeSlider::resizeEvent ( QResizeEvent * event )
 {
-	CalcPos( event->size().width() );
+	CalcPos( false, event->size().width(), event->size().height() );
 }
 
-void CRangeSlider::CalcPos( int iWidth )
+void CRangeSlider::CalcPos( bool bRepaint, int iWidth, int iHeight )
 {
-	m_iLeft		= INT( ( iWidth - 3 ) * ( m_fSliderMin - m_fMin ) / ( m_fMax - m_fMin ) ) + 1;
-	m_iRight	= INT( ( iWidth - 3 ) * ( m_fSliderMax - m_fMin ) / ( m_fMax - m_fMin ) ) + 1;
+	if ( iWidth <= 0 ) iWidth = width();
+	if ( iHeight <= 0 ) iHeight = height();
+	int		iAreaMin, iAreaMax;
+	double	fRange	= m_fMax - m_fMin;
+
+	m_iSize		= iWidth;
+	m_iSize		-=	m_sStyle.iBorderLineWidth * 2;
+
+    m_fAreaMin	= qMax( m_fMin, m_fAreaMin );
+    m_fAreaMin	= qMin( m_fMax, m_fAreaMin );
+    m_fAreaMax	= qMin( m_fMax, m_fAreaMax );
+    m_fAreaMax	= qMax( m_fMin, m_fAreaMax );
+    m_fValue	= qMax( m_fValue, m_fAreaMin );
+    m_fValue	= qMin( m_fValue, m_fAreaMax );
+
+	if ( m_eDisp == eDispValue )
+	{
+		m_iMinLine	= m_sStyle.iBorderLineWidth;
+		m_iMaxLine	= m_iSize + m_sStyle.iBorderLineWidth - 1;
+		m_iPosValue	= ( m_fValue - m_fAreaMin ) / ( m_fAreaMax - m_fAreaMin ) * m_iSize + m_sStyle.iBorderLineWidth;
+	}
+	else
+	{
+		m_iMinLine	= ( m_fAreaMin - m_fMin ) / fRange * m_iSize + m_sStyle.iBorderLineWidth;
+		m_iMaxLine	= ( m_fAreaMax - m_fMin ) / fRange * m_iSize + m_sStyle.iBorderLineWidth - 1;
+		m_iPosValue	= ( m_fValue - m_fMin ) / fRange * m_iSize + m_sStyle.iBorderLineWidth;
+	}
+	if ( m_iMinLine > m_iMaxLine && ( m_iMinLine > m_sStyle.iBorderLineWidth && m_iMaxLine < m_iSize + m_sStyle.iBorderLineWidth - 1 ) )
+	{
+		m_rtArea.setRect( m_iMaxLine, 0, 1, iHeight );
+	}
+	else
+	{
+		m_rtArea.setRect( m_iMinLine, 0, m_iMaxLine - m_iMinLine + 1, iHeight );
+	}
+	m_rtValue.setRect( m_iMinLine, 0, m_iPosValue - m_iMinLine, iHeight );
+
+
+	if ( m_sStyle.bTextAlignBar )
+	{
+		m_rtMinText.setRect( m_sStyle.iBorderLineWidth + m_sStyle.sMinText.iSpace, 0,
+			m_iSize - m_sStyle.sMinText.iSpace * 2, iHeight );
+		m_rtMaxText.setRect( m_sStyle.iBorderLineWidth + m_sStyle.sMaxText.iSpace, 0,
+			m_iSize - m_sStyle.sMaxText.iSpace * 2, iHeight );
+		m_rtAreaText.setRect( m_sStyle.iBorderLineWidth + m_sStyle.sAreaText.iSpace, 0,
+			m_iSize - m_sStyle.sAreaText.iSpace * 2, iHeight );
+
+		m_rtValueText.setRect( m_iMinLine + m_sStyle.sValueText.iSpace, 0,
+			m_iMaxLine - m_iMinLine - m_sStyle.sValueText.iSpace * 2, iHeight );
+		m_rtValueTextSub.setRect( m_iMinLine + m_sStyle.sValueTextSub.iSpace, 0,
+			m_iMaxLine - m_iMinLine - m_sStyle.sValueTextSub.iSpace * 2, iHeight );
+	}
+	else
+	{
+		m_rtMinText.setRect( m_sStyle.iBorderLineWidth + m_sStyle.sMinText.iSpace, 0,
+			m_iMinLine - m_sStyle.sMinText.iSpace - ( m_sStyle.iBorderLineWidth + m_sStyle.sMinText.iSpace ), iHeight );
+		m_rtMaxText.setRect( m_iMaxLine + m_sStyle.sMaxText.iSpace, 0,
+			iWidth - m_sStyle.sMaxText.iSpace - m_sStyle.iBorderLineWidth - ( m_iMaxLine + m_sStyle.sMaxText.iSpace ), iHeight );
+		m_rtAreaText.setRect( m_rtArea.x() + m_sStyle.sAreaText.iSpace, 0,
+			m_rtArea.width() - m_sStyle.sAreaText.iSpace * 2, iHeight );
+
+		m_rtValueText.setRect( m_iMinLine + m_sStyle.sValueText.iSpace, 0,
+			m_iPosValue - m_iMinLine - m_sStyle.sValueText.iSpace * 2, iHeight );
+		m_rtValueTextSub.setRect( m_iPosValue + m_sStyle.sValueTextSub.iSpace, 0,
+			m_iMaxLine - m_iPosValue - m_sStyle.sValueTextSub.iSpace * 2, iHeight );
+	}
+	if ( m_sStyle.eFormat == eTextPercent )
+	{
+		CalcText( m_szMinText, ( m_fAreaMin - m_fMin ) / ( m_fMax - m_fMin ) );
+		CalcText( m_szMaxText, ( m_fMax - m_fAreaMax ) / ( m_fMax - m_fMin ) );
+		if ( m_sStyle.bIsSpaceValue )
+		{
+			CalcText( m_szValueText, ( m_fValue - m_fAreaMin ) / ( m_fAreaMax - m_fAreaMin ) );
+			CalcText( m_szValueTextSub, ( m_fAreaMax - m_fValue ) / ( m_fAreaMax - m_fAreaMin ) );
+		}
+		else
+		{
+			CalcText( m_szValueText, ( m_fValue - m_fAreaMin ) / ( m_fMax - m_fMin ) );
+			CalcText( m_szValueTextSub, ( m_fAreaMax - m_fValue ) / ( m_fMax - m_fMin ) );
+		}
+		CalcText( m_szAreaText, ( m_fAreaMax - m_fAreaMin ) / ( m_fMax - m_fMin ) );
+	}
+	else if ( m_sStyle.bIsSpaceValue )
+	{
+		CalcText( m_szMinText, m_fAreaMin - m_fMin );
+		CalcText( m_szMaxText, m_fMax - m_fAreaMax );
+		CalcText( m_szValueText, m_fValue - m_fAreaMin );
+		CalcText( m_szValueTextSub, m_fAreaMax - m_fValue );
+		CalcText( m_szAreaText, m_fAreaMax - m_fAreaMin );
+	}
+	else
+	{
+		CalcText( m_szMinText, m_fAreaMin );
+		CalcText( m_szMaxText, m_fAreaMax );
+		CalcText( m_szValueText, m_fValue );
+		CalcText( m_szValueTextSub, m_fMax - m_fValue );
+		CalcText( m_szAreaText, m_fAreaMax - m_fAreaMin );
+	}
+	bRepaint ? repaint() : update();
+}
+
+void CRangeSlider::CalcText( QString& szOutStr, double fValue )
+{
+	switch( m_sStyle.eFormat )
+	{
+	case eTextFloat:
+		szOutStr	= QString( "%1" ).arg( fValue, 0, 'f', m_sStyle.iPrecision );
+		break;
+	case eTextPercent:
+		szOutStr	= QString( "%1%" ).arg( fValue, 0, 'f', m_sStyle.iPrecision );
+		break;
+	case eTextHMS:
+	case eTextHMSAuto:
+		{
+			int	iHour	= int( fValue/ 60.0 / 60.0 );
+			fValue	-= iHour * 60.0 * 60.0;
+			int	iMinute	= int( fValue / 60.0 );
+			fValue	-= iMinute * 60.0;
+			int	iSecond	= int( fValue );
+			fValue	-= iSecond;
+			szOutStr	= "";
+			if ( iHour || m_sStyle.eFormat == eTextHMS )
+			{
+				if ( m_sStyle.eFormat == eTextHMSAuto )
+					szOutStr	= QString( "%1:%2:%3" ).arg( iHour )
+						.arg( iMinute, 2, 10, QChar( '0' ) )
+						.arg( iSecond, 2, 10, QChar( '0' ) );
+				else
+					szOutStr	= QString( "%1:%2:%3" ).arg( iHour, 2, 10, QChar( '0' ) )
+						.arg( iMinute, 2, 10, QChar( '0' ) )
+						.arg( iSecond, 2, 10, QChar( '0' ) );
+			}
+			else
+			{
+				szOutStr	= QString( "%1:%2" ).arg( iMinute, 2, 10, QChar( '0' ) )
+						.arg( iSecond, 2, 10, QChar( '0' ) );
+			}
+			
+			if ( m_sStyle.iPrecision )
+			{
+				int	iScale	= 1;
+				for ( int i = 0; i < m_sStyle.iPrecision; ++i ) iScale = iScale * 10;
+				szOutStr	+= QString( ".%1" ).arg( int( fValue * iScale ), m_sStyle.iPrecision, 10, QChar( '0' ) );
+			}
+		}
+		break;
+	}
 }
 
 void CRangeSlider::CalcHit( int x, int y )
 {
-	if ( y < 1 || y > height() - 2 )
+	int		iPos	= x;
+	if ( y < m_sStyle.iBorderLineWidth || y >= height() - m_sStyle.iBorderLineWidth )
 	{
 		setCursor( QCursor( Qt::ArrowCursor ) );
 		m_eHit	= eHit_None;
 		return;
 	}
-	if ( x >= m_iLeft - 1 && x <= m_iLeft + 1 && m_iRight > 1
-		&& ( m_dwHitMask & ( 1 << eHit_LeftLine ) ) )
+
+	if ( m_eDisp == eDispValue )
+	{
+		if ( m_sStyle.bHitValue && iPos >= m_iPosValue - 2 && iPos <= m_iPosValue + 2 )
+		{
+			setCursor( QCursor( Qt::SizeHorCursor ) );
+			m_eHit	= eHit_Value;			
+		}
+		else if ( m_sStyle.bHitValue && iPos >= m_iMinLine && iPos <= m_iMaxLine )
+		{
+			setCursor( QCursor( Qt::ArrowCursor ) );
+			m_eHit	= eHit_ValueArea;			
+		}
+		else
+		{
+			setCursor( QCursor( Qt::ArrowCursor ) );
+			m_eHit	= eHit_None;
+		}
+	}
+	else if ( m_sStyle.bHitValue && m_sStyle.bDrawValueBar && m_eDisp != eDispArea &&
+		iPos >= qMax( m_iPosValue - 2, m_iMinLine ) && 
+		iPos <= qMin( m_iPosValue + 2, m_iMaxLine ) )
 	{
 		setCursor( QCursor( Qt::SizeHorCursor ) );
-		m_eHit	= eHit_LeftLine;
+		m_eHit	= eHit_Value;			
 	}
-	else if ( x >= m_iRight - 1 && x <= m_iRight + 1 && m_iLeft < width() - 2 
-		&& ( m_dwHitMask & ( 1 << eHit_RightLine ) ) )
+	else if ( m_sStyle.bHitMinLine && m_iMaxLine > m_sStyle.iBorderLineWidth &&
+		iPos >= m_iMinLine - 2 && iPos <= m_iMinLine + 2 )
 	{
 		setCursor( QCursor( Qt::SizeHorCursor ) );
-		m_eHit	= eHit_RightLine;
+		m_eHit	= eHit_MinLine;
 	}
-	else if ( x > m_iLeft && x < m_iRight )
+	else if ( m_sStyle.bHitMaxLine && m_iMinLine < width() - m_sStyle.iBorderLineWidth - 1 &&
+		iPos >= m_iMaxLine - 2 && iPos <= m_iMaxLine + 2 )
 	{
-		if ( m_dwHitMask & ( 1 << eHit_Slider ) )
+		setCursor( QCursor( Qt::SizeHorCursor ) );
+		m_eHit	= eHit_MaxLine;
+	}
+	else if ( iPos >= m_iMinLine && iPos <= m_iMaxLine )
+	{
+		if ( m_sStyle.bHitValue && m_sStyle.bDrawValueBar && !m_sStyle.bHitAreaBar && m_eDisp != eDispArea )
+		{
+			setCursor( QCursor( Qt::ArrowCursor ) );
+			m_eHit	= eHit_ValueArea;			
+		}
+		else if ( m_sStyle.bHitAreaBar )
 		{
 			setCursor( QCursor( Qt::SizeAllCursor ) );
-			m_eHit	= eHit_Slider;
+			m_eHit	= eHit_AreaBar;
 		}
-		else if ( ( m_dwHitMask & ( 1 << eHit_Left ) ) && !( m_dwHitMask & ( 1 << eHit_Right ) ) )
+		else if ( m_sStyle.bHitMinSpace && !m_sStyle.bHitMaxSpace )
 		{
 			setCursor( QCursor( Qt::ArrowCursor ) );
-			m_eHit	= eHit_Left;
+			m_eHit	= eHit_MinSpace;
 		}
-		else if ( !( m_dwHitMask & ( 1 << eHit_Left ) ) && ( m_dwHitMask & ( 1 << eHit_Right ) ) )
+		else if ( !m_sStyle.bHitMinSpace && m_sStyle.bHitMaxSpace )
 		{
 			setCursor( QCursor( Qt::ArrowCursor ) );
-			m_eHit	= eHit_Right;
+			m_eHit	= eHit_MaxSpace;
 		}
 	}
-	else if ( x < m_iLeft && x > 0 && ( m_dwHitMask & ( 1 << eHit_Left ) ) )
+	else if ( m_sStyle.bHitMinSpace &&
+		iPos < m_iMinLine && iPos >= m_sStyle.iBorderLineWidth )
 	{
 		setCursor( QCursor( Qt::ArrowCursor ) );
-		m_eHit	= eHit_Left;
+		m_eHit	= eHit_MinSpace;
 	}
-	else if ( x > m_iRight && x < width() - 1 && ( m_dwHitMask & ( 1 << eHit_Right ) ) )
+	else if ( m_sStyle.bHitMaxSpace &&
+		iPos > m_iMaxLine && iPos < m_iSize + m_sStyle.iBorderLineWidth )
 	{
 		setCursor( QCursor( Qt::ArrowCursor ) );
-		m_eHit	= eHit_Right;
+		m_eHit	= eHit_MaxSpace;
 	}
 	else
 	{
@@ -169,43 +367,47 @@ void CRangeSlider::CalcHit( int x, int y )
 
 void CRangeSlider::mouseMoveEvent ( QMouseEvent * event )
 {
-	if ( event->buttons() == Qt::LeftButton )
+	if ( event->buttons() == Qt::LeftButton  )
 	{
 		switch( m_eHit )
 		{
 		case eHit_None:
 			break;
-		case eHit_LeftLine:
-			m_iLeft	= event->pos().x() + m_iOffset;
-			if ( m_iLeft > m_iRight ) m_iLeft = m_iRight;
-			if ( m_iLeft < 1 ) m_iLeft = 1;
-			m_fSliderMin	= ( m_iLeft - 1 ) * ( m_fMax - m_fMin ) / ( width() - 3 ) + m_fMin;
-			update();
-			emit sliderRange( m_fSliderMin, m_fSliderMax );
+		case eHit_MinLine:
+			m_fAreaMin	= m_fPrevVal + ( event->pos().x() - m_iPrevPos ) * ( m_fMax - m_fMin ) / m_iSize;
+			if ( m_fAreaMin > m_fAreaMax ) m_fAreaMin = m_fAreaMax;
+			CalcPos( true );
+			emit areaChanged( m_fAreaMin, m_fAreaMax );
 			break;
-		case eHit_RightLine:
-			m_iRight	= event->pos().x() + m_iOffset;
-			if ( m_iRight < m_iLeft ) m_iRight = m_iLeft;
-			if ( m_iRight > width() - 2 ) m_iRight = width() - 2;
-			m_fSliderMax	= ( m_iRight - 1 ) * ( m_fMax - m_fMin ) / ( width() - 3 ) + m_fMin;
-			update();
-			emit sliderRange( m_fSliderMin, m_fSliderMax );
+		case eHit_MaxLine:
+			m_fAreaMax	= m_fPrevVal + ( event->pos().x() - m_iPrevPos ) * ( m_fMax - m_fMin ) / m_iSize;
+			if ( m_fAreaMax < m_fAreaMin ) m_fAreaMax = m_fAreaMin;
+			CalcPos( true );
+			emit areaChanged( m_fAreaMin, m_fAreaMax );
 			break;
-		case eHit_Slider:
+		case eHit_AreaBar:
 			{
-				int	iWidth	= m_iRight - m_iLeft;
-				int	iLeft	= event->pos().x() + m_iOffset;
-				if ( iLeft < 1 ) iLeft = 1;
-				if ( iLeft + iWidth > width() - 2 ) iLeft = width() - 2 - iWidth;
-				m_iLeft		= iLeft;
-				m_iRight	= iLeft + iWidth;
-				float	fWidth	= m_fSliderMax - m_fSliderMin;
-				m_fSliderMin		= ( m_iLeft - 1 ) * ( m_fMax - m_fMin ) / ( width() - 3 ) + m_fMin;
-				m_fSliderMax	= m_fSliderMin + fWidth;
+				double	fSize	= m_fAreaMax - m_fAreaMin;
+				m_fAreaMin	= m_fPrevVal + ( event->pos().x() - m_iPrevPos ) * ( m_fMax - m_fMin ) / m_iSize;
+				if ( m_fAreaMin < m_fMin ) m_fAreaMin = m_fMin;
+				if ( m_fAreaMin + fSize > m_fMax ) m_fAreaMin = m_fMax - fSize;
+				m_fAreaMax	= m_fAreaMin + fSize;
+				CalcPos( true );
+				emit areaChanged( m_fAreaMin, m_fAreaMax );
 			}
-			update();
-			emit sliderRange( m_fSliderMin, m_fSliderMax );
 			break;	
+		case eHit_Value:
+			if ( m_eDisp == eDispValue )
+			{
+				m_fValue	= m_fPrevVal + ( event->pos().x() - m_iPrevPos ) * ( m_fAreaMax - m_fAreaMin ) / m_iSize;
+			}
+			else
+			{
+				m_fValue	= m_fPrevVal + ( event->pos().x() - m_iPrevPos ) * ( m_fMax - m_fMin ) / m_iSize;
+			}
+			CalcPos( true );
+			emit valueChanged( m_fValue );
+			break;
 		}
 	}
 	else
@@ -222,106 +424,123 @@ void CRangeSlider::mousePressEvent ( QMouseEvent * event )
 		{
 		case eHit_None:
 			break;
-		case eHit_Left:
-			m_iLeft	= event->pos().x();
-			m_fSliderMin	= ( m_iLeft - 1 ) * ( m_fMax - m_fMin ) / ( width() - 3 ) + m_fMin;
+		case eHit_MinSpace:
+			m_fAreaMin	= m_fAreaMin + ( event->pos().x() - m_iMinLine ) * ( m_fMax - m_fMin ) / m_iSize;
+			if ( m_fAreaMin > m_fAreaMax ) m_fAreaMin = m_fAreaMax;
+			CalcPos();
 			CalcHit( event->pos().x(), event->pos().y() );
-			update();
-			emit sliderRange( m_fSliderMin, m_fSliderMax );
+			m_iPrevPos	= event->pos().x();
+			m_fPrevVal	= m_fAreaMin;
+			emit areaChanged( m_fAreaMin, m_fAreaMax );
 			break;
-		case eHit_Right:
-			m_iRight	= event->pos().x();
-			m_fSliderMax	= ( m_iRight - 1 ) * ( m_fMax - m_fMin ) / ( width() - 3 ) + m_fMin;
+		case eHit_MaxSpace:
+			m_fAreaMax	= m_fAreaMax + ( event->pos().x() - m_iMaxLine ) * ( m_fMax - m_fMin ) / m_iSize;
+			if ( m_fAreaMax < m_fAreaMin ) m_fAreaMax = m_fAreaMin;
+			CalcPos();
 			CalcHit( event->pos().x(), event->pos().y() );
-			update();
-			emit sliderRange( m_fSliderMin, m_fSliderMax );
+			m_iPrevPos	= event->pos().x();
+			m_fPrevVal	= m_fAreaMax;
+			emit areaChanged( m_fAreaMin, m_fAreaMax );
 			break;
-		case eHit_LeftLine:
-			m_iOffset	= m_iLeft - event->pos().x();
+		case eHit_MinLine:
+			m_iPrevPos	= event->pos().x();
+			m_fPrevVal	= m_fAreaMin;
 			break;
-		case eHit_RightLine:
-			m_iOffset	= m_iRight - event->pos().x();
+		case eHit_MaxLine:
+			m_iPrevPos	= event->pos().x();
+			m_fPrevVal	= m_fAreaMax;
 			break;
-		case eHit_Slider:
-			m_iOffset	= m_iLeft - event->pos().x();
+		case eHit_AreaBar:
+			m_iPrevPos	= event->pos().x();
+			m_fPrevVal	= m_fAreaMin;
 			break;
-		
+		case eHit_Value:
+			m_iPrevPos	= event->pos().x();
+			m_fPrevVal	= m_fValue;
+			break;
+		case eHit_ValueArea:
+			if ( m_eDisp == eDispValue )
+			{
+				m_fValue	= m_fValue + ( event->pos().x() - m_iPosValue ) * ( m_fAreaMax - m_fAreaMin ) / m_iSize;
+			}
+			else
+			{
+				m_fValue	= m_fValue + ( event->pos().x() - m_iPosValue ) * ( m_fMax - m_fMin ) / m_iSize;
+			}
+			CalcPos();
+			CalcHit( event->pos().x(), event->pos().y() );
+			m_iPrevPos	= event->pos().x();
+			m_fPrevVal	= m_fValue;
+			emit valueChanged( m_fValue );
+			break;
 		}
 	}
 }
 
 void CRangeSlider::mouseReleaseEvent ( QMouseEvent * event )
 {
+	m_iPrevPos = -1;
+}
+
+QColor CRangeSlider::CalcColor( const QColor& color )
+{
+	if ( isEnabled() ) return color;
+
+	float	fColor	= color.red() + color.green() + color.blue();
+	fColor	/= 4;
+	return QColor( int(fColor), int(fColor), int(fColor), color.alpha() );
 }
 
 void CRangeSlider::paintEvent ( QPaintEvent * event )
 {
 	QPainter	pnt( this );
 	QRect		rtDraw	= rect();
-	QPoint		poSlider;
 
 	rtDraw.setWidth( rtDraw.width() - 1 );
 	rtDraw.setHeight( rtDraw.height() - 1 );
-	pnt.setPen( m_coFrame );
-	pnt.fillRect( rtDraw, m_coBack );
+	pnt.setPen( CalcColor( m_sStyle.coBackgroup ) );
+	pnt.fillRect( rtDraw, CalcColor( m_sStyle.coBackgroup ) );
+	pnt.fillRect( m_rtArea, CalcColor( m_sStyle.coAreaBar ) );
+	if ( m_eDisp != eDispArea && ( m_sStyle.bDrawValueBar || m_eDisp == eDispValue ) )
+	{
+		pnt.fillRect( m_rtValue, CalcColor( m_sStyle.coValue ) );
+	}
 	pnt.drawRect( rtDraw );
 
-	rtDraw.setTop( 1 );
-	rtDraw.moveLeft( m_iLeft );
-	rtDraw.setWidth( m_iRight - m_iLeft + 1 );
-	pnt.fillRect( rtDraw, m_coSlider );
-	poSlider	= rtDraw.center();
-
-	pnt.setPen( m_coLine );
-	if ( m_dwHitMask & ( 1 << eHit_LeftLine ) )
-		pnt.drawLine( m_iLeft, rtDraw.top(), m_iLeft, rtDraw.bottom() );
-	if ( m_dwHitMask & ( 1 << eHit_RightLine ) ) 
-		pnt.drawLine( m_iRight, rtDraw.top(), m_iRight, rtDraw.bottom() );
-
-	if ( m_bEnablePos )
+	if ( m_eDisp != eDispValue )
 	{
+		if ( m_sStyle.sMinText.eAlign && m_rtMinText.width() >= 4 )
+		{
+			const	int	iAlign[]	= { 0, Qt::AlignLeft, Qt::AlignRight, Qt::AlignCenter };
+			pnt.setPen( CalcColor( m_sStyle.sMinText.coText ) );
+			pnt.drawText( m_rtMinText, iAlign[ m_sStyle.sMinText.eAlign ] | Qt::AlignVCenter, m_szMinText );
+		}
+		if ( m_sStyle.sMaxText.eAlign && m_rtMaxText.width() >= 4 )
+		{
+			const	int	iAlign[]	= { 0, Qt::AlignRight, Qt::AlignLeft, Qt::AlignCenter };
+			pnt.setPen( CalcColor( m_sStyle.sMaxText.coText ) );
+			pnt.drawText( m_rtMaxText, iAlign[ m_sStyle.sMaxText.eAlign ] | Qt::AlignVCenter, m_szMaxText );
+		}
+		if ( m_sStyle.sAreaText.eAlign && m_rtAreaText.width() >= 4 )
+		{
+			const	int	iAlign[]	= { 0, Qt::AlignLeft, Qt::AlignRight, Qt::AlignCenter };
+			pnt.setPen( CalcColor( m_sStyle.sAreaText.coText ) );
+			pnt.drawText( m_rtAreaText, iAlign[ m_sStyle.sAreaText.eAlign ] | Qt::AlignVCenter, m_szAreaText );
+		}
 	}
-
-	if ( m_dwTexDraw & 0xF )
+	if ( m_eDisp != eDispArea && ( m_sStyle.bDrawValueBar || m_eDisp == eDispValue ) )
 	{
-		QString	szLeft, szRight, szMiddle;
-		if ( (m_dwTexDraw & 0xF) == eTex_Percent )
+		if ( m_sStyle.sValueText.eAlign && m_rtValueText.width() >= 4 )
 		{
-			double	dVal	= ( m_fSliderMin - m_fMin ) / ( m_fMax - m_fMin ) * 100.0;
-			szLeft	= QString( "%1%" ).arg( dVal, 0, 'f', m_iPrecision );
-			if ( m_dwTexDraw & eTex_RightRange )
-				dVal	= ( m_fMax - m_fSliderMax - m_fMin ) / ( m_fMax - m_fMin ) * 100;
-			else
-				dVal	= ( m_fSliderMax - m_fMin ) / ( m_fMax - m_fMin ) * 100;
-			szRight	= QString( "%1%" ).arg( dVal, 0, 'f', m_iPrecision );
-			dVal	= ( m_fSliderMax - m_fSliderMin ) / ( m_fMax - m_fMin ) * 100;
-			szMiddle	= QString( "%1%" ).arg( dVal, 0, 'f', m_iPrecision );
+			const	int	iAlign[]	= { 0, Qt::AlignLeft, Qt::AlignRight, Qt::AlignCenter };
+			pnt.setPen( CalcColor( m_sStyle.sValueText.coText ) );
+			pnt.drawText( m_rtValueText, iAlign[ m_sStyle.sValueText.eAlign ] | Qt::AlignVCenter, m_szValueText );
 		}
-		else if ( (m_dwTexDraw & 0xF) == eTex_Number )
+		if ( m_sStyle.sValueTextSub.eAlign && m_rtValueTextSub.width() >= 4 )
 		{
-			szLeft	= QString( "%1" ).arg( m_fSliderMin, 0, 'f', m_iPrecision );
-			if ( m_dwTexDraw & eTex_RightRange )
-				szRight	= QString( "%1" ).arg( m_fMax - m_fSliderMax, 0, 'f', m_iPrecision );
-			else
-				szRight	= QString( "%1" ).arg( m_fSliderMax, 0, 'f', m_iPrecision );
-			szMiddle	= QString( "%1" ).arg( m_fSliderMax - m_fSliderMin, 0, 'f', m_iPrecision );
-		}
-
-		rtDraw	= rect();
-		rtDraw.setLeft(	m_iTexSpace + 1 );
-		rtDraw.setRight( width() - 2 - m_iTexSpace );
-		pnt.setPen( m_coText );
-		if ( m_dwTexDraw & eTex_Left )
-			pnt.drawText( rtDraw, Qt::AlignLeft | Qt::AlignVCenter, szLeft );
-		if ( m_dwTexDraw & eTex_Right )
-			pnt.drawText( rtDraw, Qt::AlignRight | Qt::AlignVCenter, szRight );
-		if ( m_dwTexDraw & eTex_Middle )
-		{
-			if ( m_dwTexDraw & eTex_MidSlider )
-			{
-				rtDraw.moveCenter( poSlider );
-			}
-			pnt.drawText( rtDraw, Qt::AlignCenter | Qt::AlignVCenter, szMiddle );
+			const	int	iAlign[]	= { 0, Qt::AlignRight, Qt::AlignLeft, Qt::AlignCenter };
+			pnt.setPen( CalcColor( m_sStyle.sValueTextSub.coText ) );
+			pnt.drawText( m_rtValueTextSub, iAlign[ m_sStyle.sValueTextSub.eAlign ] | Qt::AlignVCenter, m_szValueTextSub );
 		}
 	}
 }

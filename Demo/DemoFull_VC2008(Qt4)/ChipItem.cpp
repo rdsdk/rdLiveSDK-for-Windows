@@ -6,9 +6,8 @@ ChipItem::ChipItem( HCHIP hChip, QListWidget *parent)
 	: QWidget(parent)
 {
 	ui.setupUi(this);
+	m_eClassType	= Chip_GetClassType( hChip );
 
-	ZeroMemory( &m_sScrCapParams, sizeof( m_sScrCapParams ) );
-	ZeroMemory( &m_sChipStatus, sizeof( m_sChipStatus ) );
 	m_eClassType		= ePinInput_Unknow;
 	m_listWidChips		= parent;
 	m_hChip				= hChip;
@@ -79,7 +78,7 @@ BOOL ChipItem::OnRenderNotify( QListWidget* pList, IRender_ENotify eNotify, HSCE
 		break;
 	case eNotify_ChipPosed:
 		pChItem	= GetChipItem( pList, iViewLow );
-		if ( pChItem ) pChItem->OnPosChanged();
+		if ( pChItem && pChItem->m_hChip == m_pItemOper->GetHChip() ) m_pItemOper->OnPosChanged();
 		break;
 	case eNotify_ChipRotating:
 		break;
@@ -156,19 +155,18 @@ BOOL ChipItem::MoveChipItem( QListWidget* pList, int iViewFrom, int iViewTo )
 
 void ChipItem::OnStatusChanged()
 {
-	if ( !Chip_GetStatusInfo( m_hChip, &m_sChipStatus ) )
+	IPinInput_SStatusInfo	sChipStatus;
+	if ( !Chip_GetStatusInfo( m_hChip, &sChipStatus ) )
 	{
 		return;
 	}
-	if ( m_sChipStatus.eStatus == ePin_Opening || m_eClassType == ePinInput_Unknow )
-	{
-		DisplaySourceName();
-	}
-	SetLabelIcon();
+	DisplaySourceName();
+	
+	SetLabelIcon( sChipStatus );
 	BOOL	bSeted	= FALSE;
 	BOOL	bCurr	= ( this == (ChipItem*)m_listWidChips->itemWidget( m_listWidChips->currentItem() ) );
 
-	if ( m_sChipStatus.eStatus >= ePin_Opened )
+	if ( sChipStatus.eStatus >= ePin_Opened )
 	{
 		IPinInput_SCharacteristics	sCharact	= {0};
 		if ( Chip_GetCharacteristics( m_hChip, &sCharact ) )
@@ -185,7 +183,7 @@ void ChipItem::OnStatusChanged()
 				if ( bCurr && m_pItemOper->isHidden() )
 				{
 					m_lwItem->setSizeHint( QSize( m_siBase.width(), m_siBase.height() + m_pItemOper->height() ) );
-					m_pItemOper->OnChipSelected( m_hChip );
+					m_pItemOper->OnChipSelected( m_hChip, sChipStatus );
 					m_pItemOper->show();
 				}
 				bSeted	= TRUE;
@@ -206,40 +204,26 @@ void ChipItem::OnStatusChanged()
 			m_lwItem->setSizeHint( m_siBase );
 		}
 	}
-
-	//switch( sStatus.eStatus )
-	//{
-	//case ePin_None:		//没有设置源
-	//case ePin_Error:		//源错误
-	//	break;
-	//case ePin_Closed:		//已经关闭
-	//case ePin_Opened:		//源打开完成
-	//case ePin_Stoped:		//源已经停止
-	//case ePin_Paused:		//已经暂停
-	//case ePin_Played:		//正在播放
-	//	break;
-	//case ePin_Closing:	//正在关闭
-	//	break;
-	//case ePin_Opening:	//正在打开
-	//	break;
-	//case ePin_Stoping:	//正在停止
-	//	break;
-	//case ePin_Pausing:	//正在暂停
-	//	break;
-	//case ePin_Loading:	//正在载入
-	//	break;
-	//}
+	if ( bCurr )
+	{
+		m_pItemOper->OnStatusChanged( sChipStatus );
+	}
 }
 
 void ChipItem::OnChipSelected( BOOL bSelect )
 {
 	if ( bSelect )
 	{
+		IPinInput_SStatusInfo	sChipStatus;
+		if ( !Chip_GetStatusInfo( m_hChip, &sChipStatus ) )
+		{
+			return;
+		}
 		ui.verticalLayout->addWidget( m_pItemOper );
 		if ( Chip_GetStatus( m_hChip ) >= ePin_Opened )
 		{
 			m_lwItem->setSizeHint( QSize( m_siBase.width(), m_siBase.height() + m_pItemOper->height() ) );
-			m_pItemOper->OnChipSelected( m_hChip );
+			m_pItemOper->OnChipSelected( m_hChip, sChipStatus );
 			m_pItemOper->show();
 		}
 		else
@@ -264,94 +248,30 @@ void ChipItem::OnPosChanged()
 void ChipItem::DisplaySourceName()
 {
 	m_eClassType	= Chip_GetClassType( m_hChip );
-	m_szSource	= QFU( Chip_GetSourceName( m_hChip ) );
-	QString	szName;
+	QString	szName	= QFU( Chip_GetFriendlyName( m_hChip ) );
 	QFontMetrics	fm( ui.labSourceName->font() );
-	if ( m_eClassType == ePinInput_Unknow )
+
+	if ( m_eClassType == ePinInput_Picture 
+		|| m_eClassType == ePinInput_Flash
+		|| m_eClassType == ePinInput_Movie )
 	{
-		szName	= "Unknow";
-	}
-	else if ( m_eClassType == ePinInput_Picture )
-	{
-		szName	= m_szSource;
 		szName	= fm.elidedText( szName, Qt::ElideLeft, ui.labSourceName->width() );
 	}
 	else if ( m_eClassType == ePinInput_Camera )
 	{
-        int	iCamera	= Camera_GetIndex( (LPCWSTR)m_szSource.utf16() );
-		if ( iCamera >= 0 ) 
-			szName	= QFU( Camera_GetFriendlyName( iCamera ) );
 		szName	= fm.elidedText( szName, Qt::ElideRight, ui.labSourceName->width() );
 	}
 	else if ( m_eClassType == ePinInput_Screen )
 	{
-        if ( Screen_AnalysisSource( (LPCWSTR)m_szSource.utf16(), &m_sScrCapParams ) )
-		{
-			if ( m_sScrCapParams.szWindow[0] )
-			{
-				szName	= QFU( L"窗口：" );
-				szName	+= QFU( m_sScrCapParams.szWindow ); 
-				szName	= fm.elidedText( szName, Qt::ElideRight, ui.labSourceName->width() );
-			}
-			else if ( m_sScrCapParams.hWindow )
-			{
-				szName	= QFU( L"窗口：" );
-				WCHAR	szWindow[MAX_PATH]	= {0};
-				if ( 0 == InternalGetWindowText( m_sScrCapParams.hWindow, szWindow, ARRAYSIZE( szWindow ) ) || 0 == szWindow[0] )
-				{
-					wsprintf( szWindow, L"0x08X", m_sScrCapParams.hWindow );
-					szName	+= QFU( szWindow );
-				}
-				szName	+= QFU( szWindow );
-				szName	= fm.elidedText( szName, Qt::ElideRight, ui.labSourceName->width() );
-			}
-			else if ( m_sScrCapParams.iScreen < 0 )
-			{
-				if ( m_sScrCapParams.bUseInitRect )
-				{
-					szName	= QFU( L"桌面 [%1x%2]" )
-						.arg( m_sScrCapParams.rtInit.right ).arg( m_sScrCapParams.rtInit.bottom );
-				}
-				else
-				{
-					MONITORINFOEXW	monit;
-					QRect			rtScreen;
-					for ( int i = 0; i < Screen_GetCount(); ++i )
-					{
-						Screen_GetInfo( i, &monit );
-						rtScreen	|= QRect( monit.rcMonitor.left, monit.rcMonitor.top, 
-							monit.rcMonitor.right - monit.rcMonitor.left, monit.rcMonitor.bottom - monit.rcMonitor.top );
-					}
-					szName	= QFU( L"整个桌面 [%1x%2]" )
-						.arg( rtScreen.width() ).arg( rtScreen.height() );
-				}
-			}
-			else
-			{
-				if ( m_sScrCapParams.bUseInitRect )
-				{
-					szName	= QFU( L"屏幕 %1 (%3,%4)-(%5,%6)" ).arg( m_sScrCapParams.iScreen )
-						.arg( m_sScrCapParams.rtInit.left ).arg( m_sScrCapParams.rtInit.top )
-						.arg( m_sScrCapParams.rtInit.right ).arg( m_sScrCapParams.rtInit.bottom );
-				}
-				else
-				{
-					MONITORINFOEXW	monit;
-					QRect			rtScreen;
-					Screen_GetInfo( m_sScrCapParams.iScreen, &monit );
-					rtScreen	= QRect( monit.rcMonitor.left, monit.rcMonitor.top, 
-						monit.rcMonitor.right - monit.rcMonitor.left, monit.rcMonitor.bottom - monit.rcMonitor.top );
-
-					szName	= QFU( L"屏幕 %1 (%3,%4)-(%5,%6)" ).arg( m_sScrCapParams.iScreen )
-						.arg( rtScreen.x() ).arg( rtScreen.y() ).arg( rtScreen.right() + 1 ).arg( rtScreen.bottom() + 1 );
-				}
-			}
-		}
 	}
+	else if ( m_eClassType == ePinInput_Game )
+	{
+	}
+
 	ui.labSourceName->setText( szName );
 }
 
-void ChipItem::SetLabelIcon()
+void ChipItem::SetLabelIcon( IPinInput_SStatusInfo& sChipStatus )
 {
 	static QImage	imgNone( ":/Resources/ItemToolbar/inpNone32.png" );
 	static QImage	imgPicture( ":/Resources/ItemToolbar/inpPicture32.png" );
@@ -359,6 +279,8 @@ void ChipItem::SetLabelIcon()
 	static QImage	imgSceeen( ":/Resources/ItemToolbar/inpDesktop32.png" );
 	static QImage	imgWindow( ":/Resources/ItemToolbar/inpWindow32.png" );
 	static QImage	imgMovie( ":/Resources/ItemToolbar/inpMovie32.png" );
+	static QImage	imgGame( ":/Resources/ItemToolbar/inpGame32.png" );
+	static QImage	imgText( ":/Resources/ItemToolbar/inpText32.png" );
 
 	static QImage	imgStaError( ":/Resources/ItemToolbar/inpStatusError.png" );
 	static QImage	imgStaStoped( ":/Resources/ItemToolbar/inpStatusStoped.png" );
@@ -383,26 +305,34 @@ void ChipItem::SetLabelIcon()
 		imgIcon	= imgCamera;
 		break;
 	case ePinInput_Screen:
-		if ( m_sScrCapParams.szWindow[0] || m_sScrCapParams.hWindow )
 		{
-			imgIcon	= imgWindow;
-		}
-		else
-		{
-			imgIcon	= imgSceeen;
+			IScreen_SCapParams	sParams	= {0};
+			Screen_AnalysisSource( Chip_GetSourceName( m_hChip ), &sParams );
+			if ( sParams.szWindow[0] || sParams.hWindow )
+			{
+				imgIcon	= imgWindow;
+			}
+			else
+			{
+				imgIcon	= imgSceeen;
+			}
 		}
 		break;
+	case ePinInput_Flash:
 	case ePinInput_Movie:
 		imgIcon	= imgMovie;
 		break;
 	case ePinInput_Game:
-		//imgIcon	= imgCamera;
+		imgIcon	= imgGame;
+		break;
+	case ePinInput_Text:
+		imgIcon	= imgText;
 		break;
 	}
 	
 	QPainter	pnt( &imgIcon );
 
-	switch( m_sChipStatus.eStatus )
+	switch( sChipStatus.eStatus )
 	{
 	case ePin_None:		//没有设置源
 		break;
@@ -423,7 +353,7 @@ void ChipItem::SetLabelIcon()
 				pPix	+= 4;
 			}
 		}
-		if ( m_sChipStatus.eStatus == ePin_Closing ) pnt.drawImage( 16, 16, imgStaClosing );
+		if ( sChipStatus.eStatus == ePin_Closing ) pnt.drawImage( 16, 16, imgStaClosing );
 		break;
 	case ePin_Opened:		//源打开完成
 		break;

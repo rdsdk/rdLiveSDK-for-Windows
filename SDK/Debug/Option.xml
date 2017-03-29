@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Option Edition="20170303" Update="20170303">
+<Option Edition="20170321" Update="20170303">
     <Base>
         <ResolutionRatio Width="1280" SwapVH="0" Height="720" Group="Film">
             <Film Str="16:9">
@@ -69,9 +69,6 @@
             <Samp Samp="22050" Bit="16" Str="22.05 khz 16bit"/>
             <Samp Samp="44100" Bit="16" Str="44.10 khz 16bit"/>
             <Samp Samp="48000" Bit="16" Str="48.00 khz 16bit"/>
-            <Samp Samp="22050" Bit="24" Str="22.05 khz 16bit"/>
-            <Samp Samp="44100" Bit="24" Str="44.10 khz 16bit"/>
-            <Samp Samp="48000" Bit="24" Str="48.00 khz 16bit"/>
             <Samp Samp="22050" Bit="32" Str="22.05 khz 32bit"/>
             <Samp Samp="44100" Bit="32" Str="44.10 khz 32bit"/>
             <Samp Samp="48000" Bit="32" Str="48.00 khz 32bit"/>
@@ -85,4 +82,7 @@
         <Speaker Volume="1" Mutex="0"/>
         <Microphone Volume="1" Mutex="0"/>
     </AuidoCapture>
+  <Function GameRec="0" CursorCapture="1" AutoAero="1">
+    
+  </Function>
 </Option>

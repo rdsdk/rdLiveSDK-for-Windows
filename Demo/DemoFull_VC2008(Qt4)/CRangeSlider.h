@@ -14,78 +14,128 @@ public:
 	void SetRange( double fMin, double fMax );
 	void GetRange( double* pMin, double* pMax );
 
-	void SetSlider( double fSliderMin, double fSliderMax );
-	double GetSliderMin() { return m_fSliderMin; }
-	double GetSliderMax() { return m_fSliderMax; };
-	void SetProgress( double fPos, BOOL bEnable );
-	double GetProgress() { return m_fPos; }
+	void SetArea( double fAreaMin, double fAreaMax );
+	double GetAreaMin() { return m_fAreaMin; }
+	double GetAreaMax() { return m_fAreaMax; };
+	void SetValue( double fValue );
+	double GetValue() { return m_fValue; }
 
-	void SetColors( const QColor& coFrame, const QColor& coBack,
-		const QColor& coSlider, const QColor& coLine, 
-		const QColor& coProgress, const QColor& coText ); 
+
+	enum	EDrawAlign
+	{
+		eAlignNone,		//不绘制
+		eAlignFar,
+		eAlignNear,
+		eAlignCenter
+	};
+
+	enum	ETextFormat
+	{
+		eTextFloat,		//浮点数
+		eTextPercent,	//百分数
+		eTextHMS,		//时 分 秒，值表示为秒。
+		eTextHMSAuto,	//如果不足一小时，就不显示小时
+	};
+
+	struct	STextStyle
+	{
+		QColor		coText;		//文字颜色
+		EDrawAlign	eAlign;		//对齐方式
+		int			iSpace;
+	};
+
+	struct	SStyle
+	{
+		int		iBorderLineWidth;	//边框线的宽度
+		ETextFormat	eFormat;
+		int			iPrecision;	//小数位数
+		QColor	coBorderLine;
+		QColor	coBackgroup;
+		QColor	coAreaBar;
+		QColor	coValue;
+
+		bool	bHitMinSpace;		//区域小值与控件边缘之间的空白区，鼠标按下把小值线移动到鼠标位置。
+		bool	bHitMaxSpace;		//区域大值与控件边缘之间的空白区，鼠标按下把大值线移动到鼠标位置。
+		bool	bHitMinLine;		//区域小值线，鼠标按下拖动。
+		bool	bHitMaxLine;		//区域大值线，鼠标按下拖动。
+		bool	bHitAreaBar;		//区域滑块，鼠标按下拖动。
+		bool	bHitValue;			//值，在区域范围内，如果 bHitAreaBar == false，则鼠标按下设置值，否则只有在值的端点上按下移动。
+
+		bool	bTextAlignBar;		// false 值的文本以值本身的绘制范围对齐，true 以整个滑块对齐。
+		bool	bIsSpaceValue;		// false 绘制的值是值本身，true 空白区域表示的范围大小。
+		STextStyle	sMinText;		// far 空白区域靠近控件边缘， near 靠近区域边线，center 空白区域中间。
+		STextStyle	sMaxText;
+		STextStyle	sAreaText;
+
+		bool	bDrawValueBar;			// 是否绘制滑块
+		STextStyle	sValueText;
+		STextStyle	sValueTextSub;
+	};
 
 	enum	EHit
 	{
 		eHit_None,
-		eHit_Left,
-		eHit_Right,
-		eHit_LeftLine,
-		eHit_RightLine,
-		eHit_Slider,
+		eHit_MinSpace,
+		eHit_MaxSpace,
+		eHit_MinLine,
+		eHit_MaxLine,
+		eHit_AreaBar,
+		eHit_Value,
+		eHit_ValueArea,
 	};
 
-	enum	ETextDraw
+	enum	EDispMode
 	{
-		//显示值的内容模式，只能使用其中一个。
-		eTex_None		= 0,	//什么都不显示
-		eTex_Percent	= 1,	//显示为百分数
-		eTex_Number		= 2,	//显示为数字
-		//显示值的位置 MASK，使用多个值组合。
-		eTex_Left		= 0x10,	//显示左边的值
-		eTex_Right		= 0x20,
-		eTex_Middle		= 0x40,
-		//
-		eTex_RightRange	= 0x100,	//右侧的值使用显示为右侧空出的范围，否则直接显示右边的值。
-		eTex_MidSlider	= 0x200,	//中间的值跟随滑块移动。
+		eDispBoth,
+		eDispArea,
+		eDispValue,
 	};
-
-	void SetText( DWORD eDrawMask, int iPrecision, int iSpace );
-	void SetHitMask( DWORD dwHitMask )	{ m_dwHitMask = dwHitMask; }
+	void SetStyle( const SStyle& sStyle );
+	const SStyle& GetStyle(){ return m_sStyle; }
+	void SetDispMode( EDispMode eMode );
+	EDispMode GetDispMode() { return m_eDisp; }
 signals:
-	void sliderRange( double fLeft, double fRight );
-	void progress( double fProgress );
+	void areaChanged( double fMin, double fMax );
+	void valueChanged( double fValue );
 private:
 	virtual void	mouseMoveEvent ( QMouseEvent * event );
 	virtual void	mousePressEvent ( QMouseEvent * event );
 	virtual void	mouseReleaseEvent ( QMouseEvent * event );
 	virtual void	paintEvent ( QPaintEvent * event );
 	virtual void	resizeEvent ( QResizeEvent * event );
-	void CalcPos( int iWidth );
+	void CalcPos( bool bRepaint = false, int iWidth = 0, int iHeight = 0 );
 	void CalcHit( int x, int y );
+	void CalcText( QString& szOutStr, double fValue );
+	QColor CalcColor( const QColor& color );
 
 	double	m_fMax;
 	double	m_fMin;
-	double	m_fSliderMin;
-	double	m_fSliderMax;
-	double	m_fPos;
-	BOOL	m_bEnablePos;
-	QColor	m_coFrame;
-	QColor	m_coBack;
-	QColor	m_coSlider;
-	QColor	m_coLine;
-	QColor	m_coProgress;
+	double	m_fAreaMin;
+	double	m_fAreaMax;
+	double	m_fValue;
 
-	int		m_iLeft;
-	int		m_iRight;
-	int		m_iPos;
-	DWORD	m_dwHitMask;
 	EHit	m_eHit;
-	int		m_iOffset;
-
-	DWORD	m_dwTexDraw;
-	int		m_iPrecision;
-	int		m_iTexSpace;
-	QColor	m_coText;
+	SStyle	m_sStyle;
+	EDispMode	m_eDisp;
+	int		m_iPrevPos;
+	double	m_fPrevVal;
+	int		m_iSize;
+	////////////////////////////////
+	int		m_iMinLine;
+	int		m_iMaxLine;
+	int		m_iPosValue;
+	QRect	m_rtMinText;
+	QRect	m_rtMaxText;
+	QRect	m_rtArea;
+	QRect	m_rtAreaText;
+	QRect	m_rtValue;
+	QRect	m_rtValueText;
+	QRect	m_rtValueTextSub;
+	QString	m_szMinText;
+	QString	m_szMaxText;
+	QString	m_szAreaText;
+	QString	m_szValueText;
+	QString	m_szValueTextSub;
 };
 
 #endif // RANGESLIDER_H
