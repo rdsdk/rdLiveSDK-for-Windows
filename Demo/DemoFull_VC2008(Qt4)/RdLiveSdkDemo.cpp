@@ -5,6 +5,7 @@
 RDLiveSdkDemo::RDLiveSdkDemo(QWidget *parent, Qt::WFlags flags)
 	: QMainWindow(parent, flags)
 {
+	qDebug() << "GLive. In RDLiveSdkDemo::RDLiveSdkDemo";
 	m_bPreviewSizeing	= FALSE;
 	m_bChipListChanging	= FALSE;
 	ZeroMemory( &m_sPerviewLayout, sizeof(m_sPerviewLayout) );
@@ -68,7 +69,7 @@ RDLiveSdkDemo::RDLiveSdkDemo(QWidget *parent, Qt::WFlags flags)
 	qRegisterMetaType<int>("IEncoder_ENotify");
 	connect( this, SIGNAL(signalEncoderNotifyCB( IEncoder_ENotify, ulong, ulong )), this, SLOT(on_EncoderNotifyCB( IEncoder_ENotify, ulong, ulong )) );
 
-
+	qDebug() << "GLive. RDLive_Init";
 	if ( !RDLive_Init( L"17RD", L"RDLiveSdkDemo",
 		RenderNotifyCB, EncoderNotifyCB, this ) )
 	{
@@ -76,14 +77,17 @@ RDLiveSdkDemo::RDLiveSdkDemo(QWidget *parent, Qt::WFlags flags)
 		close();
 	}
 
+	qDebug() << "GLive. RDLive_ResetAccredit";
 	if ( !RDLive_ResetAccredit( "d3200cc987431827", 
 		"77a9eeea008524e8bdf10e18409cbdb3sULczML4CjomZFtst04v/HLUrHqWT72Mmkz7WhUEmpjXMH7/UWz5oGMwUGQPbYX+MKSpM01lSGQ/qNzCkFFyKXSwxrKIViR4iZ7ZxOuB6n80wDeCV7jHJSEN1+DqlCLm3dJWQF3CFLMOj2YJxwI/YDY9h3SjCsWFz9j/71RCHH0FWpr13vMRM6a1uRCnke2Tyly/V4S4E7BE1tR6WDcxNQTeX9w399l/EpNb8LvBNNUz6shNmM627BGBfTbPG2vj+grPaxv1rFcVRqNkT45Jrjvjp3PV8L6Py7fCUvK5PJ0Pb/olb9q/M2Yom+AZkSlE0FDcSKb0MG+QCE9f1MYacjFoU31o7cZb5ZQZ++7lMqXMDvTi9LyTYR+0lDKKwFC8EJ43/upbIuhawyXQ2w4u7Zvv9IUXqhamlTUirPmuV4lSVypdzCT+gPdEjq9krLLjRajAMutBwefKiHdrp/h65BxTErT94rH7OAU6bCmbX/o=" ) )
 	{
 	}
 
 
+	qDebug() << "GLive. LoadProfile";
 	LoadProfile();
 
+	qDebug() << "GLive. Out RDLiveSdkDemo::RDLiveSdkDemo";
 
 }
 
@@ -526,9 +530,12 @@ void RDLiveSdkDemo::on_timReszie_timeout()
 	static bool bFirstResize	= true;
 	if ( bFirstResize )
 	{
+		qDebug() << "GLive. UpdatePreviewConfig";
 		bFirstResize	= false;
 		UpdatePreviewConfig( IGlRender_SPreviewLayout::eScreenCenter );		
+		qDebug() << "GLive. Begin LoadScenes";
 		LoadScenes();
+		qDebug() << "GLive. End LoadScenes";
 	}
 	else
 	{

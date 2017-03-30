@@ -362,6 +362,7 @@ void ChipItemOper::on_timPlayProgress_timeout()
 	}
 }
 
+
 void ChipItemOper::on_chkLoopPlay_clicked( bool checked )
 {
 	Chip_SetLoop( m_hChip, checked );
@@ -390,6 +391,26 @@ void ChipItemOper::on_widPlayProgress_areaChanged( double fMin, double fMax )
 	ui.tiePlayStart->setTime( timRangeMin );
 	ui.tiePlayEnd->setTimeRange( timRangeMin, timMax );
 	ui.tiePlayEnd->setTime( timRangeMax );
+}
+
+void ChipItemOper::on_tiePlayStart_timeChanged ( const QTime & time )
+{
+	double	fMSecond	= time.hour() * 60.0 * 60.0;
+	fMSecond	+= time.minute() * 60.0;
+	fMSecond	+= time.second();
+	fMSecond	+= time.msec() / 1000.0;
+
+	ui.widPlayProgress->SetArea( fMSecond, ui.widPlayProgress->GetAreaMax() );
+}
+
+void ChipItemOper::on_tiePlayEnd_timeChanged ( const QTime & time )
+{
+	double	fMSecond	= time.hour() * 60.0 * 60.0;
+	fMSecond	+= time.minute() * 60.0;
+	fMSecond	+= time.second();
+	fMSecond	+= time.msec() / 1000.0;
+
+	ui.widPlayProgress->SetArea( ui.widPlayProgress->GetAreaMin(), fMSecond );
 }
 
 void ChipItemOper::on_widPlayProgress_valueChanged( double fValue )

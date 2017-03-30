@@ -55,6 +55,9 @@ copy ..\release\QtCore4.dll Demo\release
 copy "..\GliveHelp\RDLive_output\HTML Help\help.chm" SDK\help.chm
 copy "..\GliveHelp\RDLive_output\HTML Help\help.chm" Demo\help.chm
 copy "..\GliveHelp\RDLive_output\HTML Help\help.chm" help.chm
+copy "..\GliveHelp\RDLive_output\PDF\a.pdf" SDK\help.pdf
+copy "..\GliveHelp\RDLive_output\PDF\a.pdf" Demo\help.pdf
+copy "..\GliveHelp\RDLive_output\PDF\a.pdf" help.pdf
 
 
 copy SDK\Include\*.* Demo\Include

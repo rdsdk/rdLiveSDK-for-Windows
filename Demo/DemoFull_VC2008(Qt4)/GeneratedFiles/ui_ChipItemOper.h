@@ -124,7 +124,7 @@ public:
     {
         if (ChipItemOper->objectName().isEmpty())
             ChipItemOper->setObjectName(QString::fromUtf8("ChipItemOper"));
-        ChipItemOper->resize(295, 133);
+        ChipItemOper->resize(365, 133);
         ChipItemOper->setStyleSheet(QString::fromUtf8("\n"
 "QPushButton#butClip16_9{\n"
 "	border: 1px solid #8f8f91;\n"
@@ -529,7 +529,7 @@ public:
         scrollArea->setWidgetResizable(true);
         scrollAreaWidgetContents = new QWidget();
         scrollAreaWidgetContents->setObjectName(QString::fromUtf8("scrollAreaWidgetContents"));
-        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 264, 158));
+        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 334, 158));
         verticalLayout_7 = new QVBoxLayout(scrollAreaWidgetContents);
         verticalLayout_7->setSpacing(4);
         verticalLayout_7->setContentsMargins(11, 11, 11, 11);
@@ -742,8 +742,8 @@ public:
         retranslateUi(ChipItemOper);
 
         tabWidget->setCurrentIndex(0);
-        stkChipPlayType->setCurrentIndex(1);
-        stkPlayControl->setCurrentIndex(0);
+        stkChipPlayType->setCurrentIndex(0);
+        stkPlayControl->setCurrentIndex(1);
 
 
         QMetaObject::connectSlotsByName(ChipItemOper);

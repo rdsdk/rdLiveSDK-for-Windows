@@ -53,7 +53,7 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,0,0,26
+ FILEVERSION 1,0,0,29
  PRODUCTVERSION 1,1,0,1
  FILEFLAGSMASK 0x17L
 #ifdef _DEBUG
@@ -71,7 +71,7 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "北京锐动天地信息技术有限公司"
             VALUE "FileDescription", "RDLiveSDK For Windows 完整功能演示程序"
-            VALUE "FileVersion", "1, 0, 0, 26"
+            VALUE "FileVersion", "1, 0, 0, 29"
             VALUE "InternalName", "RDLiveSDKDemo"
             VALUE "LegalCopyright", "Copyright (C) 2017"
             VALUE "OriginalFilename", "Demo_VC2008(Qt4).exe"

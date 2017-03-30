@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>295</width>
+    <width>365</width>
     <height>133</height>
    </rect>
   </property>
@@ -192,7 +192,7 @@ QPushButton#chkMute:disabled:checked{
        <item>
         <widget class="QStackedWidget" name="stkChipPlayType">
          <property name="currentIndex">
-          <number>1</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="pageMovie">
           <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -221,7 +221,7 @@ QPushButton#chkMute:disabled:checked{
            <item>
             <widget class="QStackedWidget" name="stkPlayControl">
              <property name="currentIndex">
-              <number>0</number>
+              <number>1</number>
              </property>
              <widget class="QWidget" name="stpPlayOper">
               <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -657,7 +657,7 @@ QPushButton#chkMute:disabled:checked{
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>264</width>
+            <width>334</width>
             <height>158</height>
            </rect>
           </property>

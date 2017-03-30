@@ -29,6 +29,8 @@ public slots:
 	void on_widClipTB_areaChanged( double fMin, double fMax );
 	void on_widPlayProgress_areaChanged( double fMin, double fMax );
 	void on_widPlayProgress_valueChanged( double fValue );
+	void on_tiePlayStart_timeChanged ( const QTime & time );
+	void on_tiePlayEnd_timeChanged ( const QTime & time );
 	void on_widPlayVolume_valueChanged( double fValue );
 
 	void on_butClip16_9_clicked();
