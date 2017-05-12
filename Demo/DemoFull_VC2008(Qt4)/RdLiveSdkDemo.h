@@ -22,6 +22,7 @@ private:
 	BOOL			m_bPreviewSizeing;		//标记，当前的窗口缩放是程序自己调用的，而不是用户操作，因此不需要在事件响应中进行任何处理。
 	QTimer*			m_timReszie;
 	BOOL			m_bChipListChanging;	//标记，当前的元件列表的修改是程序自己调用的，而不是用户操作，因此不需要在事件响应中进行任何处理。
+	BOOL			m_bSceneActionSingle;	//场景切换的动画效果只能单选
 
 	//加载配置文件
 	BOOL LoadProfile();
@@ -112,7 +113,8 @@ public slots:
 	void on_actCapCursor_toggled( bool checked );
 	void on_actAutoAero_toggled( bool checked );
 
-	
+
+	void on_butCutTo_clicked();
 };
 
 #endif // RDLIVESDKDEMO_H

@@ -23,7 +23,7 @@ static const uint qt_meta_data_RDLiveSdkDemo[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-      42,   14, // methods
+      43,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -75,6 +75,7 @@ static const uint qt_meta_data_RDLiveSdkDemo[] = {
     1473,  281,   14,   14, 0x0a,
     1501,  281,   14,   14, 0x0a,
     1531,  281,   14,   14, 0x0a,
+    1560,   14,   14,   14, 0x0a,
 
        0        // eod
 };
@@ -124,6 +125,7 @@ static const char qt_meta_stringdata_RDLiveSdkDemo[] = {
     "on_actGameRec_toggled(bool)\0"
     "on_actCapCursor_toggled(bool)\0"
     "on_actAutoAero_toggled(bool)\0"
+    "on_butCutTo_clicked()\0"
 };
 
 void RDLiveSdkDemo::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
@@ -174,6 +176,7 @@ void RDLiveSdkDemo::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _i
         case 39: _t->on_actGameRec_toggled((*reinterpret_cast< bool(*)>(_a[1]))); break;
         case 40: _t->on_actCapCursor_toggled((*reinterpret_cast< bool(*)>(_a[1]))); break;
         case 41: _t->on_actAutoAero_toggled((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 42: _t->on_butCutTo_clicked(); break;
         default: ;
         }
     }
@@ -211,9 +214,9 @@ int RDLiveSdkDemo::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 42)
+        if (_id < 43)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 42;
+        _id -= 43;
     }
     return _id;
 }

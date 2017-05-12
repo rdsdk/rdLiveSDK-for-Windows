@@ -60,6 +60,9 @@ HCHIP	WINAPI Scene_CreateChip( HSCENE hScene, IPinInput_EClass ePinClass, LPCWST
 HCHIP	WINAPI Sceen_GetCurChip( HSCENE hScene );
 LPCWSTR WINAPI Scene_GetName( HSCENE hScene );
 BOOL	WINAPI Scene_SetName( HSCENE hScene, LPCWSTR szName );
+
+BOOL	WINAPI Scene_SetSwitchActions( HSCENE hScene, LPCWSTR szActions );
+LPCWSTR WINAPI Scene_GetCurrentActions( HSCENE hScene );
 ///////////////////////////////////
 INT		WINAPI Chip_GetIndex( HCHIP hChip, HSCENE* pScene );
 BOOL	WINAPI Chip_SetIndex( HCHIP hChip, INT iIndex );
@@ -75,6 +78,8 @@ BOOL	WINAPI Chip_SetRectPercent( HCHIP hChip, FLOAT fX, FLOAT fY, FLOAT fWidth, 
 BOOL	WINAPI Chip_GetRectPercent( HCHIP hChip, PFLOAT pX, PFLOAT pY, PFLOAT pWidth, PFLOAT pHeight, BOOL bRealDisplay );
 BOOL	WINAPI Chip_SetClipPercent( HCHIP hChip, FLOAT fLeft, FLOAT fTop, FLOAT fRight, FLOAT fBottom );
 BOOL	WINAPI Chip_GetClipPercent( HCHIP hChip, PFLOAT pLeft, PFLOAT pTop, PFLOAT pRight, PFLOAT pBottom );
+BOOL	WINAPI Chip_SetRotate( HCHIP hChip, FLOAT fX, FLOAT fY, FLOAT fZ );
+BOOL	WINAPI Chip_GetRotate( HCHIP hChip, PFLOAT pfX, PFLOAT pfY, PFLOAT pfZ );
 
 BOOL	WINAPI Chip_SetViewLock( HCHIP hChip, IChip_ELockType eLockType, BOOL bLock );
 BOOL	WINAPI Chip_GetViewLock( HCHIP hChip, IChip_ELockType eLockType );
@@ -99,8 +104,20 @@ LPCWSTR	WINAPI Chip_GetSourceName( HCHIP hChip );
 LPCWSTR	WINAPI Chip_GetFriendlyName( HCHIP hChip );
 
 
-BOOL	WINAPI Chip_SetShaderParam( HCHIP hChip, IChip_EShaderParam eParam, FLOAT fValue );
-FLOAT	WINAPI Chip_GetShaderParam( HCHIP hChip, IChip_EShaderParam eParam );
+BOOL	WINAPI Chip_SetBaseShaderParam( HCHIP hChip, IChip_EShaderParam eParam, FLOAT fValue );
+FLOAT	WINAPI Chip_GetBaseShaderParam( HCHIP hChip, IChip_EShaderParam eParam );
+
+//BOOL	WINAPI Chip_AddShProgram( HCHIP hChip, LPCWSTR szProgram );
+//INT		WINAPI Chip_GetShProgramCount( HCHIP hChip );
+//LPCWSTR	WINAPI Chip_GetShProgramName( HCHIP hChip, INT iProgIndex );
+//
+//BOOL	WINAPI Chip_SetShaderMaterial( HCHIP hChip, INT iProgram, LPCWSTR szParamName,
+//									  IPinInput_EClass ePinClass, LPCWSTR szSource = NULL, BOOL bCannotReuse = FALSE, DWORD_PTR ptrParam = NULL );
+//HCHIP	WINAPI Chip_GetShaderMaterial( HCHIP hChip, INT iProgram, LPCWSTR szParamName );
+//BOOL	WINAPI Chip_SetShaderParamF( HCHIP hChip, INT iProgIndex, LPCWSTR szParamName, 
+//									FLOAT fValue0, FLOAT fValue1 = 0, FLOAT fValue2 = 0, FLOAT fValue3 = 0 );
+//BOOL	WINAPI Chip_SetShaderParamI( HCHIP hChip, INT iProgIndex, LPCWSTR szParamName,
+//									INT iValue0, INT iValue1 = 0, INT iValue2 = 0, INT iValue3 = 0 );
 
 ////////////////////////////////////////////////////////////////
 INT		WINAPI Camera_GetCount();

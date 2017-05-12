@@ -1,6 +1,8 @@
 ﻿#include "stdafx.h"
 #include "rdlivesdkdemo.h"
 #include "chipitem.h"
+#include <math.h> 
+
 
 RDLiveSdkDemo::RDLiveSdkDemo(QWidget *parent, Qt::WFlags flags)
 	: QMainWindow(parent, flags)
@@ -8,6 +10,7 @@ RDLiveSdkDemo::RDLiveSdkDemo(QWidget *parent, Qt::WFlags flags)
 	qDebug() << "GLive. In RDLiveSdkDemo::RDLiveSdkDemo";
 	m_bPreviewSizeing	= FALSE;
 	m_bChipListChanging	= FALSE;
+	m_bSceneActionSingle	= TRUE;
 	ZeroMemory( &m_sPerviewLayout, sizeof(m_sPerviewLayout) );
 	m_timReszie	= new QTimer( this );
 	m_timReszie->setObjectName( "timReszie" );
@@ -82,13 +85,23 @@ RDLiveSdkDemo::RDLiveSdkDemo(QWidget *parent, Qt::WFlags flags)
 		"77a9eeea008524e8bdf10e18409cbdb3sULczML4CjomZFtst04v/HLUrHqWT72Mmkz7WhUEmpjXMH7/UWz5oGMwUGQPbYX+MKSpM01lSGQ/qNzCkFFyKXSwxrKIViR4iZ7ZxOuB6n80wDeCV7jHJSEN1+DqlCLm3dJWQF3CFLMOj2YJxwI/YDY9h3SjCsWFz9j/71RCHH0FWpr13vMRM6a1uRCnke2Tyly/V4S4E7BE1tR6WDcxNQTeX9w399l/EpNb8LvBNNUz6shNmM627BGBfTbPG2vj+grPaxv1rFcVRqNkT45Jrjvjp3PV8L6Py7fCUvK5PJ0Pb/olb9q/M2Yom+AZkSlE0FDcSKb0MG+QCE9f1MYacjFoU31o7cZb5ZQZ++7lMqXMDvTi9LyTYR+0lDKKwFC8EJ43/upbIuhawyXQ2w4u7Zvv9IUXqhamlTUirPmuV4lSVypdzCT+gPdEjq9krLLjRajAMutBwefKiHdrp/h65BxTErT94rH7OAU6bCmbX/o=" ) )
 	{
 	}
-
+	
 
 	qDebug() << "GLive. LoadProfile";
 	LoadProfile();
 
 	qDebug() << "GLive. Out RDLiveSdkDemo::RDLiveSdkDemo";
 
+	QImage	imgSinusoid( 256, 1, QImage::Format_ARGB32 );
+
+	for ( int x = 0; x < 256; ++x )
+	{
+		double	d	= sin( x * 2.0 / 255.0 * 3.1415926 );
+		LPBYTE	pix	= imgSinusoid.bits() + x * 4;
+		pix[0]	= pix[1]	= pix[2]	= BYTE( (d + 1) * 0.5 * 255.0 );
+		pix[3]	= 255;
+	}
+	imgSinusoid.save( "E:\\CompanyProject\\GLive\\GlRender\\Shaders\\Sinusoid.png", "PNG" );
 }
 
 RDLiveSdkDemo::~RDLiveSdkDemo()
@@ -313,16 +326,22 @@ BOOL RDLiveSdkDemo::LoadScenes()
 				Chip_SetClipPercent( hChip, eleClip.attribute( "L" ).toFloat(), eleClip.attribute( "T" ).toFloat(),
 					eleClip.attribute( "R" ).toFloat(), eleClip.attribute( "B" ).toFloat() );
 			}
+			QDomElement		eleRot		= eleChip.firstChildElement( "Rotate" );
+			if ( !eleRot.isNull() )
+			{
+				Chip_SetRotate( hChip, eleRot.attribute( "X" ).toFloat(), eleRot.attribute( "Y" ).toFloat(),
+					eleRot.attribute( "Z" ).toFloat() );
+			}
 
 			QDomElement	eleColor	= eleChip.firstChildElement( "Color" );
 			if ( !eleColor.isNull() )
 			{
-				Chip_SetShaderParam( hChip, eShader_Hue, eleColor.attribute( "Hue" ).toFloat() );
-				Chip_SetShaderParam( hChip, eShader_UseFixedHue, eleColor.attribute( "HueFixed" ).toFloat() );
-				Chip_SetShaderParam( hChip, eShader_Saturation, eleColor.attribute( "Saturation" ).toFloat() );
-				Chip_SetShaderParam( hChip, eShader_Lighteness, eleColor.attribute( "Ligtheness" ).toFloat() );
-				Chip_SetShaderParam( hChip, eShader_Contrast, eleColor.attribute( "Contrast" ).toFloat() );
-				Chip_SetShaderParam( hChip, eShader_Transparency, eleColor.attribute( "Transparency" ).toFloat() );
+				Chip_SetBaseShaderParam( hChip, eShader_Hue, eleColor.attribute( "Hue" ).toFloat() );
+				Chip_SetBaseShaderParam( hChip, eShader_UseFixedHue, eleColor.attribute( "HueFixed" ).toFloat() );
+				Chip_SetBaseShaderParam( hChip, eShader_Saturation, eleColor.attribute( "Saturation" ).toFloat() );
+				Chip_SetBaseShaderParam( hChip, eShader_Lighteness, eleColor.attribute( "Ligtheness" ).toFloat() );
+				Chip_SetBaseShaderParam( hChip, eShader_Contrast, eleColor.attribute( "Contrast" ).toFloat() );
+				Chip_SetBaseShaderParam( hChip, eShader_Transparency, eleColor.attribute( "Transparency" ).toFloat() );
 			}
 
 			Chip_SetViewLock( hChip, eLock_AspectRatio, eleChip.attribute( "LockAR" ).toInt() ? TRUE : FALSE );
@@ -397,7 +416,7 @@ BOOL RDLiveSdkDemo::SaveScenes()
 			eleChip.setAttribute( "LockAngle", Chip_GetViewLock( hChip, eLock_Angle )  );
 
 			QDomElement	eleRect	= docScenes.createElement( "Rect" );
-			FLOAT	fX, fY, fW, fH;
+			FLOAT	fX, fY, fZ, fW, fH;
 			BOOL	bKeepAspectRatio;
 			Chip_GetRectPercent( hChip, &fX, &fY, &fW, &fH, FALSE );
 			eleRect.setAttribute( "X", fX );
@@ -415,13 +434,21 @@ BOOL RDLiveSdkDemo::SaveScenes()
 			eleClip.setAttribute( "B", fB );
 			eleChip.appendChild( eleClip );
 
+			QDomElement	eleRot	= docScenes.createElement( "Rotate" );
+			Chip_GetRotate( hChip, &fX, &fY, &fZ );
+			eleRot.setAttribute( "X", fX );
+			eleRot.setAttribute( "Y", fY );
+			eleRot.setAttribute( "Z", fZ );
+			eleChip.appendChild( eleRot );
+
+
 			QDomElement	eleColor	= docScenes.createElement( "Color" );
-			eleColor.setAttribute( "Hue", Chip_GetShaderParam( hChip, eShader_Hue ) );
-			eleColor.setAttribute( "HueFixed", Chip_GetShaderParam( hChip, eShader_UseFixedHue ) );
-			eleColor.setAttribute( "Saturation", Chip_GetShaderParam( hChip, eShader_Saturation ) );
-			eleColor.setAttribute( "Ligtheness", Chip_GetShaderParam( hChip, eShader_Lighteness ) );
-			eleColor.setAttribute( "Contrast", Chip_GetShaderParam( hChip, eShader_Contrast ) );
-			eleColor.setAttribute( "Transparency", Chip_GetShaderParam( hChip, eShader_Transparency ) );
+			eleColor.setAttribute( "Hue", Chip_GetBaseShaderParam( hChip, eShader_Hue ) );
+			eleColor.setAttribute( "HueFixed", Chip_GetBaseShaderParam( hChip, eShader_UseFixedHue ) );
+			eleColor.setAttribute( "Saturation", Chip_GetBaseShaderParam( hChip, eShader_Saturation ) );
+			eleColor.setAttribute( "Ligtheness", Chip_GetBaseShaderParam( hChip, eShader_Lighteness ) );
+			eleColor.setAttribute( "Contrast", Chip_GetBaseShaderParam( hChip, eShader_Contrast ) );
+			eleColor.setAttribute( "Transparency", Chip_GetBaseShaderParam( hChip, eShader_Transparency ) );
 			eleChip.appendChild( eleColor );
 
 			eleScene.appendChild( eleChip );

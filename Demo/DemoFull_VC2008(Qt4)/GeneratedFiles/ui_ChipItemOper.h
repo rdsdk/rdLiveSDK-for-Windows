@@ -21,6 +21,7 @@
 #include <QtGui/QHBoxLayout>
 #include <QtGui/QHeaderView>
 #include <QtGui/QLabel>
+#include <QtGui/QListView>
 #include <QtGui/QPushButton>
 #include <QtGui/QScrollArea>
 #include <QtGui/QSlider>
@@ -82,6 +83,11 @@ public:
     QPushButton *butTexColor;
     QDoubleSpinBox *dspScrollCharPerSecond;
     QTextEdit *texInput;
+    QWidget *pagePicList;
+    QGridLayout *gridLayout_3;
+    QListView *listView;
+    QPushButton *butAddPicToList;
+    QPushButton *butDelPicFromList;
     QWidget *tab_Image;
     QVBoxLayout *verticalLayout;
     QScrollArea *scrollArea;
@@ -89,17 +95,17 @@ public:
     QVBoxLayout *verticalLayout_7;
     QWidget *widgetColor;
     QGridLayout *gridLayout;
-    QSlider *hsSaturation;
     QLabel *label_7;
+    QSlider *hsSaturation;
+    QLabel *label_6;
     QLabel *label_4;
     QSlider *hsHue;
-    QLabel *label_6;
-    QSlider *hsLighteness;
-    QSlider *hsContrast;
     QLabel *label_8;
-    QPushButton *chkFixedHue;
+    QSlider *hsContrast;
+    QSlider *hsLighteness;
     QLabel *label_9;
     QSlider *hsTransparency;
+    QPushButton *chkFixedHue;
     QFrame *line;
     QWidget *widgetClip;
     QVBoxLayout *verticalLayout_2;
@@ -117,6 +123,19 @@ public:
     QHBoxLayout *horizontalLayout_4;
     QLabel *label_5;
     CRangeSlider *widClipTB;
+    QFrame *line_2;
+    QWidget *widgetRotate;
+    QGridLayout *gridLayout_2;
+    QLabel *label_11;
+    QLabel *label_10;
+    QLabel *label_13;
+    QSlider *hsRotateX;
+    QSlider *hsRotateY;
+    QLabel *label_12;
+    QSlider *hsRotateZ;
+    QDoubleSpinBox *dspRotateX;
+    QDoubleSpinBox *dspRotateY;
+    QDoubleSpinBox *dspRotateZ;
     QSpacerItem *verticalSpacer;
     QWidget *tab_4;
 
@@ -124,7 +143,8 @@ public:
     {
         if (ChipItemOper->objectName().isEmpty())
             ChipItemOper->setObjectName(QString::fromUtf8("ChipItemOper"));
-        ChipItemOper->resize(365, 133);
+        ChipItemOper->resize(365, 135);
+        ChipItemOper->setMinimumSize(QSize(0, 135));
         ChipItemOper->setStyleSheet(QString::fromUtf8("\n"
 "QPushButton#butClip16_9{\n"
 "	border: 1px solid #8f8f91;\n"
@@ -511,6 +531,28 @@ public:
         verticalLayout_9->addWidget(texInput);
 
         stkChipPlayType->addWidget(pageText);
+        pagePicList = new QWidget();
+        pagePicList->setObjectName(QString::fromUtf8("pagePicList"));
+        gridLayout_3 = new QGridLayout(pagePicList);
+        gridLayout_3->setSpacing(2);
+        gridLayout_3->setContentsMargins(0, 0, 0, 0);
+        gridLayout_3->setObjectName(QString::fromUtf8("gridLayout_3"));
+        listView = new QListView(pagePicList);
+        listView->setObjectName(QString::fromUtf8("listView"));
+
+        gridLayout_3->addWidget(listView, 0, 0, 2, 1);
+
+        butAddPicToList = new QPushButton(pagePicList);
+        butAddPicToList->setObjectName(QString::fromUtf8("butAddPicToList"));
+
+        gridLayout_3->addWidget(butAddPicToList, 0, 1, 1, 1);
+
+        butDelPicFromList = new QPushButton(pagePicList);
+        butDelPicFromList->setObjectName(QString::fromUtf8("butDelPicFromList"));
+
+        gridLayout_3->addWidget(butDelPicFromList, 1, 1, 1, 1);
+
+        stkChipPlayType->addWidget(pagePicList);
 
         verticalLayout_3->addWidget(stkChipPlayType);
 
@@ -529,7 +571,7 @@ public:
         scrollArea->setWidgetResizable(true);
         scrollAreaWidgetContents = new QWidget();
         scrollAreaWidgetContents->setObjectName(QString::fromUtf8("scrollAreaWidgetContents"));
-        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 334, 158));
+        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 334, 247));
         verticalLayout_7 = new QVBoxLayout(scrollAreaWidgetContents);
         verticalLayout_7->setSpacing(4);
         verticalLayout_7->setContentsMargins(11, 11, 11, 11);
@@ -541,6 +583,11 @@ public:
         gridLayout->setSpacing(4);
         gridLayout->setContentsMargins(0, 0, 0, 0);
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
+        label_7 = new QLabel(widgetColor);
+        label_7->setObjectName(QString::fromUtf8("label_7"));
+
+        gridLayout->addWidget(label_7, 2, 0, 1, 1);
+
         hsSaturation = new QSlider(widgetColor);
         hsSaturation->setObjectName(QString::fromUtf8("hsSaturation"));
         hsSaturation->setMaximumSize(QSize(16777215, 14));
@@ -549,10 +596,10 @@ public:
 
         gridLayout->addWidget(hsSaturation, 1, 1, 1, 1);
 
-        label_7 = new QLabel(widgetColor);
-        label_7->setObjectName(QString::fromUtf8("label_7"));
+        label_6 = new QLabel(widgetColor);
+        label_6->setObjectName(QString::fromUtf8("label_6"));
 
-        gridLayout->addWidget(label_7, 2, 0, 1, 1);
+        gridLayout->addWidget(label_6, 1, 0, 1, 1);
 
         label_4 = new QLabel(widgetColor);
         label_4->setObjectName(QString::fromUtf8("label_4"));
@@ -567,18 +614,10 @@ public:
 
         gridLayout->addWidget(hsHue, 0, 1, 1, 1);
 
-        label_6 = new QLabel(widgetColor);
-        label_6->setObjectName(QString::fromUtf8("label_6"));
+        label_8 = new QLabel(widgetColor);
+        label_8->setObjectName(QString::fromUtf8("label_8"));
 
-        gridLayout->addWidget(label_6, 1, 0, 1, 1);
-
-        hsLighteness = new QSlider(widgetColor);
-        hsLighteness->setObjectName(QString::fromUtf8("hsLighteness"));
-        hsLighteness->setMaximumSize(QSize(16777215, 14));
-        hsLighteness->setMinimum(-99);
-        hsLighteness->setOrientation(Qt::Horizontal);
-
-        gridLayout->addWidget(hsLighteness, 2, 1, 1, 1);
+        gridLayout->addWidget(label_8, 3, 0, 1, 1);
 
         hsContrast = new QSlider(widgetColor);
         hsContrast->setObjectName(QString::fromUtf8("hsContrast"));
@@ -588,17 +627,13 @@ public:
 
         gridLayout->addWidget(hsContrast, 3, 1, 1, 1);
 
-        label_8 = new QLabel(widgetColor);
-        label_8->setObjectName(QString::fromUtf8("label_8"));
+        hsLighteness = new QSlider(widgetColor);
+        hsLighteness->setObjectName(QString::fromUtf8("hsLighteness"));
+        hsLighteness->setMaximumSize(QSize(16777215, 14));
+        hsLighteness->setMinimum(-99);
+        hsLighteness->setOrientation(Qt::Horizontal);
 
-        gridLayout->addWidget(label_8, 3, 0, 1, 1);
-
-        chkFixedHue = new QPushButton(widgetColor);
-        chkFixedHue->setObjectName(QString::fromUtf8("chkFixedHue"));
-        chkFixedHue->setMaximumSize(QSize(16, 16));
-        chkFixedHue->setCheckable(true);
-
-        gridLayout->addWidget(chkFixedHue, 0, 2, 1, 1);
+        gridLayout->addWidget(hsLighteness, 2, 1, 1, 1);
 
         label_9 = new QLabel(widgetColor);
         label_9->setObjectName(QString::fromUtf8("label_9"));
@@ -611,6 +646,13 @@ public:
         hsTransparency->setOrientation(Qt::Horizontal);
 
         gridLayout->addWidget(hsTransparency, 4, 1, 1, 1);
+
+        chkFixedHue = new QPushButton(widgetColor);
+        chkFixedHue->setObjectName(QString::fromUtf8("chkFixedHue"));
+        chkFixedHue->setMaximumSize(QSize(16, 16));
+        chkFixedHue->setCheckable(true);
+
+        gridLayout->addWidget(chkFixedHue, 0, 2, 1, 1);
 
 
         verticalLayout_7->addWidget(widgetColor);
@@ -723,6 +765,95 @@ public:
 
         verticalLayout_7->addWidget(widgetClip);
 
+        line_2 = new QFrame(scrollAreaWidgetContents);
+        line_2->setObjectName(QString::fromUtf8("line_2"));
+        line_2->setFrameShape(QFrame::HLine);
+        line_2->setFrameShadow(QFrame::Sunken);
+
+        verticalLayout_7->addWidget(line_2);
+
+        widgetRotate = new QWidget(scrollAreaWidgetContents);
+        widgetRotate->setObjectName(QString::fromUtf8("widgetRotate"));
+        gridLayout_2 = new QGridLayout(widgetRotate);
+        gridLayout_2->setSpacing(6);
+        gridLayout_2->setContentsMargins(0, 0, 0, 0);
+        gridLayout_2->setObjectName(QString::fromUtf8("gridLayout_2"));
+        gridLayout_2->setHorizontalSpacing(4);
+        gridLayout_2->setVerticalSpacing(2);
+        label_11 = new QLabel(widgetRotate);
+        label_11->setObjectName(QString::fromUtf8("label_11"));
+
+        gridLayout_2->addWidget(label_11, 1, 0, 1, 1);
+
+        label_10 = new QLabel(widgetRotate);
+        label_10->setObjectName(QString::fromUtf8("label_10"));
+
+        gridLayout_2->addWidget(label_10, 0, 0, 1, 1);
+
+        label_13 = new QLabel(widgetRotate);
+        label_13->setObjectName(QString::fromUtf8("label_13"));
+
+        gridLayout_2->addWidget(label_13, 3, 0, 1, 1);
+
+        hsRotateX = new QSlider(widgetRotate);
+        hsRotateX->setObjectName(QString::fromUtf8("hsRotateX"));
+        hsRotateX->setMaximumSize(QSize(16777215, 14));
+        hsRotateX->setMinimum(-180);
+        hsRotateX->setMaximum(180);
+        hsRotateX->setOrientation(Qt::Horizontal);
+
+        gridLayout_2->addWidget(hsRotateX, 1, 1, 1, 1);
+
+        hsRotateY = new QSlider(widgetRotate);
+        hsRotateY->setObjectName(QString::fromUtf8("hsRotateY"));
+        hsRotateY->setMaximumSize(QSize(16777215, 14));
+        hsRotateY->setMinimum(-180);
+        hsRotateY->setMaximum(180);
+        hsRotateY->setOrientation(Qt::Horizontal);
+
+        gridLayout_2->addWidget(hsRotateY, 2, 1, 1, 1);
+
+        label_12 = new QLabel(widgetRotate);
+        label_12->setObjectName(QString::fromUtf8("label_12"));
+
+        gridLayout_2->addWidget(label_12, 2, 0, 1, 1);
+
+        hsRotateZ = new QSlider(widgetRotate);
+        hsRotateZ->setObjectName(QString::fromUtf8("hsRotateZ"));
+        hsRotateZ->setMaximumSize(QSize(16777215, 14));
+        hsRotateZ->setMinimum(-180);
+        hsRotateZ->setMaximum(180);
+        hsRotateZ->setOrientation(Qt::Horizontal);
+
+        gridLayout_2->addWidget(hsRotateZ, 3, 1, 1, 1);
+
+        dspRotateX = new QDoubleSpinBox(widgetRotate);
+        dspRotateX->setObjectName(QString::fromUtf8("dspRotateX"));
+        dspRotateX->setDecimals(1);
+        dspRotateX->setMinimum(-180);
+        dspRotateX->setMaximum(180);
+
+        gridLayout_2->addWidget(dspRotateX, 1, 2, 1, 1);
+
+        dspRotateY = new QDoubleSpinBox(widgetRotate);
+        dspRotateY->setObjectName(QString::fromUtf8("dspRotateY"));
+        dspRotateY->setDecimals(1);
+        dspRotateY->setMinimum(-180);
+        dspRotateY->setMaximum(180);
+
+        gridLayout_2->addWidget(dspRotateY, 2, 2, 1, 1);
+
+        dspRotateZ = new QDoubleSpinBox(widgetRotate);
+        dspRotateZ->setObjectName(QString::fromUtf8("dspRotateZ"));
+        dspRotateZ->setDecimals(1);
+        dspRotateZ->setMinimum(-180);
+        dspRotateZ->setMaximum(180);
+
+        gridLayout_2->addWidget(dspRotateZ, 3, 2, 1, 1);
+
+
+        verticalLayout_7->addWidget(widgetRotate);
+
         verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
         verticalLayout_7->addItem(verticalSpacer);
@@ -765,13 +896,15 @@ public:
         butTexBold->setText(QApplication::translate("ChipItemOper", "B", 0, QApplication::UnicodeUTF8));
         butTexSizeByWidth->setText(QApplication::translate("ChipItemOper", "H", 0, QApplication::UnicodeUTF8));
         butTexColor->setText(QApplication::translate("ChipItemOper", "C", 0, QApplication::UnicodeUTF8));
+        butAddPicToList->setText(QApplication::translate("ChipItemOper", "\346\267\273\345\212\240", 0, QApplication::UnicodeUTF8));
+        butDelPicFromList->setText(QApplication::translate("ChipItemOper", "\345\210\240\351\231\244", 0, QApplication::UnicodeUTF8));
         tabWidget->setTabText(tabWidget->indexOf(tabPlay), QApplication::translate("ChipItemOper", "\346\222\255\346\224\276", 0, QApplication::UnicodeUTF8));
         label_7->setText(QApplication::translate("ChipItemOper", "\344\272\256\345\272\246\357\274\232", 0, QApplication::UnicodeUTF8));
-        label_4->setText(QApplication::translate("ChipItemOper", "\351\242\234\350\211\262\357\274\232", 0, QApplication::UnicodeUTF8));
         label_6->setText(QApplication::translate("ChipItemOper", "\346\265\223\345\272\246\357\274\232", 0, QApplication::UnicodeUTF8));
+        label_4->setText(QApplication::translate("ChipItemOper", "\351\242\234\350\211\262\357\274\232", 0, QApplication::UnicodeUTF8));
         label_8->setText(QApplication::translate("ChipItemOper", "\345\257\271\346\257\224\357\274\232", 0, QApplication::UnicodeUTF8));
-        chkFixedHue->setText(QApplication::translate("ChipItemOper", "S", 0, QApplication::UnicodeUTF8));
         label_9->setText(QApplication::translate("ChipItemOper", "\351\200\217\346\230\216\357\274\232", 0, QApplication::UnicodeUTF8));
+        chkFixedHue->setText(QApplication::translate("ChipItemOper", "S", 0, QApplication::UnicodeUTF8));
         label->setText(QApplication::translate("ChipItemOper", "\345\211\252\350\243\201\357\274\232", 0, QApplication::UnicodeUTF8));
         butClip16_9->setText(QApplication::translate("ChipItemOper", "16:9", 0, QApplication::UnicodeUTF8));
         butClip9_16->setText(QApplication::translate("ChipItemOper", "9:16", 0, QApplication::UnicodeUTF8));
@@ -780,6 +913,10 @@ public:
         butRestore->setText(QApplication::translate("ChipItemOper", "R", 0, QApplication::UnicodeUTF8));
         label_2->setText(QApplication::translate("ChipItemOper", "\345\267\246\345\217\263", 0, QApplication::UnicodeUTF8));
         label_5->setText(QApplication::translate("ChipItemOper", "\344\270\212\344\270\213", 0, QApplication::UnicodeUTF8));
+        label_11->setText(QApplication::translate("ChipItemOper", "X \350\275\264\357\274\232", 0, QApplication::UnicodeUTF8));
+        label_10->setText(QApplication::translate("ChipItemOper", "\346\227\213\350\275\254", 0, QApplication::UnicodeUTF8));
+        label_13->setText(QApplication::translate("ChipItemOper", "Z \350\275\264\357\274\232", 0, QApplication::UnicodeUTF8));
+        label_12->setText(QApplication::translate("ChipItemOper", "Y \350\275\264\357\274\232", 0, QApplication::UnicodeUTF8));
         tabWidget->setTabText(tabWidget->indexOf(tab_Image), QApplication::translate("ChipItemOper", "\345\237\272\346\234\254", 0, QApplication::UnicodeUTF8));
         tabWidget->setTabText(tabWidget->indexOf(tab_4), QApplication::translate("ChipItemOper", "\347\211\271\346\225\210", 0, QApplication::UnicodeUTF8));
     } // retranslateUi

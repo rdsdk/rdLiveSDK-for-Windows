@@ -51,12 +51,12 @@ void ChipItemOper::OnChipSelected( HCHIP hChip, const IPinInput_SStatusInfo& sCh
 		ui.widPlayProgress->SetDispMode( CRangeSlider::eDispValue );
 		ui.stkPlayControl->setCurrentIndex( 0 );
 
-		ui.chkFixedHue->setChecked( Chip_GetShaderParam( m_hChip, eShader_UseFixedHue ) != 0.0f ? true : false );
-		ui.hsHue->setValue( Chip_GetShaderParam( m_hChip, eShader_Hue ) * ui.hsHue->maximum() );
-		ui.hsSaturation->setValue( Chip_GetShaderParam( m_hChip, eShader_Saturation ) * ui.hsSaturation->maximum() );
-		ui.hsLighteness->setValue( Chip_GetShaderParam( m_hChip, eShader_Lighteness ) * ui.hsLighteness->maximum() );
-		ui.hsContrast->setValue( Chip_GetShaderParam( m_hChip, eShader_Contrast ) * ui.hsContrast->maximum() );
-		ui.hsTransparency->setValue( Chip_GetShaderParam( m_hChip, eShader_Transparency ) * ui.hsTransparency->maximum() );
+		ui.chkFixedHue->setChecked( Chip_GetBaseShaderParam( m_hChip, eShader_UseFixedHue ) != 0.0f ? true : false );
+		ui.hsHue->setValue( Chip_GetBaseShaderParam( m_hChip, eShader_Hue ) * ui.hsHue->maximum() );
+		ui.hsSaturation->setValue( Chip_GetBaseShaderParam( m_hChip, eShader_Saturation ) * ui.hsSaturation->maximum() );
+		ui.hsLighteness->setValue( Chip_GetBaseShaderParam( m_hChip, eShader_Lighteness ) * ui.hsLighteness->maximum() );
+		ui.hsContrast->setValue( Chip_GetBaseShaderParam( m_hChip, eShader_Contrast ) * ui.hsContrast->maximum() );
+		ui.hsTransparency->setValue( Chip_GetBaseShaderParam( m_hChip, eShader_Transparency ) * ui.hsTransparency->maximum() );
 
 		switch( Chip_GetClassType( m_hChip ) )
 		{
@@ -121,6 +121,7 @@ void ChipItemOper::OnChipSelected( HCHIP hChip, const IPinInput_SStatusInfo& sCh
 
 		OnStatusChanged( sChipStatus );
 		OnPosChanged();
+		OnRotateChanged();
 	}
 	setEnabled( hChip ? true : false );
 }
@@ -136,6 +137,15 @@ void ChipItemOper::OnPosChanged()
 	ui.widClipLR->SetArea( fLeft * iWidth, iWidth - fRight * iWidth );
 	ui.widClipTB->SetRange( 0.0, iHeight );
 	ui.widClipTB->SetArea( fTop * iHeight, iHeight - fBottom * iHeight );
+}
+
+void ChipItemOper::OnRotateChanged()
+{
+	FLOAT	fX, fY, fZ;
+	Chip_GetRotate( m_hChip, &fX, &fY, &fZ );
+	ui.dspRotateX->setValue( fX );
+	ui.dspRotateY->setValue( fY );
+	ui.dspRotateZ->setValue( fZ );
 }
 
 void ChipItemOper::OnStatusChanged( const IPinInput_SStatusInfo& sChipStatus )
@@ -297,6 +307,48 @@ void ChipItemOper::on_butRestore_clicked()
 	SetAspectRatioClip( iWidth, iHeight );
 }
 
+void ChipItemOper::on_hsRotateX_valueChanged( int value )
+{
+	if ( int( ui.dspRotateX->value() ) != value )
+	{
+		ui.dspRotateX->setValue( value );
+	}
+}
+
+void ChipItemOper::on_hsRotateY_valueChanged( int value )
+{
+	if ( int( ui.dspRotateY->value() ) != value )
+	{
+		ui.dspRotateY->setValue( value );
+	}
+}
+
+void ChipItemOper::on_hsRotateZ_valueChanged( int value )
+{
+	if ( int( ui.dspRotateZ->value() ) != value )
+	{
+		ui.dspRotateZ->setValue( value );
+	}
+}
+
+void ChipItemOper::on_dspRotateX_valueChanged ( double d )
+{
+	ui.hsRotateX->setValue( int( d ) );
+	Chip_SetRotate( m_hChip, ui.dspRotateX->value(), ui.dspRotateY->value(), ui.dspRotateZ->value() );
+}
+
+void ChipItemOper::on_dspRotateY_valueChanged ( double d )
+{
+	ui.hsRotateY->setValue( int( d ) );
+	Chip_SetRotate( m_hChip, ui.dspRotateX->value(), ui.dspRotateY->value(), ui.dspRotateZ->value() );
+}
+
+void ChipItemOper::on_dspRotateZ_valueChanged ( double d )
+{
+	ui.hsRotateZ->setValue( int( d ) );
+	Chip_SetRotate( m_hChip, ui.dspRotateX->value(), ui.dspRotateY->value(), ui.dspRotateZ->value() );
+}
+
 void ChipItemOper::on_butPlay_clicked()
 {
 	Chip_Play( m_hChip );
@@ -426,27 +478,27 @@ void ChipItemOper::on_widPlayVolume_valueChanged( double fValue )
 
 void ChipItemOper::on_hsHue_valueChanged( int value )
 {
-	Chip_SetShaderParam( m_hChip, eShader_Hue, float( value ) / ui.hsHue->maximum() );
+	Chip_SetBaseShaderParam( m_hChip, eShader_Hue, float( value ) / ui.hsHue->maximum() );
 }
 void ChipItemOper::on_hsSaturation_valueChanged( int value )
 {
-	Chip_SetShaderParam( m_hChip, eShader_Saturation, float( value ) / ui.hsSaturation->maximum() );
+	Chip_SetBaseShaderParam( m_hChip, eShader_Saturation, float( value ) / ui.hsSaturation->maximum() );
 }
 void ChipItemOper::on_hsLighteness_valueChanged( int value )
 {
-	Chip_SetShaderParam( m_hChip, eShader_Lighteness, float( value ) / ui.hsLighteness->maximum() );
+	Chip_SetBaseShaderParam( m_hChip, eShader_Lighteness, float( value ) / ui.hsLighteness->maximum() );
 }
 void ChipItemOper::on_hsContrast_valueChanged( int value )
 {
-	Chip_SetShaderParam( m_hChip, eShader_Contrast, float( value ) / ui.hsContrast->maximum() );
+	Chip_SetBaseShaderParam( m_hChip, eShader_Contrast, float( value ) / ui.hsContrast->maximum() );
 }
 void ChipItemOper::on_hsTransparency_valueChanged( int value )
 {
-	Chip_SetShaderParam( m_hChip, eShader_Transparency, float( value ) / ui.hsTransparency->maximum() );
+	Chip_SetBaseShaderParam( m_hChip, eShader_Transparency, float( value ) / ui.hsTransparency->maximum() );
 }
 void ChipItemOper::on_chkFixedHue_clicked( bool checked )
 {
-	Chip_SetShaderParam( m_hChip, eShader_UseFixedHue, float( checked ) );
+	Chip_SetBaseShaderParam( m_hChip, eShader_UseFixedHue, float( checked ) );
 }
 void ChipItemOper::on_texInput_textChanged()
 {

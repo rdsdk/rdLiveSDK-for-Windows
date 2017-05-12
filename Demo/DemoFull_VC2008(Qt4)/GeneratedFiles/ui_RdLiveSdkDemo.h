@@ -91,6 +91,7 @@ public:
     QHBoxLayout *horizontalLayout;
     QPushButton *butAddChip;
     QSpacerItem *horizontalSpacer;
+    QPushButton *butCutTo;
     QPushButton *butUpChip;
     QPushButton *butDownChip;
     QPushButton *butCloseChip;
@@ -483,6 +484,12 @@ public:
 
         horizontalLayout->addItem(horizontalSpacer);
 
+        butCutTo = new QPushButton(tabCurrScene);
+        butCutTo->setObjectName(QString::fromUtf8("butCutTo"));
+        butCutTo->setMaximumSize(QSize(20, 20));
+
+        horizontalLayout->addWidget(butCutTo);
+
         butUpChip = new QPushButton(tabCurrScene);
         butUpChip->setObjectName(QString::fromUtf8("butUpChip"));
         butUpChip->setMinimumSize(QSize(16, 16));
@@ -663,6 +670,7 @@ public:
         chkMicrophone->setText(QString());
         butAudioPopMic->setText(QString());
         butAddChip->setText(QApplication::translate("RDLiveSdkDemoClass", "\346\267\273\345\212\240\345\206\205\345\256\271", 0, QApplication::UnicodeUTF8));
+        butCutTo->setText(QApplication::translate("RDLiveSdkDemoClass", "\350\275\254", 0, QApplication::UnicodeUTF8));
         tabSector->setTabText(tabSector->indexOf(tabCurrScene), QApplication::translate("RDLiveSdkDemoClass", "\345\275\223\345\211\215\345\234\272\346\231\257", 0, QApplication::UnicodeUTF8));
         tabSector->setTabText(tabSector->indexOf(tabSetting), QApplication::translate("RDLiveSdkDemoClass", "\350\256\276\347\275\256", 0, QApplication::UnicodeUTF8));
         menuChipInput->setTitle(QApplication::translate("RDLiveSdkDemoClass", "\346\267\273\345\212\240", 0, QApplication::UnicodeUTF8));

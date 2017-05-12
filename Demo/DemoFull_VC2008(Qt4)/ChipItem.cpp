@@ -222,7 +222,8 @@ void ChipItem::OnChipSelected( BOOL bSelect )
 		ui.verticalLayout->addWidget( m_pItemOper );
 		if ( Chip_GetStatus( m_hChip ) >= ePin_Opened )
 		{
-			m_lwItem->setSizeHint( QSize( m_siBase.width(), m_siBase.height() + m_pItemOper->height() ) );
+			int		iHeight	= m_pItemOper->minimumHeight();
+			m_lwItem->setSizeHint( QSize( m_siBase.width(), m_siBase.height() + iHeight ) );
 			m_pItemOper->OnChipSelected( m_hChip, sChipStatus );
 			m_pItemOper->show();
 		}

@@ -531,6 +531,19 @@ QPushButton#chkStart:disabled:checked{
            </spacer>
           </item>
           <item>
+           <widget class="QPushButton" name="butCutTo">
+            <property name="maximumSize">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>转</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QPushButton" name="butUpChip">
             <property name="minimumSize">
              <size>

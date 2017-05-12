@@ -698,3 +698,68 @@ void RDLiveSdkDemo::on_actAutoAero_toggled( bool checked )
 	eleFun.setAttribute( "AutoAero", checked ? 1 : 0 );
 	Screen_SetAutoEnableAero( checked );
 }
+
+void RDLiveSdkDemo::on_butCutTo_clicked()
+{
+	QString	szFile	= QApplication::applicationDirPath() + "/Effects.xml";
+	QFile	file( szFile );
+	if ( !file.open( QIODevice::ReadOnly | QIODevice::Text ) )	return;
+	QDomDocument	doc;
+	if ( !doc.setContent( &file ) )	return;
+	QDomElement		eleRoot	= doc.documentElement();
+	if ( eleRoot.tagName() != "Effects" )	return;
+
+	QDomElement		eleActs	= eleRoot.firstChildElement( "Actions" );
+	if ( eleActs.isNull() ) return;
+	QDomElement		eleAct	= eleActs.firstChildElement( "Action" );
+	if ( eleAct.isNull() ) return;
+
+	QStringList		szList	= QFU( Scene_GetCurrentActions( Render_GetCurScene() ) ).split( "|", QString::SkipEmptyParts );
+	QActionGroup	grpAction( this );
+	QMenu			menu;
+	QAction*		actSingle	= menu.addAction( QFU(L"单选") );
+	menu.addSeparator();
+	actSingle->setCheckable( true );
+	actSingle->setChecked( m_bSceneActionSingle );
+	grpAction.setExclusive( m_bSceneActionSingle );
+
+	while( !eleAct.isNull() )
+	{
+		QAction*	act	= menu.addAction( eleAct.attribute( "name" ) );
+		grpAction.addAction( act );
+		act->setData( eleAct.attribute( "file" ) );
+		act->setCheckable( true );
+		for ( int i = 0; i < szList.count(); ++i )
+		{
+			if ( szList[i] == eleAct.attribute( "file" ) )
+			{
+				act->setChecked( true );
+				break;
+			}
+		}
+		eleAct	= eleAct.nextSiblingElement( "Action" );
+	}
+	
+	QAction*	pSelect	= menu.exec( ui.butCutTo->mapToGlobal( QPoint( 0, ui.butCutTo->height() ) ) );
+	if ( pSelect )
+	{
+		if ( pSelect == actSingle )
+		{
+			m_bSceneActionSingle	= !m_bSceneActionSingle;
+		}
+		else
+		{
+			QString	szActs;
+			QList<QAction*>	actList	= grpAction.actions();
+			for ( int i = 0; i < actList.count(); ++i )
+			{
+				if ( actList[i]->isChecked() )
+				{
+					szActs.append( actList[i]->data().toString() );
+					szActs.append( "|" );
+				}
+			}
+			Scene_SetSwitchActions( Render_GetCurScene(), szActs.utf16() );
+		}
+	}
+}

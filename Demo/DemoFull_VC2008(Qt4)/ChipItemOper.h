@@ -14,6 +14,7 @@ public:
 
 	void OnChipSelected( HCHIP hChip, const IPinInput_SStatusInfo& sChipStatus );
 	void OnPosChanged();
+	void OnRotateChanged();
 	void OnStatusChanged( const IPinInput_SStatusInfo& sChipStatus );
 	HCHIP GetHChip() { return m_hChip; }
 private:
@@ -38,6 +39,12 @@ public slots:
 	void on_butClip4_3_clicked();
 	void on_butClip3_4_clicked();
 	void on_butRestore_clicked();
+	void on_hsRotateX_valueChanged( int value );
+	void on_hsRotateY_valueChanged( int value );
+	void on_hsRotateZ_valueChanged( int value );
+	void on_dspRotateX_valueChanged ( double d );
+	void on_dspRotateY_valueChanged ( double d );
+	void on_dspRotateZ_valueChanged ( double d );
 
 	void on_butPlay_clicked();
 	void on_butPause_clicked();

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>DlgEncoderSetting</class>
  <widget class="QWidget" name="DlgEncoderSetting">
@@ -23,7 +23,7 @@
    <item>
     <widget class="QToolBox" name="toolBox">
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="page">
       <property name="geometry">
@@ -526,6 +526,19 @@
           <item row="1" column="1" colspan="2">
            <layout class="QHBoxLayout" name="horizontalLayout_4">
             <item>
+             <spacer name="horizontalSpacer">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
              <widget class="QPushButton" name="butBrowVideoDir">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -535,12 +548,12 @@
               </property>
               <property name="maximumSize">
                <size>
-                <width>16</width>
-                <height>16</height>
+                <width>60</width>
+                <height>20</height>
                </size>
               </property>
               <property name="text">
-               <string>B</string>
+               <string>浏览…</string>
               </property>
              </widget>
             </item>
@@ -548,12 +561,12 @@
              <widget class="QPushButton" name="butViewVideoDir">
               <property name="maximumSize">
                <size>
-                <width>16</width>
-                <height>16</height>
+                <width>60</width>
+                <height>20</height>
                </size>
               </property>
               <property name="text">
-               <string>V</string>
+               <string>查看…</string>
               </property>
              </widget>
             </item>
@@ -645,7 +658,7 @@
        <item>
         <widget class="QCheckBox" name="chkOutputVCamera">
          <property name="text">
-          <string>输出到虚拟摄像头</string>
+          <string>输出到虚拟摄像头（暂无功能）</string>
          </property>
         </widget>
        </item>

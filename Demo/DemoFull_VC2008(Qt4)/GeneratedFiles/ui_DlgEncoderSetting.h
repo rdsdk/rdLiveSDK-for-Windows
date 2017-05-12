@@ -93,6 +93,7 @@ public:
     QLabel *label_37;
     QLineEdit *editVideoDir;
     QHBoxLayout *horizontalLayout_4;
+    QSpacerItem *horizontalSpacer;
     QPushButton *butBrowVideoDir;
     QPushButton *butViewVideoDir;
     QLabel *labAcceditLocalDays;
@@ -432,6 +433,10 @@ public:
         horizontalLayout_4 = new QHBoxLayout();
         horizontalLayout_4->setSpacing(6);
         horizontalLayout_4->setObjectName(QString::fromUtf8("horizontalLayout_4"));
+        horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_4->addItem(horizontalSpacer);
+
         butBrowVideoDir = new QPushButton(gboxSaveToFile);
         butBrowVideoDir->setObjectName(QString::fromUtf8("butBrowVideoDir"));
         QSizePolicy sizePolicy1(QSizePolicy::Preferred, QSizePolicy::Fixed);
@@ -439,13 +444,13 @@ public:
         sizePolicy1.setVerticalStretch(0);
         sizePolicy1.setHeightForWidth(butBrowVideoDir->sizePolicy().hasHeightForWidth());
         butBrowVideoDir->setSizePolicy(sizePolicy1);
-        butBrowVideoDir->setMaximumSize(QSize(16, 16));
+        butBrowVideoDir->setMaximumSize(QSize(60, 20));
 
         horizontalLayout_4->addWidget(butBrowVideoDir);
 
         butViewVideoDir = new QPushButton(gboxSaveToFile);
         butViewVideoDir->setObjectName(QString::fromUtf8("butViewVideoDir"));
-        butViewVideoDir->setMaximumSize(QSize(16, 16));
+        butViewVideoDir->setMaximumSize(QSize(60, 20));
 
         horizontalLayout_4->addWidget(butViewVideoDir);
 
@@ -531,7 +536,7 @@ public:
 
         retranslateUi(DlgEncoderSetting);
 
-        toolBox->setCurrentIndex(2);
+        toolBox->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(DlgEncoderSetting);
@@ -583,15 +588,15 @@ public:
         labVideoFormatTitle->setText(QApplication::translate("DlgEncoderSetting", "\346\226\207\344\273\266\346\240\274\345\274\217\357\274\232", 0, QApplication::UnicodeUTF8));
         label_36->setText(QApplication::translate("DlgEncoderSetting", "\346\226\207\344\273\266\345\210\206\345\215\267\357\274\232", 0, QApplication::UnicodeUTF8));
         label_37->setText(QApplication::translate("DlgEncoderSetting", "MB", 0, QApplication::UnicodeUTF8));
-        butBrowVideoDir->setText(QApplication::translate("DlgEncoderSetting", "B", 0, QApplication::UnicodeUTF8));
-        butViewVideoDir->setText(QApplication::translate("DlgEncoderSetting", "V", 0, QApplication::UnicodeUTF8));
+        butBrowVideoDir->setText(QApplication::translate("DlgEncoderSetting", "\346\265\217\350\247\210\342\200\246", 0, QApplication::UnicodeUTF8));
+        butViewVideoDir->setText(QApplication::translate("DlgEncoderSetting", "\346\237\245\347\234\213\342\200\246", 0, QApplication::UnicodeUTF8));
         labAcceditLocalDays->setText(QString());
         gboxLiveToNet->setTitle(QApplication::translate("DlgEncoderSetting", "\347\233\264\346\222\255\345\210\260\347\275\221\347\273\234", 0, QApplication::UnicodeUTF8));
         labAcceditLiveDays->setText(QString());
         chkAdaptiveNetwork->setText(QApplication::translate("DlgEncoderSetting", "\347\233\264\346\222\255\344\270\212\344\274\240\346\227\266\350\207\252\345\212\250\351\200\202\345\272\224\347\275\221\347\273\234\351\200\237\345\272\246", 0, QApplication::UnicodeUTF8));
         butAddLiveUrl->setText(QApplication::translate("DlgEncoderSetting", "\346\267\273\345\212\240\347\233\264\346\222\255\347\233\256\346\240\207", 0, QApplication::UnicodeUTF8));
         butDelLiveUrl->setText(QApplication::translate("DlgEncoderSetting", "\345\210\240\351\231\244\351\200\211\344\270\255\351\241\271", 0, QApplication::UnicodeUTF8));
-        chkOutputVCamera->setText(QApplication::translate("DlgEncoderSetting", "\350\276\223\345\207\272\345\210\260\350\231\232\346\213\237\346\221\204\345\203\217\345\244\264", 0, QApplication::UnicodeUTF8));
+        chkOutputVCamera->setText(QApplication::translate("DlgEncoderSetting", "\350\276\223\345\207\272\345\210\260\350\231\232\346\213\237\346\221\204\345\203\217\345\244\264\357\274\210\346\232\202\346\227\240\345\212\237\350\203\275\357\274\211", 0, QApplication::UnicodeUTF8));
         toolBox->setItemText(toolBox->indexOf(page_3), QApplication::translate("DlgEncoderSetting", "\347\274\226\347\240\201\350\276\223\345\207\272", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 

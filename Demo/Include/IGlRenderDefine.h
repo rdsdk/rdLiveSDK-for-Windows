@@ -274,6 +274,8 @@ enum	IChip_EShaderParam
 	eShader_Lighteness,		//亮度
 	eShader_Contrast,		//对比度
 	eShader_Transparency,	//透明度
+
+	eShader_BaseCount
 };
 
 //游戏使用的绘图接口
