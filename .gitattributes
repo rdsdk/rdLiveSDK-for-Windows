@@ -1,1 +1,2 @@
-*.html linguist-language=C++
+*.vsh linguist-language=C++
+*.fsh linguist-language=C++
